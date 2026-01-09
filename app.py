@@ -22,18 +22,27 @@ def start_backend_server():
 
     if not is_port_in_use(3000):
         # Start server
-        print("🚀 Starting Node.js Backend...")
+        print("🚀 Starting Backend & Dependencies...")
         
-        # 1. Install dependencies if missing
+        # 1. Install Node modules if missing
         if not os.path.exists("node_modules"):
             print("📦 Installing Node modules...")
             try:
                 subprocess.run(["npm", "install"], check=True)
-                print("✅ Dependencies installed.")
+                print("✅ Node dependencies installed.")
             except Exception as e:
                 print(f"❌ npm install failed: {e}")
 
-        # 2. Start Server
+        # 2. Install Playwright Browsers (CRITICAL for Scraper)
+        # We check a flag or just run it (it's fast if already installed)
+        print("🎭 Ensuring Playwright browsers...")
+        try:
+             subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+             print("✅ Playwright chromium installed.")
+        except Exception as e:
+             print(f"⚠️ Playwright install warning: {e}")
+
+        # 3. Start Server
         try:
             # Run node server.js in background
             subprocess.Popen(
