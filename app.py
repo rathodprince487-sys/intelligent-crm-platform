@@ -955,6 +955,19 @@ else:
         st.session_state.theme = "light"
         st.rerun()
 
+# Seed Data Button (Demo Mode)
+if st.sidebar.button("🌱 Add Dummy Data", use_container_width=True, help="Injects 10 sample leads for demo purposes"):
+    try:
+        r = requests.post(f"{BACKEND_BASE}/leads/seed", timeout=5)
+        if r.status_code == 200:
+            st.toast("✅ Dummy data added!", icon="🌱")
+            time.sleep(1)
+            st.rerun()
+        else:
+            st.error("Failed to seed data.")
+    except Exception as e:
+        st.error(f"Error: {e}")
+
 st.sidebar.markdown("---")
 
 

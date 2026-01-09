@@ -378,6 +378,130 @@ app.post("/leads", async (req, res) => {
   }
 });
 
+// Seed Dummy Leads (Manual Trigger)
+app.post("/leads/seed", async (req, res) => {
+  try {
+    const dummyLeads = [
+      {
+        businessName: "ABC Dental Clinic",
+        phone: "+1-555-0101",
+        address: "123 Main St, New York, NY 10001",
+        email: "contact@abcdental.example.com",
+        status: "Qualified",
+        priority: "HOT",
+        notes: "Interested in premium CRM features",
+        dealValue: 5000,
+        source: "Google Maps"
+      },
+      {
+        businessName: "XYZ Healthcare Solutions",
+        phone: "+1-555-0102",
+        address: "456 Oak Ave, Los Angeles, CA 90001",
+        email: "info@xyzhealthcare.example.com",
+        status: "Contacted",
+        priority: "WARM",
+        notes: "Follow up next week",
+        dealValue: 8500,
+        source: "LinkedIn"
+      },
+      {
+        businessName: "MediCare Plus",
+        phone: "+1-555-0103",
+        address: "789 Pine Rd, Chicago, IL 60601",
+        email: "sales@medicareplus.example.com",
+        status: "Meeting set",
+        priority: "HOT",
+        notes: "Demo scheduled for next Monday",
+        dealValue: 12000,
+        source: "Referral",
+        meetingDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      },
+      {
+        businessName: "HealthFirst Diagnostics",
+        phone: "+1-555-0104",
+        address: "321 Elm St, Houston, TX 77001",
+        email: "contact@healthfirst.example.com",
+        status: "Proposal sent",
+        priority: "WARM",
+        notes: "Waiting for decision from management",
+        dealValue: 15000,
+        source: "Google Maps"
+      },
+      {
+        businessName: "SmileCare Dentistry",
+        phone: "+1-555-0105",
+        address: "654 Maple Dr, Phoenix, AZ 85001",
+        email: "admin@smilecare.example.com",
+        status: "Closed - Won",
+        priority: "COLD",
+        notes: "Deal closed! Onboarding in progress",
+        dealValue: 20000,
+        source: "Cold Email"
+      },
+      {
+        businessName: "City Medical Center",
+        phone: "+1-555-0106",
+        address: "987 Cedar Ln, Philadelphia, PA 19101",
+        email: "info@citymedical.example.com",
+        status: "Generated",
+        priority: "WARM",
+        notes: "New lead from scraper",
+        source: "Google Maps"
+      },
+      {
+        businessName: "Wellness Clinic Group",
+        phone: "+1-555-0107",
+        address: "147 Birch Blvd, San Antonio, TX 78201",
+        email: "contact@wellnessgroup.example.com",
+        status: "Qualified",
+        priority: "HOT",
+        notes: "High potential client",
+        dealValue: 7500,
+        source: "Website"
+      },
+      {
+        businessName: "TechCorp Solutions",
+        phone: "+1-555-0108",
+        address: "101 Tech Way, San Francisco, CA 94105",
+        email: "sales@techcorp.example.com",
+        status: "Meeting set",
+        priority: "HOT",
+        notes: "Discussing contract terms",
+        dealValue: 50000,
+        source: "Conference"
+      },
+      {
+        businessName: "Global Trade Inc.",
+        phone: "+1-555-0109",
+        address: "202 Market St, London, UK",
+        email: "contact@globaltrade.example.com",
+        status: "Generated",
+        priority: "WARM",
+        notes: "Interested in export services",
+        source: "Web Form"
+      },
+      {
+        businessName: "Green Energy Co.",
+        phone: "+1-555-0110",
+        address: "303 Solar Blvd, Berlin, Germany",
+        email: "info@greenenergy.example.com",
+        status: "Generated",
+        priority: "COLD",
+        notes: "Potential partner for renewable projects",
+        source: "LinkedIn"
+      }
+    ];
+
+    await Lead.bulkCreate(dummyLeads);
+    console.log(`🌱 Manually seeded ${dummyLeads.length} leads.`);
+    res.json({ success: true, count: dummyLeads.length });
+
+  } catch (e) {
+    console.error("Manual seed error:", e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Delete Lead
 app.delete("/leads/:id", async (req, res) => {
   try {
