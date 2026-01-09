@@ -4,9 +4,55 @@ import requests
 import plotly.express as px
 import time
 from datetime import datetime
+import subprocess
+import sys
+import os
+import socket
+
+# ================== BACKEND AUTO-START ==================
+@st.cache_resource
+def start_backend_server():
+    """
+    Checks if the backend is running on port 3000.
+    If not, starts 'node server.js' as a background process.
+    """
+    def is_port_in_use(port):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            return s.connect_ex(('localhost', port)) == 0
+
+    if not is_port_in_use(3000):
+        # Start server
+        print("🚀 Starting Node.js Backend...")
+        
+        # 1. Install dependencies if missing
+        if not os.path.exists("node_modules"):
+            print("📦 Installing Node modules...")
+            try:
+                subprocess.run(["npm", "install"], check=True)
+                print("✅ Dependencies installed.")
+            except Exception as e:
+                print(f"❌ npm install failed: {e}")
+
+        # 2. Start Server
+        try:
+            # Run node server.js in background
+            subprocess.Popen(
+                ["node", "server.js"], 
+                cwd=os.getcwd(),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            time.sleep(5)  # Give it 5 seconds to boot
+            print("✅ Backend launch command sent.")
+        except Exception as e:
+            print(f"❌ Failed to start backend: {e}")
+    else:
+        print("✅ Backend already running.")
+
+# Initialize Backend
+start_backend_server()
 
 # ================== CONFIG ==================
-import os
 BACKEND_BASE = os.getenv("BACKEND_URL", "http://localhost:3000")
 EXECUTIONS_API = f"{BACKEND_BASE}/executions"
 LEADS_API = f"{BACKEND_BASE}/leads"
