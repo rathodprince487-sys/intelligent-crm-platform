@@ -24,10 +24,28 @@ DOWNLOAD_HANDLERS = {
 
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 
+import shutil
+import os
+import sys
+
+# ... (Previous imports can stay or be redundant, cleaner to just start fresh logic here for launch options)
+
 PLAYWRIGHT_LAUNCH_OPTIONS = {
-    "headless": True, # Set to False to see the browser
-    "timeout": 90 * 1000,  # 90 seconds for stability
+    "headless": True,
+    "timeout": 90 * 1000,
+    "args": [
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-software-rasterizer",
+    ]
 }
+
+# Auto-detect system Chromium for Streamlit Cloud (Linux)
+if sys.platform.startswith("linux"):
+    chrome_path = shutil.which("chromium") or shutil.which("chromium-browser") or "/usr/bin/chromium"
+    if chrome_path and os.path.exists(chrome_path):
+        PLAYWRIGHT_LAUNCH_OPTIONS["executable_path"] = chrome_path
 
 DOWNLOADER_MIDDLEWARES = {
    'dental_scraper.middlewares.RotateUserAgentMiddleware': 400,
