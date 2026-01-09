@@ -15,8 +15,9 @@ build/
 node_modules/
 npm-debug.log
 yarn-error.log
+package-lock.json
 
-# Database
+# Database (exclude SQLite, use external DB in production)
 *.sqlite
 *.db
 
@@ -35,28 +36,41 @@ Thumbs.db
 *.log
 server.log
 
-# Temporary files
-*.tmp
-*.temp
+# Data files (exclude from repo)
 *.csv
+*.xlsx
+*.xls
+
+# Archives
 *.zip
+*.tar.gz
+*.rar
 
 # Sensitive
 .env
 *.key
 credentials.json
+secrets/
 
-# Project specific
+# Project specific - exclude backup/demo folders
 n8n_data/
 n8n_data_backup/
 dental_demo/
-project_backup.zip
-AllinOne.zip
-scraped_results.csv
-leads.csv
-test.csv
+AllinOne/
+backups/
+temp/
 
-# Generated files
+# Generated/temporary files
+*.tmp
+*.temp
 *.rtf
 *.docx
 *.pdf
+*.html
+
+# Deployment helpers (keep in repo but ignore outputs)
+convert_to_docx.py
+convert_to_word.sh
+create_weekly_report.py
+fix_logo.py
+generate_pdf.py
