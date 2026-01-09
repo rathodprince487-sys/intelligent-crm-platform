@@ -16,7 +16,139 @@ app.use(express.json({ limit: '50mb' }));
 // ------------------------------
 // Database Initialization
 // ------------------------------
-initDB();
+initDB().then(async () => {
+  // SEED DUMMY DATA ON STARTUP
+  try {
+    const count = await Lead.count();
+    if (count === 0) {
+      console.log('🌱 Database empty! Seeding dummy data...');
+
+      const dummyLeads = [
+        {
+          businessName: "ABC Dental Clinic",
+          phone: "+1-555-0101",
+          address: "123 Main St, New York, NY 10001",
+          website: "https://abcdental.example.com",
+          email: "contact@abcdental.example.com",
+          status: "Qualified",
+          notes: "Interested in premium CRM features",
+          assignedTo: "John Doe",
+          dealValue: 5000,
+          source: "Google Maps"
+        },
+        {
+          businessName: "XYZ Healthcare Solutions",
+          phone: "+1-555-0102",
+          address: "456 Oak Ave, Los Angeles, CA 90001",
+          website: "https://xyzhealthcare.example.com",
+          email: "info@xyzhealthcare.example.com",
+          status: "Contacted",
+          notes: "Follow up next week",
+          assignedTo: "Jane Smith",
+          dealValue: 8500,
+          source: "LinkedIn"
+        },
+        {
+          businessName: "MediCare Plus",
+          phone: "+1-555-0103",
+          address: "789 Pine Rd, Chicago, IL 60601",
+          website: "https://medicareplus.example.com",
+          email: "sales@medicareplus.example.com",
+          status: "Meeting Scheduled",
+          notes: "Demo scheduled for next Monday",
+          assignedTo: "John Doe",
+          dealValue: 12000,
+          source: "Referral",
+          meetingDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        },
+        {
+          businessName: "HealthFirst Diagnostics",
+          phone: "+1-555-0104",
+          address: "321 Elm St, Houston, TX 77001",
+          website: "https://healthfirst.example.com",
+          email: "contact@healthfirst.example.com",
+          status: "Proposal Sent",
+          notes: "Waiting for decision from management",
+          assignedTo: "Jane Smith",
+          dealValue: 15000,
+          source: "Google Maps"
+        },
+        {
+          businessName: "SmileCare Dentistry",
+          phone: "+1-555-0105",
+          address: "654 Maple Dr, Phoenix, AZ 85001",
+          website: "https://smilecare.example.com",
+          email: "admin@smilecare.example.com",
+          status: "Won",
+          notes: "Deal closed! Onboarding in progress",
+          assignedTo: "John Doe",
+          dealValue: 20000,
+          source: "Cold Email",
+          lastContacted: new Date()
+        },
+        {
+          businessName: "City Medical Center",
+          phone: "+1-555-0106",
+          address: "987 Cedar Ln, Philadelphia, PA 19101",
+          website: "https://citymedical.example.com",
+          email: "info@citymedical.example.com",
+          status: "Generated",
+          notes: "New lead from scraper",
+          source: "Google Maps"
+        },
+        {
+          businessName: "Wellness Clinic Group",
+          phone: "+1-555-0107",
+          address: "147 Birch Blvd, San Antonio, TX 78201",
+          website: "https://wellnessgroup.example.com",
+          email: "contact@wellnessgroup.example.com",
+          status: "Qualified",
+          notes: "High potential client",
+          assignedTo: "Jane Smith",
+          dealValue: 7500,
+          source: "Website"
+        },
+        {
+          businessName: "TechCorp Solutions",
+          phone: "+1-555-0108",
+          address: "101 Tech Way, San Francisco, CA 94105",
+          website: "https://techcorp.example.com",
+          email: "sales@techcorp.example.com",
+          status: "Negotiation",
+          notes: "Discussing contract terms",
+          assignedTo: "Michael Brown",
+          dealValue: 50000,
+          source: "Conference"
+        },
+        {
+          businessName: "Global Trade Inc.",
+          phone: "+1-555-0109",
+          address: "202 Market St, London, UK",
+          website: "https://globaltrade.example.com",
+          email: "contact@globaltrade.example.com",
+          status: "New",
+          notes: "Interested in export services",
+          source: "Web Form"
+        },
+        {
+          businessName: "Green Energy Co.",
+          phone: "+1-555-0110",
+          address: "303 Solar Blvd, Berlin, Germany",
+          website: "https://greenenergy.example.com",
+          email: "info@greenenergy.example.com",
+          status: "Generated",
+          notes: "Potential partner for renewable projects",
+          source: "LinkedIn"
+        }
+      ];
+
+      await Lead.bulkCreate(dummyLeads);
+      console.log('✅ Dummy data seeded successfully!');
+    }
+  } catch (error) {
+    console.error('❌ Data seeding failed:', error);
+  }
+});
 
 // ------------------------------
 // Health check
