@@ -1057,37 +1057,46 @@ if "Dashboard" in page:
     leads = fetch_data(LEADS_API)
     df_all = pd.DataFrame(leads)
     
+    # ALWAYS RENDER CARDS (Empty or Not)
+    # Split Data
     if df_all.empty:
-        st.info("No data available yet.")
+        df_generated = pd.DataFrame(columns=["id", "status"])
+        df_crm = pd.DataFrame(columns=["id", "status"])
     else:
-        # Split Data
         # 1. Generated (Fresh leads, unworked)
         df_generated = df_all[df_all['status'] == 'Generated']
-        
         # 2. CRM (Everything else)
         df_crm = df_all[df_all['status'] != 'Generated']
-        
-        # --- SECTION 1: LEAD GENERATION ---
-        st.subheader("⚡ Lead Generation (Data Mining)")
-        c1, c2, c3 = st.columns(3)
-        with c1: metric_card("Fresh Leads Available", len(df_generated), icon="✨", color="blue")
-        with c2: metric_card("Recent Imports", len(df_generated[df_generated['id'].astype(int) > (len(df_all)-10)]), icon="📥", color="purple")
-        
-        # --- SECTION 2: CRM PIPELINE ---
-        st.markdown("---")
-        st.subheader("💼 Active Pipeline (CRM)")
-        
-        # Calculate CRM specific metrics
-        crm_total = len(df_crm)
+    
+    # --- SECTION 1: LEAD GENERATION ---
+    st.subheader("⚡ Lead Generation (Data Mining)")
+    c1, c2, c3 = st.columns(3)
+    with c1: metric_card("Fresh Leads Available", len(df_generated), icon="✨", color="blue")
+    with c2: metric_card("Recent Imports", 0 if df_all.empty else len(df_generated[df_generated['id'].astype(int) > (len(df_all)-10)]), icon="📥", color="purple")
+    
+    # --- SECTION 2: CRM PIPELINE ---
+    st.markdown("---")
+    st.subheader("💼 Active Pipeline (CRM)")
+    
+    # Calculate CRM specific metrics
+    crm_total = len(df_crm)
+    if not df_crm.empty and 'priority' in df_crm.columns:
         hot_leads = len(df_crm[df_crm['priority'] == 'HOT'])
+    else:
+        hot_leads = 0
+        
+    if not df_crm.empty and 'status' in df_crm.columns:
         meetings = len(df_crm[df_crm['status'].str.contains("Meeting", case=False, na=False)])
         closed_won = len(df_crm[df_crm['status'] == 'Closed - Won'])
-        
-        c_a, c_b, c_c, c_d = st.columns(4)
-        with c_a: metric_card("In Pipeline", crm_total, icon="📊", color="blue")
-        with c_b: metric_card("Hot Opportunities", hot_leads, icon="🔥", color="rose")
-        with c_c: metric_card("Meetings Set", meetings, icon="📅", color="amber")
-        with c_d: metric_card("Closed Won", closed_won, icon="🏆", color="green")
+    else:
+        meetings = 0
+        closed_won = 0
+    
+    c_a, c_b, c_c, c_d = st.columns(4)
+    with c_a: metric_card("In Pipeline", crm_total, icon="📊", color="blue")
+    with c_b: metric_card("Hot Opportunities", hot_leads, icon="🔥", color="rose")
+    with c_c: metric_card("Meetings Set", meetings, icon="📅", color="amber")
+    with c_d: metric_card("Closed Won", closed_won, icon="🏆", color="green")
 
     # st.markdown("---")
     # if breakdown:
@@ -1374,106 +1383,52 @@ if "CRM Grid" in page:
 
 
     # CSS Injection (Updated for new Scale + Conditional Dark Mode)
-    # Build dark mode CSS only if theme is dark
-    dark_mode_css = ""
-    if st.session_state.get("theme") == "dark":
-        dark_mode_css = """
-    /* DARK MODE STYLING FOR CRM GRID - NUCLEAR OPTION */
+    # Build dark mode CSS only if theme is dark (and create light mode CSS explicitly if theme is light)
+    grid_css_conditional = ""
     
-    /* Canvas/WebGL rendered data editor - use filter inversion */
+    if st.session_state.get("theme") == "dark":
+        grid_css_conditional = """
+    /* DARK MODE STYLING FOR CRM GRID */
     div[data-testid="stDataEditor"] canvas {
         filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.1);
     }
-    
-    /* Override ALL backgrounds in data editor */
-    div[data-testid="stDataEditor"],
-    div[data-testid="stDataEditor"] *,
-    div[data-testid="stDataEditor"] > *,
-    div[data-testid="stDataEditor"] div,
-    [data-testid="stDataEditor"],
-    [data-testid="stDataEditor"] * {
-        background-color: #0f172a !important;
-    }
-    
-    /* Force header row specifically */
-    div[data-testid="stDataEditor"] div[style*="background"],
-    div[data-testid="stDataEditor"] div[style*="rgb(255, 255, 255)"],
-    div[data-testid="stDataEditor"] div[style*="rgb(240"],
-    div[data-testid="stDataEditor"] div[style*="white"] {
-        background-color: #1e293b !important;
-        background: #1e293b !important;
-    }
-    
-    /* All text in data editor */
-    div[data-testid="stDataEditor"] *,
-    div[data-testid="stDataEditor"] div,
-    div[data-testid="stDataEditor"] span {
-        color: #cbd5e1 !important;
-    }
-    
-    /* Header text specifically */
-    div[data-testid="stDataEditor"] div:first-child div,
-    div[data-testid="stDataEditor"] > div > div:first-child,
-    div[data-testid="stDataEditor"] > div:first-child {
-        background-color: #1e293b !important;
-        color: #f8fafc !important;
-        font-weight: 600 !important;
-    }
-    
-    /* Traditional table selectors (if they exist) */
-    div[data-testid="stDataEditor"] th,
-    div[data-testid="stDataEditor"] thead tr th,
-    div[data-testid="stDataEditor"] thead th,
-    div[data-testid="stDataEditor"] table th,
-    [data-testid="stDataEditor"] th,
-    [role="columnheader"] {
-        background-color: #1e293b !important;
-        background: #1e293b !important;
-        color: #f8fafc !important;
-        font-weight: 600 !important;
-        border-bottom: 1px solid #334155 !important;
-    }
-    
-    /* Table cells */
-    div[data-testid="stDataEditor"] td,
-    div[data-testid="stDataEditor"] tbody tr td,
-    [role="gridcell"] {
+    div[data-testid="stDataEditor"], [data-testid="stDataEditor"] * {
         background-color: #0f172a !important;
         color: #cbd5e1 !important;
-        border-bottom: 1px solid #1e293b !important;
-    }
-    
-    /* Borders */
-    div[data-testid="stDataEditor"] *,
-    div[data-testid="stDataEditor"] div {
         border-color: #334155 !important;
     }
-    
-    /* Fix white buttons in CRM Grid toolbar */
-    div[data-testid="stHorizontalBlock"] button:not([kind="primary"]),
-    div[data-testid="column"] button:not([kind="primary"]) {
-        background-color: rgba(255, 255, 255, 0.04) !important;
-        color: #e2e8f0 !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    div[data-testid="stDataEditor"] div[style*="background"], div[data-testid="stDataEditor"] div[style*="white"] {
+        background-color: #1e293b !important;
     }
-    
-    div[data-testid="stHorizontalBlock"] button:not([kind="primary"]):hover,
-    div[data-testid="column"] button:not([kind="primary"]):hover {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-        color: #fff !important;
+    /* Headers */
+    div[data-testid="stDataEditor"] thead tr th, [role="columnheader"] {
+        background-color: #1e293b !important;
+        color: #f8fafc !important;
     }
-    
-    /* Primary buttons keep their amber styling */
-    button[kind="primary"] {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
-        color: #ffffff !important;
-        border: none !important;
+        """
+    else:
+        # LIGHT MODE (Explicitly Force White to override any auto-dark behavior)
+        grid_css_conditional = """
+    /* LIGHT MODE STYLING FOR CRM GRID */
+    div[data-testid="stDataEditor"], [data-testid="stDataEditor"] * {
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        border-color: #e2e8f0 !important;
+    }
+    div[data-testid="stDataEditor"] canvas {
+        filter: none !important;
+    }
+    /* Headers */
+    div[data-testid="stDataEditor"] thead tr th, [role="columnheader"] {
+        background-color: #f8f9fa !important;
+        color: #334155 !important;
+        font-weight: 600 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
     }
         """
     
     st.markdown(f"""
     <style>
-    /* 1. Force Main Container to Edges */
     section.main > .block-container {{
         padding-top: 1rem !important;
         padding-bottom: 5rem !important;
@@ -1482,110 +1437,20 @@ if "CRM Grid" in page:
         max-width: 100vw !important;
         width: 100vw !important;
     }}
-    
-    /* 2. Target the Dataframe Container - Force Width & Zoom */
     div[data-testid="stDataEditor"], div[data-testid="stDataFrame"] {{
         zoom: {scale_val};
         width: {width_str} !important;
         min-width: {width_str} !important;
         max-width: none !important;
-        display: block;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        
-        /* Shadow for visual framing */
         border-radius: 8px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }}
-    
-    /* 3. Aggressively target inner children to ensure they inherit the width */
-    div[data-testid="stDataEditor"] > div, 
-    div[data-testid="stDataFrame"] > div,
-    div[data-testid="stDataEditor"] canvas,
-    div[data-testid="stDataFrame"] canvas {{
+    div[data-testid="stDataEditor"] canvas {{
         width: 100% !important;
         max-width: 100% !important;
     }}
-    
-    {dark_mode_css}
+    {grid_css_conditional}
     </style>
-    
-    <script>
-    // Force dark mode styling on data editor (both read and edit modes)
-    if ('{st.session_state.get("theme", "dark")}' === 'dark') {{
-        
-        function applyDarkMode() {{
-            const dataEditor = document.querySelector('[data-testid="stDataEditor"]');
-            if (!dataEditor) return;
-            
-            // Force dark background on the entire editor
-            dataEditor.style.backgroundColor = '#0f172a';
-            
-            // Target all divs and check for light backgrounds
-            const allDivs = dataEditor.querySelectorAll('div');
-            allDivs.forEach(div => {{
-                const bgColor = window.getComputedStyle(div).backgroundColor;
-                const isLight = bgColor.includes('255, 255, 255') || 
-                               bgColor.includes('240, 242, 246') ||
-                               bgColor.includes('rgb(255') ||
-                               bgColor.includes('rgb(240') ||
-                               bgColor.includes('rgb(250') ||
-                               bgColor === 'rgba(0, 0, 0, 0)' ||
-                               bgColor === 'transparent';
-                
-                if (isLight) {{
-                    div.style.backgroundColor = '#0f172a';
-                    div.style.color = '#cbd5e1';
-                }}
-            }});
-            
-            // Force header row (first child)
-            const headerRow = dataEditor.querySelector('div > div:first-child');
-            if (headerRow) {{
-                headerRow.style.backgroundColor = '#1e293b';
-                headerRow.style.color = '#f8fafc';
-                const headerCells = headerRow.querySelectorAll('div');
-                headerCells.forEach(cell => {{
-                    cell.style.backgroundColor = '#1e293b';
-                    cell.style.color = '#f8fafc';
-                }});
-            }}
-            
-            // Target input fields in edit mode
-            const inputs = dataEditor.querySelectorAll('input, textarea, select');
-            inputs.forEach(input => {{
-                input.style.backgroundColor = '#1e293b';
-                input.style.color = '#f8fafc';
-                input.style.border = '1px solid #334155';
-            }});
-            
-            // Target all table-like structures
-            const tables = dataEditor.querySelectorAll('table');
-            tables.forEach(table => {{
-                table.style.backgroundColor = '#0f172a';
-                const ths = table.querySelectorAll('th');
-                ths.forEach(th => {{
-                    th.style.backgroundColor = '#1e293b';
-                    th.style.color = '#f8fafc';
-                }});
-                const tds = table.querySelectorAll('td');
-                tds.forEach(td => {{
-                    td.style.backgroundColor = '#0f172a';
-                    td.style.color = '#cbd5e1';
-                }});
-            }});
-        }}
-        
-        // Apply immediately
-        setTimeout(applyDarkMode, 300);
-        setTimeout(applyDarkMode, 800);
-        setTimeout(applyDarkMode, 1500);
-        
-        // Watch for changes and reapply
-        const observer = new MutationObserver(applyDarkMode);
-        observer.observe(document.body, {{ childList: true, subtree: true, attributes: true }});
-    }}
-    </script>
     """, unsafe_allow_html=True)
     # Sync Options with Palette Keys to ensure 100% match
     status_keys = list(STATUS_PALETTE.keys())
