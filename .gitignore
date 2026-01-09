@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Database
+*.sqlite
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+server.log
+
+# Temporary files
+*.tmp
+*.temp
+*.csv
+*.zip
+
+# Sensitive
+.env
+*.key
+credentials.json
+
+# Project specific
+n8n_data/
+n8n_data_backup/
+dental_demo/
+project_backup.zip
+AllinOne.zip
+scraped_results.csv
+leads.csv
+test.csv
+
+# Generated files
+*.rtf
+*.docx
+*.pdf

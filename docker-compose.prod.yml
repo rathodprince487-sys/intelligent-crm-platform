@@ -1,0 +1,49 @@
+services:
+  # 1. Backend API (Node.js)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: crm_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./database.sqlite:/app/database.sqlite
+      - ./n8n_data:/app/n8n_data
+      - ./service-account.json:/app/service-account.json # If you have one
+    environment:
+      - PORT=3000
+
+  # 2. Frontend Dashboard (Streamlit)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: crm_frontend
+    restart: always
+    ports:
+      - "8501:8501"
+    environment:
+      # In Docker, 'localhost' refers to the container itself.
+      # To talk to another container, use the service name 'backend'.
+      # HOWEVER: Streamlit runs in the user's browser (client-side) for some things,
+      # but Server-side API calls (requests.get) happen inside the container.
+      # We need to update app.py to point to 'http://backend:3000' for internal calls if we want docker networking,
+      # OR keep using localhost if using host networking, but usually Docker networks are better.
+      # For simplicity in this setups, the browser needs to hit the container.
+      # Wait, Streamlit Python code runs on server. So app.py 'requests.get' calls happen FROM container TO backend container.
+      # So we should inject the backend URL.
+      - BACKEND_URL=http://backend:3000
+
+  # 3. Automation (n8n)
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: crm_n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=false

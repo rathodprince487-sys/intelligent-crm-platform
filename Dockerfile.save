@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/playwright:v1.42.0-jammy
+
+# Install n8n
+RUN npm install -g n8n
+
+# Create n8n data directory
+RUN mkdir -p /home/node/.n8n
+RUN chown -R node:node /home/node
+
+USER node
+WORKDIR /home/node
+
+EXPOSE 5678
+
+CMD ["n8n"]
+
