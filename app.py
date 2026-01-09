@@ -97,7 +97,6 @@ div[data-testid="stDecoration"] {
 /* Streamlit's default is fine, just needs to be visible. */
 
 /* Sidebar Radius Adjustments */
-/* Sidebar Radius Adjustments */
 section[data-testid="stSidebar"] div[role="radiogroup"] {
     gap: 8px;
 }
@@ -119,61 +118,47 @@ div[role="radiogroup"] label {
     padding-left: 12px !important;
 }
 
-/* ============================================================ */
-/* 📱 MOBILE RESPONSIVENESS (Advanced Tweaks) */
-/* ============================================================ */
-@media (max-width: 768px) {
-    /* 1. Reduce Main Padding */
+/* --- MOBILE RESPONSIVE OPTIMIZATIONS --- */
+@media only screen and (max-width: 768px) {
+    /* Maximize horizontal space */
     .block-container {
-        padding-top: 3rem !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
-        padding-bottom: 3rem !important;
+        padding-top: 3rem !important;
     }
 
-    /* 2. Resize Headings */
+    /* Stack flex containers vertically if needed */
+    .row-widget.stHorizontal {
+        flex-direction: column !important;
+    }
+    
+    /* Ensure cards take full width */
+    .metric-card, .meeting-card {
+        width: 100% !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* Adjust Font Sizes */
     h1 { font-size: 1.75rem !important; }
     h2 { font-size: 1.5rem !important; }
     h3 { font-size: 1.25rem !important; }
-
-    /* 3. Cards Stacking */
-    /* Force columns to stack if they don't natively */
-    div[data-testid="column"] {
-        width: 100% !important;
-        flex: 1 1 auto !important;
-        min-width: 100% !important;
-    }
     
-    /* 4. Metric Cards - Compact Mode */
-    .metric-card {
-        padding: 16px !important;
-        margin-bottom: 12px !important;
-    }
-    .metric-value {
-        font-size: 1.8rem !important;
-    }
-    .metric-icon {
-        width: 40px !important;
-        height: 40px !important;
-        font-size: 1.2rem !important;
-    }
-
-    /* 5. Safe Horizontal Scroll for Grids */
-    div[data-testid="stDataFrame"], div[data-testid="stDataEditor"] {
+    /* Improve Grid Scroll */
+    div[data-testid="stDataEditor"] {
+        width: 100% !important;
         overflow-x: auto !important;
         display: block !important;
-        width: 100% !important;
     }
-
-    /* 6. Adjust Toolbar Layout (CRM Grid) */
-    /* Force buttons to be full width for easier tapping */
+    
+    /* Make buttons larger for touch */
     div.stButton > button {
-        width: 100% !important; 
+        width: 100% !important;
+        min-height: 48px !important;
         margin-bottom: 8px !important;
     }
     
-    /* 7. Hide non-essential desktop elements if needed */
-    /* (Currently keeping everything visible) */
+    /* Hide decorative status bar on mobile to save space */
+    footer { display: none !important; }
 }
 </style>
 """
