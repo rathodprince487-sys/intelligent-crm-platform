@@ -603,65 +603,7 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
     border-radius: 16px;
     padding: 24px;
     text-align: center;
-}
-</style>
-"""
 
-# 4. SHARED RESPONSIVE CSS (Mobile Optimization)
-RESPONSIVE_CSS = """
-<style>
-/* --- MOBILE RESPONSIVENESS (Screens < 768px) --- */
-@media only screen and (max-width: 768px) {
-    
-    /* 1. Main Container Padding */
-    .block-container {
-        padding-top: 2rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        padding-bottom: 3rem !important;
-    }
-
-    /* 2. Header & Titles */
-    h1 { font-size: 1.8rem !important; }
-    h2 { font-size: 1.5rem !important; }
-    h3 { font-size: 1.3rem !important; }
-    
-    /* 3. Metrics Cards Stack */
-    div[data-testid="column"] {
-        flex: 1 1 auto !important;
-        width: 100% !important;
-        min-width: 100% !important;
-        margin-bottom: 1rem !important;
-    }
-
-    /* 4. CRM Toolbar Stack */
-    .crm-toolbar {
-        display: none !important; /* Hide spacer */
-    }
-    
-    /* 5. Dataframes & Tables */
-    div[data-testid="stDataEditor"], div[data-testid="stDataFrame"] {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    /* 6. Sidebar Mobile */
-    section[data-testid="stSidebar"] {
-        width: 100% !important;
-    }
-    
-    /* 7. Button sizing */
-    button {
-        min-height: 44px !important; /* Touch target size */
-    }
-    
-    /* 8. Hide less critical elements */
-    .hide-mobile {
-        display: none !important;
-    }
-}
-</style>
-"""
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease;
     height: 100%;
@@ -926,6 +868,62 @@ div[role="radiogroup"] label:hover {
 }
 
 /* Old .cal-btn removed */
+</style>
+"""
+
+# 4. SHARED RESPONSIVE CSS (Mobile Optimization)
+RESPONSIVE_CSS = """
+<style>
+/* --- MOBILE RESPONSIVENESS (Screens < 768px) --- */
+@media only screen and (max-width: 768px) {
+    
+    /* 1. Main Container Padding */
+    .block-container {
+        padding-top: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-bottom: 3rem !important;
+    }
+
+    /* 2. Header & Titles */
+    h1 { font-size: 1.8rem !important; }
+    h2 { font-size: 1.5rem !important; }
+    h3 { font-size: 1.3rem !important; }
+    
+    /* 3. Metrics Cards Stack */
+    div[data-testid="column"] {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* 4. CRM Toolbar Stack */
+    .crm-toolbar {
+        display: none !important; /* Hide spacer */
+    }
+    
+    /* 5. Dataframes & Tables */
+    div[data-testid="stDataEditor"], div[data-testid="stDataFrame"] {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 6. Sidebar Mobile */
+    section[data-testid="stSidebar"] {
+        width: 100% !important;
+    }
+    
+    /* 7. Button sizing */
+    button {
+        min-height: 44px !important; /* Touch target size */
+    }
+    
+    /* 8. Hide less critical elements */
+    .hide-mobile {
+        display: none !important;
+    }
+}
 </style>
 """
 
