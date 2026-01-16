@@ -3761,9 +3761,19 @@ if "Google Maps Scraper" in page:
                                 st.rerun()
 
                     else:
-                        status_container.error("❌ Scraper failed.")
-                        with st.expander("Logs"):
-                            if process.stderr: st.code(process.stderr.read())
+                        status_container.error(f"❌ Scraper Failed with Exit Code {poll}")
+                        # Capture Stderr (Robust)
+                        try:
+                            # We might have already consumed pipe? communicate() handles this.
+                            _, stderr_out = process.communicate(timeout=5)
+                            if stderr_out:
+                                with st.expander("📝 View Error Logs (Click Here)", expanded=True):
+                                    st.code(stderr_out, language="text")
+                                
+                                if "playwright" in stderr_out.lower() or "browser" in stderr_out.lower() or "executable" in stderr_out.lower():
+                                    st.warning("💡 To Fix: In Dashboard, click 'Manage App' -> 'Reboot App' to install browsers.")
+                        except Exception as e:
+                             st.error(f"Could not retrieve error logs: {e}")
         else:
             st.session_state.scraper_running = False
             st.rerun()
