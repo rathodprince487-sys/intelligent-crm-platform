@@ -10,6 +10,18 @@ import os
 import socket
 import json
 
+# --- PLAYWRIGHT SETUP FOR CLOUD ---
+# Ensure browsers are installed (essential for Streamlit Cloud)
+if not os.path.exists(".browser_installed"):
+    try:
+        print("🔧 Installing Playwright Browsers (First Run)...")
+        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+        with open(".browser_installed", "w") as f: 
+            f.write("done")
+        print("✅ Playwright Browsers Installed.")
+    except Exception as e:
+        print(f"⚠️ Failed to install browsers: {e}")
+
 # ================== BACKEND AUTO-START ==================
 @st.cache_resource
 def start_backend_server():
