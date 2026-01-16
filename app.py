@@ -2067,8 +2067,8 @@ if "CRM Grid" in page:
                              count += 1
                  if deleted_rows:
                      for index in deleted_rows:
-                         if index < len(snapshot_df):
-                             lead_id = int(snapshot_df.iloc[index]["id"])
+                         if index in snapshot_df.index:
+                             lead_id = int(snapshot_df.loc[index]["id"])
                              if delete_lead(lead_id):
                                  count += 1
                  if count > 0:
