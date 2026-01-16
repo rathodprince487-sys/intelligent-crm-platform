@@ -17,6 +17,7 @@ const Lead = sequelize.define('Lead', {
     email: DataTypes.STRING,
     query: DataTypes.STRING,
     location: DataTypes.STRING,
+    source: DataTypes.STRING,
 
     // Enhanced Status List
     status: {

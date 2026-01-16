@@ -2,20 +2,108 @@ import scrapy
 from scrapy_playwright.page import PageMethod
 from dental_scraper.items import DentalScraperItem
 import re
+import urllib.parse
+import os
 
 class DentalSpider(scrapy.Spider):
     name = "dental_spider"
-    allowed_domains = ["google.com", "google.co.in"] 
+    allowed_domains = ["google.com", "google.co.in", "google.pl"]
 
     def __init__(self, search_query="Dental clinics in Gotri, Vadodara", *args, **kwargs):
         super(DentalSpider, self).__init__(*args, **kwargs)
         self.search_query = search_query
+        self.total_places = 0
+        self.processed_places = 0
+        self.progress_file = "../scraper_progress.txt"
         self.seen_urls = set()
+        self.update_progress("Starting...")
+
+    def update_progress(self, status=None):
+        try:
+            display = status if status else f"{self.processed_places}/{self.total_places}"
+            with open(self.progress_file, "w") as f:
+                f.write(f"{display}|{self.search_query}")
+        except Exception:
+            pass
 
     def start_requests(self):
-        base_query = self.search_query
+        # STRATEGY: Start at Google Home to handle global consent cookie first.
+        # This bypasses the stricter checks on Google Maps search URLs.
+        url = "https://www.google.com/?hl=en"
+        yield scrapy.Request(
+            url,
+            meta={
+                "playwright": True,
+                "playwright_include_page": True,
+                "playwright_context": "persistent_session", # VITAL: Share context/cookies
+                "playwright_context_kwargs": {
+                    "viewport": {"width": 1920, "height": 1080},
+                    "locale": "en-US", # Try to force English locale at browser level
+                },
+                "playwright_page_methods": [
+                    PageMethod("wait_for_load_state", "domcontentloaded"),
+                    PageMethod("wait_for_timeout", 2000),
+                ],
+            },
+            callback=self.parse_google_home
+        )
+
+    async def parse_google_home(self, response):
+        page = response.meta["playwright_page"]
         
-        # 1. Identify Location and Base Business Type
+        # 1. HANDLE CONSENT ON GOOGLE HOME
+        self.logger.info("🏠 Landed on Google Home. Checking for consent...")
+        self.update_progress("Checking Consent...")
+        
+        try:
+            # Check for consent buttons
+            buttons = page.locator('button')
+            count = await buttons.count()
+            consent_clicked = False
+            
+            # Keywords to LOOK FOR (Prioritize Acceptance/Rejection)
+            consent_keywords = [
+                'accept', 'agree', 'allow', 'consent',
+                'zgadzam', 'akceptuj', 'zaakceptuj', # Polish
+                'odrzuć', 'reject', # Reject
+                'zustimmen', 'akzeptieren', # German
+                'j\'accepte', 'accepter', # French
+                'aceptar', # Spanish
+                'accetta', # Italian
+                'alle akzeptieren', 'accept all',
+                'alles accepteren',
+                'hyväksy',
+            ]
+            avoid_keywords = ['more options', 'więcej opcji', 'customize', 'personalize', 'manage options']
+
+            for i in range(count):
+                btn = buttons.nth(i)
+                if await btn.is_visible():
+                    text = (await btn.inner_text()).lower()
+                    aria = (await btn.get_attribute('aria-label') or "").lower()
+                    combined_text = f"{text} {aria}"
+                    
+                    if any(bad in combined_text for bad in avoid_keywords):
+                        continue
+                        
+                    if any(good in combined_text for good in consent_keywords):
+                        self.logger.info(f"🍪 Found Consent Button on Home: '{text}' (Aria: {aria}). Clicking...")
+                        await btn.click()
+                        await page.wait_for_load_state("networkidle")
+                        await page.wait_for_timeout(3000)
+                        consent_clicked = True
+                        break
+            
+            if not consent_clicked:
+                self.logger.info("✅ No obvious consent button found on Home. Assuming clean session/already consented.")
+            else:
+                self.logger.info("✅ Consent handled on Home.")
+                
+        except Exception as e:
+            self.logger.warning(f"⚠️ Error handling home consent: {e}")
+
+        # 2. GENERATE SEARCH QUERIES
+        base_query = self.search_query
         location = ""
         business_type = base_query
         
@@ -24,203 +112,184 @@ class DentalSpider(scrapy.Spider):
             business_type = parts[0].strip()
             location = parts[-1].strip()
         
-        # 2. UNIVERSAL BUSINESS TYPE EXPANSION (Works for ANY business type!)
-        # Automatically generate variations based on common patterns
         business_variants = [business_type]
-        
-        # Add ONLY the most effective suffixes/prefixes for speed
         business_lower = business_type.lower()
         words = business_type.split()
         
-        # Priority 1: Services (highest yield)
         if 'service' not in business_lower:
             business_variants.append(f"{business_type} services")
-        
-        # Priority 2: Firms/Companies (professional services)
         if 'firm' not in business_lower and 'compan' not in business_lower:
             business_variants.append(f"{business_type} firm")
-        
-        # Priority 3: Office/Center (location-based)
         if 'office' not in business_lower and 'center' not in business_lower:
             business_variants.append(f"{business_type} office")
-        
-        # Priority 4: Consultant (for professional services)
         if 'consultant' not in business_lower and len(words) <= 2:
             business_variants.append(f"{business_type} consultant")
+            
+        business_variants = list(set(business_variants))
         
-        # Limit to top 6 most effective variants for speed
-        business_variants = list(set(business_variants))[:6]
-        
-        # 3. ENHANCED KEYWORD EXPANSION FOR MAXIMUM COVERAGE
         queries_to_run = []
-        
         if location:
-            self.logger.info(f"📍 Detected Location: {location}. Expanding search for MAXIMUM results...")
-            self.logger.info(f"🔍 Business variants ({len(business_variants)}): {business_variants}")
-            
-            # ITERATE THROUGH ALL BUSINESS VARIANTS (Optimized)
+            self.logger.info(f"📍 Detected Location: {location}. Expanding search...")
+            self.update_progress("Preparing Search...")
             for biz_type in business_variants:
-                # Core queries only (most effective)
                 queries_to_run.append(f"{biz_type} in {location}")
-                queries_to_run.append(f"{biz_type} {location}")
-                
-                # Quality variations ONLY for main business type
-                if biz_type == business_type:
-                    queries_to_run.extend([
-                        f"Best {biz_type} in {location}",
-                        f"Top {biz_type} in {location}",
-                    ])
-            
-            # Minimal additional variations (high-yield only)
-            queries_to_run.extend([
-                f"All {business_type} in {location}",
-            ])
-            
-            # GEOGRAPHIC SUBDIVISION STRATEGY
-            # If location contains comma (e.g., "Gotri, Vadodara"), search both the specific area and broader area
-            if ',' in location:
-                parts = [p.strip() for p in location.split(',')]
-                specific_area = parts[0]
-                broader_area = parts[-1]
-                
-                # Search in broader area too
-                queries_to_run.extend([
-                    f"{business_type} in {broader_area}",
-                    f"{business_type} near {broader_area}",
-                    f"Best {business_type} in {broader_area}",
-                    f"{business_type} {broader_area}",
-                ])
-                
-                # Search with just specific neighborhood
-                queries_to_run.extend([
-                    f"{business_type} {specific_area}",
-                    f"{business_type} near {specific_area}",
-                ])
+            queries_to_run.append(f"{business_type} {location}")
         else:
             queries_to_run.append(base_query)
-
-        # Unique queries only
-        queries_to_run = list(set(queries_to_run))
-        
-        self.logger.info(f"🚀 Running {len(queries_to_run)} search variations for comprehensive coverage!")
-
-        for idx, q in enumerate(queries_to_run):
-            # Write progress to file for UI tracking
-            try:
-                with open("scraper_progress.txt", "w") as f:
-                    f.write(f"{idx+1}/{len(queries_to_run)}|{q}")
-            except:
-                pass
             
-            formatted_q = q.replace(" ", "+")
-            url = f"https://www.google.com/maps/search/{formatted_q}/"
-            yield scrapy.Request(
-                url,
-                meta={
-                    "playwright": True,
-                    "playwright_include_page": True,
-                    "playwright_page_methods": [
-                        PageMethod("wait_for_load_state", "domcontentloaded"),
-                        PageMethod("wait_for_timeout", 3000), 
-                    ],
-                },
-                callback=self.parse_search_results
-            )
+        queries_to_run = list(set(queries_to_run))
+        self.logger.info(f"🚀 Generated {len(queries_to_run)} search variations.")
 
-    async def parse_search_results(self, response):
-        page = response.meta["playwright_page"]
+        # 3. START MAPS SCRAPING (Using SAME Context/Page)
+        # We drive the page manually here to ensure session continuity
         
-        self.logger.info("Starting optimized scroll...")
+        for idx, q in enumerate(queries_to_run):
+            # Using + for spaces
+            encoded_q = q.replace(" ", "+")
+            # Force English result interface
+            search_url = f"https://www.google.com/maps/search/{encoded_q}?hl=en"
+            
+            self.logger.info(f"📍 Manually navigating to: {search_url}")
+            self.update_progress("Navigating to Maps...")
+            
+            try:
+                await page.goto(search_url, timeout=30000)
+                await page.wait_for_load_state("domcontentloaded")
+                
+                # Copy of the waiting logic from previous `parse_search_results` params
+                try:
+                    await page.wait_for_selector("div[role='feed'], h1", timeout=15000, state="attached")
+                except:
+                    pass
+                
+                # Now invoke the scraping logic directly
+                # We iterate over the async generator
+                async for req in self.scrape_maps_results(page, search_url):
+                    yield req
+                    
+            except Exception as e:
+                self.logger.error(f"Failed to navigate/scrape {search_url}: {e}")
+                
+        # Close page only after all searches are done
+        await page.close()
 
-        # ENHANCED SCROLLING LOGIC FOR MAXIMUM RESULTS
+    async def scrape_maps_results(self, page, url):
+        self.update_progress("Arrived at Maps...")
+        self.logger.info(f"📍 Parsing Maps URL: {url}")
+        
+        # Take a snapshot of what we see immediately
+        # await page.screenshot(path="../debug_arrival.png")
+        
+        # Double check consent just in case (Maps sometimes has its own)
+        try:
+            if "consent" in page.url:
+                self.logger.warning("⚠️ Still hitting consent on Maps! Attempting secondary click...")
+                buttons = page.locator('button')
+                count = await buttons.count()
+                for i in range(count):
+                    btn = buttons.nth(i)
+                    if await btn.is_visible():
+                        text = (await btn.inner_text()).lower()
+                        if 'reject' in text or 'odrzuć' in text or 'accept' in text or 'zgadzam' in text:
+                             await btn.click(force=True)
+                             await page.wait_for_load_state("networkidle")
+                             break
+        except:
+            pass
+
+        self.logger.info("⏳ Waiting for results feed...")
+        try:
+            # Wait for generic result container
+            await page.wait_for_selector('div[role="feed"], div[aria-label*="Results"]', state="attached", timeout=10000)
+            self.logger.info("✅ Results feed detected!")
+            self.update_progress("Feed Detected...")
+        except:
+             self.logger.warning("⚠️ Feed selector timeout. Trying JS fallback...")
+             self.update_progress("Retrying Feed...")
+
         place_links = await page.evaluate("""
             async () => {
                 const delay = ms => new Promise(res => setTimeout(res, ms));
                 const collectedLinks = new Set();
                 
-                const scrapeVisible = () => {
-                    const links = document.querySelectorAll('a');
-                    links.forEach(a => {
-                        if (a.href && a.href.includes('/maps/place/')) {
-                            collectedLinks.add(a.href);
-                        }
-                    });
+                // Verified Selector from Browser Audit
+                const scrapeGlobal = () => {
+                    // Primary: Verified Class from Google
+                    const classLinks = document.querySelectorAll('a.hfpxzc');
+                    classLinks.forEach(a => collectedLinks.add(a.href));
+                    
+                    // Secondary: Fallback to href pattern
+                    const hrefLinks = document.querySelectorAll('a[href*="/maps/place/"]');
+                    hrefLinks.forEach(a => collectedLinks.add(a.href));
                 };
 
+                // Verified Container: role="feed"
                 let element = document.querySelector('div[role="feed"]');
                 if (!element) {
-                     const divs = document.querySelectorAll('div[aria-label]');
-                     for (const d of divs) {
-                         if (d.getAttribute('aria-label') && d.getAttribute('aria-label').includes('Results for')) {
-                             element = d;
-                             break;
-                         }
-                     }
+                    const candidates = document.querySelectorAll('div[aria-label]');
+                    for (const c of candidates) {
+                         const label = (c.getAttribute('aria-label') || "").toLowerCase();
+                         if (label.includes('results') || label.includes('wyniki')) element = c;
+                    }
                 }
-                if (!element) return Array.from(collectedLinks);
+                
+                // If still no element, we can't scroll effectively, but we can still Scrape what is visible
+                if (!element) {
+                    console.log("⚠️ No specific feed element found. Scraping body...");
+                    scrapeGlobal();
+                    // Try to scroll the body just in case
+                    window.scrollTo(0, document.body.scrollHeight);
+                    await delay(1000);
+                    scrapeGlobal();
+                    return Array.from(collectedLinks);
+                }
 
+                console.log("✅ using element:", element);
+
+                // Scroll Strategy
                 let previousHeight = 0;
                 let sameHeightCount = 0;
                 
-                scrapeVisible();
-
-                // SPEED-OPTIMIZED Dynamic Scroll Loop
-                // Reduced iterations but smarter detection for same coverage
-                
-                for(let i=0; i<400; i++) { 
-                    element.scrollTop = element.scrollHeight;
+                for(let i=0; i<40; i++) { 
+                    scrapeGlobal(); // Scrape everything visible
                     
-                    // Faster initial check
-                    await delay(300); 
+                    element.scrollTop = element.scrollHeight;
+                    await delay(1000); 
                     
                     let currentHeight = element.scrollHeight;
-                    
                     if (currentHeight === previousHeight) {
-                         // Quick secondary check
-                         await delay(800);
-                         scrapeVisible();
+                         await delay(1500);
                          currentHeight = element.scrollHeight;
-                         
                          if(currentHeight === previousHeight) {
                              sameHeightCount++;
+                             // Try to press End key
+                             // document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'End'})); 
                              
-                             // Efficient wiggle to trigger lazy loading
-                             if(sameHeightCount > 1) {
-                                 element.scrollTop = element.scrollHeight - 1500;
-                                 await delay(400);
-                                 element.scrollTop = element.scrollHeight;
-                                 await delay(600);
-                                 scrapeVisible();
-                             }
-                             
-                             // Exit after 5 stuck attempts (faster bailout)
-                             if(sameHeightCount >= 5) {
-                                 console.log(`Reached end after ${i} iterations with ${collectedLinks.size} results`);
-                                 break;
-                             }
-                         } else {
-                             sameHeightCount = 0;
-                         }
-                    } else {
-                        sameHeightCount = 0;
-                        scrapeVisible();
-                    }
+                             if(sameHeightCount >= 5) break;
+                         } else { sameHeightCount = 0; }
+                    } else { sameHeightCount = 0; }
                     previousHeight = currentHeight;
                 }
                 
-                // Final comprehensive scrape to catch any missed links
-                scrapeVisible();
-                
+                scrapeGlobal();
                 return Array.from(collectedLinks);
             }
         """)
         
-        self.logger.info(f"Scrolling complete. Found {len(place_links)} unique places.")
+        self.logger.info(f"Found {len(place_links)} places.")
+        
+        if len(place_links) == 0:
+            self.logger.warning("⚠️ No places found! Taking debug screenshot...")
+            await page.screenshot(path="../debug_failure.png", full_page=True)
+            self.update_progress("No leads found (Check debug_failure.png)")
+        
+        self.update_progress(f"Extracting {len(place_links)} leads...")
+        self.total_places += len(place_links)
+        self.update_progress()
         
         for link in place_links:
             clean_link = link.split('?')[0]
-            if clean_link in self.seen_urls:
-                continue
+            if clean_link in self.seen_urls: continue
             self.seen_urls.add(clean_link)
 
             yield scrapy.Request(
@@ -228,114 +297,93 @@ class DentalSpider(scrapy.Spider):
                 meta={
                     "playwright": True,
                     "playwright_include_page": False,
+                    "playwright_context": "persistent_session", # Keep using same context
                     "playwright_page_methods": [
-                        PageMethod("wait_for_selector", "h1", timeout=6000),  # Reduced from 8s
-                        PageMethod("wait_for_load_state", "domcontentloaded"),
-                        PageMethod("wait_for_timeout", 1200),  # Reduced from 2s
+                        PageMethod("wait_for_selector", "h1", timeout=5000), 
                     ],
                 },
-                callback=self.parse_place_detail
-            )
-            
-        await page.close()
+                callback=self.parse_place_detail,
+                errback=self.errback_detail
+            ) 
+
 
     def parse_place_detail(self, response):
+        self.logger.info(f"📍 Scraped Detail: {response.url}")
         item = DentalScraperItem()
         item['place_url'] = response.url
-        
         item['clinic_name'] = response.css('h1::text').get()
-        if not item['clinic_name']:
-             self.logger.warning(f"No name found for {response.url}")
         
-        item['address'] = response.css('button[data-item-id="address"]::attr(aria-label)').get()
-        if item['address']:
-            item['address'] = item['address'].replace("Address: ", "").strip()
-        else:
-            item['address'] = response.css('button[data-item-id="address"] .fontBodyMedium::text').get()
+        # Address
+        addr = response.css('button[data-item-id="address"]::attr(aria-label)').get() or ""
+        item['address'] = re.sub(r'^.*?:', '', addr).strip()
 
-        item['phone_number'] = response.css('button[data-item-id^="phone"]::attr(aria-label)').get()
-        if item['phone_number']:
-            item['phone_number'] = item['phone_number'].replace("Phone: ", "").strip()
-        else:
-             item['phone_number'] = response.css('button[data-item-id^="phone"] .fontBodyMedium::text').get()
+        # Phone
+        phone = response.css('button[data-item-id^="phone"]::attr(aria-label)').get() or ""
+        item['phone_number'] = re.sub(r'^.*?:', '', phone).strip()
 
-        # ENHANCED WEBSITE EXTRACTION with multiple fallback selectors
+        # Website
         website_selectors = [
             'a[data-item-id="authority"]::attr(href)',
-            'a[data-item-id^="authority"]::attr(href)',
             'a[aria-label*="Website"]::attr(href)',
-            'a[href*="http"][data-item-id*="authority"]::attr(href)',
         ]
-        
         item['website_url'] = None
-        for selector in website_selectors:
-            item['website_url'] = response.css(selector).get()
-            if item['website_url']:
-                self.logger.info(f"✅ Website found using CSS: {selector}")
+        for sel in website_selectors:
+            val = response.css(sel).get()
+            if val:
+                item['website_url'] = val
                 break
         
-        # XPath fallbacks if CSS selectors fail
-        if not item['website_url']:
-            xpath_selectors = [
-                '//a[contains(@aria-label, "Website:")]/@href',
-                '//a[contains(@data-item-id, "authority")]/@href',
-                '//a[contains(@href, "http") and contains(@aria-label, "ebsite")]/@href',
-            ]
-            for xpath in xpath_selectors:
-                item['website_url'] = response.xpath(xpath).get()
-                if item['website_url']:
-                    self.logger.info(f"✅ Website found using XPath: {xpath}")
-                    break
-        
-        if not item['website_url']:
-            self.logger.warning(f"⚠️ No website found for {item['clinic_name']} - {response.url}")
-
         if item['website_url']:
-            # Clean up the URL if it's a Google redirect
-            if 'google.com/url?q=' in item['website_url']:
-                import urllib.parse
-                parsed = urllib.parse.parse_qs(urllib.parse.urlparse(item['website_url']).query)
-                if 'q' in parsed:
-                    item['website_url'] = parsed['q'][0]
-            
-            self.logger.info(f"🌐 Visiting website: {item['website_url']}")
-            yield scrapy.Request(
+             # Visit website for email
+             yield scrapy.Request(
                 item['website_url'],
                 callback=self.parse_website,
-                meta={'item': item}, 
+                meta={'item': item},
                 errback=self.errback_website,
                 dont_filter=True
-            )
+             )
         else:
-            # No website found, yield item without email
             item['email'] = None
+            self.processed_places += 1
+            self.update_progress()
             yield item
 
     def parse_website(self, response):
         item = response.meta['item']
-        html_text = response.text
-        
-        # Extract emails with improved regex
-        emails = set(re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', html_text))
-        # Filter out common false positives
-        emails = {e for e in emails if not any(x in e.lower() for x in ['example.com', 'sentry', 'schema.org', 'w3.org'])}
-        
-        phones = set(re.findall(r'(?:\+91[\-\s]?)?[6789]\d{9}|0265[\-\s]?\d{6,8}', html_text))
-        
+        html = response.text
+        emails = set(re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', html))
+        emails = {e for e in emails if not any(x in e.lower() for x in ['example.com', 'sentry', 'w3.org', '.png', '.jpg'])}
         item['email'] = ", ".join(emails) if emails else None
-        
-        if item['email']:
-            self.logger.info(f"📧 Email(s) found: {item['email']}")
-        else:
-            self.logger.warning(f"⚠️ No email found on website: {response.url}")
-        
-        if not item.get('phone_number') and phones:
-             item['phone_number'] = ", ".join(phones)
-             
+        self.processed_places += 1
+        self.update_progress()
         yield item
 
     def errback_website(self, failure):
         item = failure.request.meta['item']
         item['email'] = None
-        self.logger.error(f"❌ Failed to visit website {failure.request.url}: {failure.value}")
+        self.processed_places += 1
+        self.update_progress()
         yield item
+
+    def errback_detail(self, failure):
+        self.logger.error(f"❌ Failed to scrape detail page: {failure.request.url} - {failure.value}")
+        # Yield a partial item if possible, or just mark as processed
+        # Since we don't have partial data here (only URL), we just skip it.
+        # But we MUST update progress.
+        self.processed_places += 1
+        self.update_progress()
+
+    custom_settings = {
+        "PLAYWRIGHT_LAUNCH_OPTIONS": {
+            "headless": True,
+            "timeout": 60000,  # 60s launch timeout
+        },
+        "DOWNLOAD_TIMEOUT": 30, # Reduced timeout for faster failure on bad sites
+        "CONCURRENT_REQUESTS": 16, # Increased concurrency
+        "CONCURRENT_REQUESTS_DOMAIN": 16,
+        "AUTOTHROTTLE_ENABLED": True,
+        "AUTOTHROTTLE_START_DELAY": 1.0, # Reduced from 5.0
+        "AUTOTHROTTLE_MAX_DELAY": 30,
+        "PLAYWRIGHT_ABORT_REQUEST": lambda req: req.resource_type in ["image", "stylesheet", "font", "media"],
+    }
+

@@ -8,6 +8,7 @@ import subprocess
 import sys
 import os
 import socket
+import json
 
 # ================== BACKEND AUTO-START ==================
 @st.cache_resource
@@ -95,6 +96,12 @@ div[data-testid="stDecoration"] {
 }
 /* Keep the hamburger menu visible but maybe style it? */
 /* Streamlit's default is fine, just needs to be visible. */
+
+/* Sidebar Width Fix */
+section[data-testid="stSidebar"] {
+    min-width: 250px !important;
+    max-width: 300px !important;
+}
 
 /* Sidebar Radius Adjustments */
 section[data-testid="stSidebar"] div[role="radiogroup"] {
@@ -307,20 +314,18 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
 .mc-title { 
     color: #1a202c !important; 
     font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    white-space: normal; /* Allow wrap */
+    line-height: 1.2;
+    word-break: break-word; /* Prevent overflow */
 }
 .mc-company { 
     color: #64748b !important;
-    font-size: 0.75rem;
-    margin-bottom: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    white-space: normal;
+    line-height: 1.3;
 }
 .mc-action {
     display: inline-flex;
@@ -673,19 +678,18 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
 .mc-title { 
     color: #f8fafc !important; 
     font-weight: 600; 
-    font-size: 0.9rem;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    white-space: normal;
+    line-height: 1.2;
+    word-break: break-word;
 }
 .mc-company { 
     color: #94a3b8 !important; 
-    font-size: 0.75rem;
-    margin-bottom: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    white-space: normal;
+    line-height: 1.3;
 }
 .mc-action {
     display: inline-flex;
@@ -1009,11 +1013,11 @@ if sb_logo_dark and sb_logo_light:
     
     st.sidebar.markdown(f"""
     <div style="margin-bottom: 20px;">
-        <img src="data:image/png;base64,{target_logo}" style="width: 100%;">
+        <img src="data:image/png;base64,{target_logo}" style="width: 100%; max-width: 240px; height: auto;">
     </div>
     """, unsafe_allow_html=True)
 elif sb_logo_dark:
-    st.sidebar.image("logo.png", use_container_width=True)
+    st.sidebar.image("logo.png", width=240)
 else:
     st.sidebar.title("SHDPIXEL")
 
@@ -1021,13 +1025,13 @@ else:
 page = st.sidebar.radio(
     "Navigate",
     [
-        "📊 Dashboard", 
-        "🗂 CRM Grid", 
-        "📞 Power Dialer", 
+        "🏠 Dashboard", 
+        "👥 CRM Grid", 
+        "🎧 Power Dialer", 
         "⚡ Lead Generator", 
-        "📜 Lead Gen History",
-        "🧠 Spreadsheet Tool",
-        "🗺️ Google Maps Scraper"
+        "📥 Scraped Leads",
+        "📗 Spreadsheet Tool",
+        "📍 Google Maps Scraper"
     ],
     label_visibility="collapsed"
 )
@@ -1102,9 +1106,10 @@ try:
             if future_meetings.empty:
                 st.sidebar.caption("No upcoming meetings.")
             else:
+                meetings_html = '<div style="max-height: 350px; overflow-y: auto; padding-right: 4px;">'
+                
                 for idx, row in future_meetings.iterrows():
                     # Create Link
-                    # Re-use logic or quick inline
                     m_date = row["meetingDate"]
                     name = str(row.get("contactName", "Lead")).strip() or "Lead"
                     comp = str(row.get("businessName", "Company")).strip() or "Company"
@@ -1116,23 +1121,25 @@ try:
                     details = urllib.parse.quote(f"Phone: {row.get('phone', '')}\nAddress: {row.get('address', '')}")
                     cal_url = f"https://calendar.google.com/calendar/render?action=TEMPLATE&text={title}&details={details}&dates={start_str}/{end_str}"
                     
-                    # Render Card with IMPROVED UI
-                    with st.sidebar.container():
-                        st.markdown(f"""
-                        <div class="meeting-card">
-                            <div class="mc-date-box">
-                                <span class="mc-month">{m_date.strftime('%b').upper()}</span>
-                                <span class="mc-day">{m_date.strftime('%d')}</span>
-                            </div>
-                            <div class="mc-details">
-                                <div class="mc-title" title="{comp}">{comp}</div>
-                                <div class="mc-company" title="{name}">👤 {name}</div>
-                                <a href="{cal_url}" target="_blank" class="mc-action">
-                                    📅 Add to Cal
-                                </a>
-                            </div>
+                    # Append Card HTML
+                    meetings_html += f"""
+                    <div class="meeting-card">
+                        <div class="mc-date-box">
+                            <span class="mc-month">{m_date.strftime('%b').upper()}</span>
+                            <span class="mc-day">{m_date.strftime('%d')}</span>
                         </div>
-                        """, unsafe_allow_html=True)
+                        <div class="mc-details">
+                            <div class="mc-title" title="{comp}">{comp}</div>
+                            <div class="mc-company" title="{name}">👤 {name}</div>
+                            <a href="{cal_url}" target="_blank" class="mc-action">
+                                📅 Add to Cal
+                            </a>
+                        </div>
+                    </div>
+                    """
+                
+                meetings_html += "</div>"
+                st.sidebar.markdown(meetings_html, unsafe_allow_html=True)
 except Exception as e:
     # Fail silently to not break main app
     st.sidebar.caption(f"Syncing calendar... ({e})")
@@ -1154,7 +1161,7 @@ if "Dashboard" in page:
                 box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
                 color: white;
             ">
-                📊
+                🏠
             </div>
             <span>CRM Overview</span>
         </h1>
@@ -1215,7 +1222,7 @@ if "Dashboard" in page:
 
 # ================== CRM GRID (PIPELINE) ==================
 if "CRM Grid" in page:
-    st.title("🗂 Advanced CRM Grid")
+    st.title("👥 Advanced CRM Grid")
     
     # --- File Import Section ---
     with st.expander("📂 Import Leads (CSV/Excel)"):
@@ -1393,6 +1400,126 @@ if "CRM Grid" in page:
     for date_col in ["lastFollowUpDate", "nextFollowUpDate", "meetingDate"]:
         df[date_col] = pd.to_datetime(df[date_col], errors='coerce').dt.date
 
+    # --- GOOGLE SHEETS FUNCTIONALITY: FILTERS & SEARCH ---
+    st.markdown("""
+    <style>
+    .filter-bar {
+        background: rgba(150, 150, 150, 0.05);
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    .grid-footer {
+        background: #f8f9fa;
+        padding: 5px 15px;
+        border-radius: 0 0 8px 8px;
+        border-top: 1px solid #ddd;
+        font-size: 0.85rem;
+        color: #666;
+        display: flex;
+        justify-content: space-between;
+        margin-top: -5px;
+    }
+    /* GRID HEADER STYLING (Sheets Style) */
+    div[data-testid="stDataEditor"] .glide-grid-header {
+        background: #f1f3f4 !important;
+        font-weight: bold !important;
+    }
+    
+    /* Overall grid border for Sheet look */
+    div[data-testid="stDataEditor"] {
+        border: 1px solid #e0e0e0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # --- CALLBACKS ---
+    def clear_all_filters_cb():
+        st.session_state.global_search_input = ""
+        st.session_state.f_status_multi = []
+        st.session_state.f_prio_multi = []
+
+    # 1. SEARCH & FILTERS ROW
+    col_search, col_status, col_prio, col_clear, col_export = st.columns([2.5, 1.5, 1.2, 0.4, 1])
+    
+    with col_search:
+        search_q = st.text_input("🔍 Search", placeholder="Search name, company, notes...", label_visibility="collapsed", key="global_search_input")
+    
+    with col_status:
+        # Sync Options with Palette Keys to ensure 100% match
+        status_keys = list(STATUS_PALETTE.keys())
+        if "Generated" not in status_keys: status_keys.insert(0, "Generated")
+        status_options = status_keys
+        f_status = st.multiselect("Filter Status", options=status_options, placeholder="All Statuses", label_visibility="collapsed", key="f_status_multi")
+    
+    with col_prio:
+        f_prio = st.multiselect("Filter Priority", options=["HOT", "WARM", "COLD"], placeholder="All Priorities", label_visibility="collapsed", key="f_prio_multi")
+
+    with col_clear:
+        st.button("🧹", help="Clear All Filters", on_click=clear_all_filters_cb)
+    
+    with col_export:
+        import io
+        def to_excel(df_to_save):
+            output = io.BytesIO()
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                df_to_save.to_excel(writer, index=False, sheet_name='CRM_Leads')
+            return output.getvalue()
+
+    # 2. APPLY REACTIVE FILTERING
+    if not df.empty:
+        if search_q:
+            mask = df.astype(str).apply(lambda x: x.str.contains(search_q, case=False, na=False)).any(axis=1)
+            df = df[mask]
+        if f_status:
+            df = df[df['status'].isin(f_status)]
+        if f_prio:
+            df = df[df['priority'].isin(f_prio)]
+
+        # --- SORTING LOGIC ---
+        # -1 = Urgent (Follow-up is TODAY)
+        #  0 = Normal
+        #  1 = Closed - Lost (Bottom)
+        
+        today_date = datetime.now().date()
+        
+        def get_sort_key(row):
+            # 1. Check Closed-Lost (Deprioritize)
+            st_val = str(row.get('status', '')).strip()
+            if st_val in ["Closed – Lost", "Closed - Lost"]:
+                return 1
+            
+            # 2. Check Follow-up Date (Prioritize)
+            d = row.get('nextFollowUpDate')
+            # Ensure d is a valid date object for comparison
+            if d == today_date:
+                return -1
+                
+            return 0
+
+        df['_sort_key'] = df.apply(get_sort_key, axis=1)
+        
+        # Sort: SortKey ASC, then ID DESC (Newest first)
+        df = df.sort_values(by=['_sort_key', 'id'], ascending=[True, False])
+        df = df.drop(columns=['_sort_key'])
+            
+    with col_export:
+        if not df.empty:
+            excel_data = to_excel(df)
+            st.download_button(
+                label="📥 Export Excel",
+                data=excel_data,
+                file_name=f"CRM_Export_{time.strftime('%Y%m%d_%H%M')}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                help="Download filtered leads to Excel",
+                use_container_width=True
+            )
+        else:
+            st.button("📥 Export", disabled=True, use_container_width=True)
+
     # --- INIT STATE ---
     # Default State for Toolbar
     if "mode_state" not in st.session_state:
@@ -1408,93 +1535,81 @@ if "CRM Grid" in page:
     save_clicked = False 
 
     # --- RESPONSIVE LAYOUT LOGIC v6 (Fixed Selectors) ---
-    scale_val = zoom_val / 100
-    
-    # 1. Height Logic
-    total_content_height = (len(df) + 1) * 35 + 10
-    final_height = min(total_content_height, 20000) 
-    final_height = max(final_height, 200)
-
-    # 2. Width Logic (Python Calculated)
-    # We calculate the inverse percentage to force the element to fill the visual screen.
-    # e.g. Zoom 0.8 -> Width 125vw.
-    width_val = 99.0 / scale_val
-    width_str = f"{width_val:.2f}vw"
+    # zoom_val and scroll logic REMOVED. relying on native browser scroll.
     
     # --- CUSTOM TOOLBAR UI ---
-    st.markdown("""<div style="margin-bottom: 10px;"></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class="crm-toolbar"></div>""", unsafe_allow_html=True)
     
-    toolbar_c1, toolbar_c2, toolbar_c3 = st.columns([1.2, 3, 1.8])
+    # Simple Layout: Spacer | Actions
+    toolbar_c2, toolbar_c3 = st.columns([4.0, 2.5])
     
-    with toolbar_c1:
-        # Custom CSS for Slider to make it compact
-        st.markdown("""
-        <style>
-        div[data-testid="stSlider"] {
-            padding-top: 0px !important;
-            padding-bottom: 0px !important;
-            margin-top: -10px !important;
-        }
-        div[data-testid="stSlider"] label {
-            display: none;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("**🔎 Zoom Level**", unsafe_allow_html=True)
-        new_zoom = st.slider("Zoom", 50, 100, 90, 10, label_visibility="collapsed", key="zoom_slider_real")
-        
-        # Update vars based on real slider
-        scale_val = new_zoom / 100 
-        width_val = 99.0 / scale_val
-        width_str = f"{width_val:.2f}vw"
-
     with toolbar_c2:
          st.write("") # Spacer
 
     with toolbar_c3:
         st.write("⚙️ **Actions**")
-        # Split into smaller cols for better layout - gap="small" for tighter look
-        ac1, ac2, ac3 = st.columns([1, 1, 1], gap="small") 
+        
+        # Init Zoom Level
+        if "zoom_level" not in st.session_state:
+            st.session_state.zoom_level = 100
+            
+        current_wrap = st.session_state.get("wrap_text", False)
+
+        if current_wrap:
+             # Edit | Wrap | Zoom In | Zoom Out | Save | All
+             ac1, ac2, z_out, z_in, ac3, ac4 = st.columns([1, 1, 0.6, 0.6, 1, 1], gap="small")
+        else:
+             # Normal Layout
+             ac1, ac2, ac3, ac4 = st.columns([1, 1, 1, 1], gap="small") 
         
         with ac1:
              # Edit/Read Toggle
              if mode == "👁️ Read Only":
-                 if st.button("✏️ Edit", use_container_width=True, key="btn_edit_mode"):
+                 if st.button("✏️", use_container_width=True, key="btn_edit_mode", help="Switch to Edit Mode"):
                      st.session_state.mode_state = "✏️ Edit" 
                      st.rerun() 
              else:
-                 if st.button("👁️ Read", use_container_width=True, key="btn_read_mode"):
+                 if st.button("👁️", use_container_width=True, key="btn_read_mode", help="Switch to Read Only Mode"):
                     st.session_state.mode_state = "👁️ Read Only"
                     st.rerun()
         
         with ac2:
-            # Wrap Toggle - Replaced with Button for better aesthetics ("Image or something")
-            # We use a button that toggles state interactively
-            current_wrap = st.session_state.get("wrap_text", False)
-            btn_label = "📏 Table" if current_wrap else "↩️ Wrap"
-            btn_help = "Switch to Standard Table" if current_wrap else "Switch to Wrapped View"
-            
+            btn_label = "📏" if current_wrap else "↩️"
+            btn_help = "Standard Table View" if current_wrap else "Wrapped Text View"
             if st.button(btn_label, use_container_width=True, help=btn_help, key="wrap_btn_toggle"):
                 st.session_state.wrap_text = not current_wrap
                 st.rerun()
 
+        if current_wrap:
+             with z_out:
+                  # Use unique key per render if needed, but fixed key is better for debounce
+                  if st.button("➖", use_container_width=True, help="Zoom Out (10%)", key="zoom_out_btn"):
+                       # Ensure int
+                       curr = int(st.session_state.get('zoom_level', 100))
+                       st.session_state.zoom_level = max(50, curr - 10)
+                       st.rerun()
+             
+             # Display current zoom level with a small hack using a disabled button styling or just centering logic
+             # But here we just assume it's sandwiched
+             
+             with z_in:
+                  if st.button("➕", use_container_width=True, help="Zoom In (10%)", key="zoom_in_btn"):
+                       curr = int(st.session_state.get('zoom_level', 100))
+                       st.session_state.zoom_level = min(200, curr + 10)
+                       st.rerun()
+
         with ac3:
+             # Auto-Save Indicator (Visual only)
              if mode == "✏️ Edit":
-                 # In Wrap Mode, we don't need the save button because the Modal handles it individually.
-                 # But we keep it for Standard Grid.
-                 if not st.session_state.get("wrap_text", False):
-                    save_clicked = st.button("💾 Save", type="primary", use_container_width=True, key="btn_save")
-                 else:
-                    st.button("💾 Save", disabled=True, use_container_width=True, key="btn_save_disabled", help="Use the inline edit buttons in Wrap Mode")
+                  st.button("⚡", disabled=True, use_container_width=True, help="Auto-save enabled", key="btn_autosave_indicator")
              else:
-                 # Standardize button size by adding text even in read only
-                 st.button("💾 Save", disabled=True, use_container_width=True, key="btn_save_read_only")
+                  st.button("🔒", disabled=True, use_container_width=True, help="Read Only", key="btn_readonly_indicator")
 
+        with ac4:
+            # "All" / Show All icon
+            st.button("📑", use_container_width=True, key="btn_show_all", help="Show All Rows / Reset Filters", on_click=clear_all_filters_cb)
 
-
-    # CSS Injection (Updated for new Scale + Conditional Dark Mode)
-    # Build dark mode CSS only if theme is dark (and create light mode CSS explicitly if theme is light)
+    # CSS Injection (Clean Native)
     grid_css_conditional = ""
     
     if st.session_state.get("theme") == "dark":
@@ -1518,7 +1633,7 @@ if "CRM Grid" in page:
     }
         """
     else:
-        # LIGHT MODE (Explicitly Force White to override any auto-dark behavior)
+        # LIGHT MODE
         grid_css_conditional = """
     /* LIGHT MODE STYLING FOR CRM GRID */
     div[data-testid="stDataEditor"], [data-testid="stDataEditor"] * {
@@ -1538,28 +1653,42 @@ if "CRM Grid" in page:
     }
         """
     
+    # Full View Adjustments
+    full_view_css = ""
+    if st.session_state.get("full_view", False):
+        full_view_css = """
+        section[data-testid="stSidebar"] { display: none !important; }
+        button[kind="header"] { display: none !important; }
+        .stMain { padding-top: 0 !important; }
+        """
+
+    viewport_offset = 64
     st.markdown(f"""
     <style>
-    section.main > .block-container {{
-        padding-top: 1rem !important;
-        padding-bottom: 5rem !important;
+    {full_view_css}
+    
+    /* REMOVE ALL STREAMLIT VERTICAL WASTE */
+    section.main > .block-container,
+    div[data-testid="stAppViewContainer"] .block-container,
+    div[data-testid="stAppViewContainer"] .main,
+    .stAppViewContainer, .main, .block-container {{
+        padding: 0 !important;
+        margin: 0 !important;
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
         padding-left: 0.5rem !important;
         padding-right: 0.5rem !important;
-        max-width: 100vw !important;
-        width: 100vw !important;
+        max-width: 100% !important;
+        width: 100% !important;
     }}
-    div[data-testid="stDataEditor"], div[data-testid="stDataFrame"] {{
-        zoom: {scale_val};
-        width: {width_str} !important;
-        min-width: {width_str} !important;
-        max-width: none !important;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }}
-    div[data-testid="stDataEditor"] canvas {{
+    
+    /* NATIVE SCROLL LOGIC ONLY */
+    div[data-testid="stDataEditor"] {{
         width: 100% !important;
         max-width: 100% !important;
+        overflow: auto !important;
     }}
+    
     {grid_css_conditional}
     </style>
     """, unsafe_allow_html=True)
@@ -1594,44 +1723,51 @@ if "CRM Grid" in page:
     # --- HELPER: STYLING FUNCTIONS ---
     def get_status_style(val):
         """
-        Returns CSS style string for a given status value.
+        Applies Google Sheets-style conditional formatting to Status cells.
+        Strict exact matching only.
         """
         if not val or pd.isna(val):
             return ""
             
         status_val = str(val).strip()
         
-        # Get palette (theme agnostic)
-        status_colors = get_status_colors("light")
+        # EXACT Google Sheets Color Mapping (Per User Request)
+        # Background color | Text color
+        GS_MAPPING = {
+            "Interested":          "background-color: #DFF5E1; color: #1B5E20;",
+            "Not picking":         "background-color: #F0F0F0; color: #616161;",
+            "Asked to call later": "background-color: #FFF8E1; color: #8D6E00;",
+            "Meeting set":         "background-color: #E3F2FD; color: #0D47A1;",
+            "Meeting Done":        "background-color: #E0F2F1; color: #004D40;",
+            "Proposal sent":       "background-color: #F3E5F5; color: #4A148C;",
+            "Follow-up scheduled": "background-color: #FFE0B2; color: #E65100;",
+            "Not interested":      "background-color: #FDECEA; color: #B71C1C;",
+            "Closed – Won":        "background-color: #C8E6C9; color: #1B5E20;", # En-dash
+            "Closed - Won":        "background-color: #C8E6C9; color: #1B5E20;", # Hyphen fallback
+            "Closed – Lost":       "background-color: #ECEFF1; color: #37474F;", # En-dash
+            "Closed - Lost":       "background-color: #ECEFF1; color: #37474F;"  # Hyphen fallback
+        }
+
+        # Logic: Strict Case-Sensitive Exact Match
+        return GS_MAPPING.get(status_val, "")
         
-        # Pre-process keys for fuzzy matching
-        status_lookup = {k.lower(): v for k, v in status_colors.items()}
-        
-        style_found = ""
-        
-        # A. Exact Match
-        if status_val in status_colors:
-            style_found = status_colors[status_val]
-        
-        # B. Case-Insensitive Match
-        elif status_val.lower() in status_lookup:
-            style_found = status_lookup[status_val.lower()]
+    def get_priority_style(val):
+        """
+        Applies strict Google Sheets-style conditional formatting to Priority cells.
+        """
+        if not val or pd.isna(val):
+            return ""
             
-        # C. Fuzzy Dash Match
-        else:
-            variants = [
-                status_val.replace('-', '–'), # hyphen to en-dash
-                status_val.replace('–', '-'), # en-dash to hyphen
-            ]
-            for v in variants:
-                if v in status_colors:
-                    style_found = status_colors[v]
-                    break
-                if v.lower() in status_lookup:
-                    style_found = status_lookup[v.lower()]
-                    break
+        p_val = str(val).strip()
         
-        return style_found
+        # EXACT Colors - DO NOT CHANGE
+        PRIO_MAPPING = {
+            "HOT":  "background-color: #F25C54; color: #FFFFFF;",
+            "WARM": "background-color: #FFE5B4; color: #5A3E00;",
+            "COLD": "background-color: #E3F2FD; color: #1E3A8A;"
+        }
+        
+        return PRIO_MAPPING.get(p_val, "")
 
     def get_user_style(val):
         """
@@ -1647,19 +1783,31 @@ if "CRM Grid" in page:
         }
         return user_colors.get(val_str, "")
 
-    def get_user_style(val):
+    def highlight_closed_rows(row):
         """
-        Returns CSS for specific users.
+        Highlight entire row if Status is Closed-Won or Closed-Lost.
         """
-        if not val or pd.isna(val):
-            return ""
+        s = str(row.get('Status', '')).strip()
         
-        val_str = str(val).strip()
-        user_colors = {
-            "Satyajit": "background-color: #E040FB; color: white; border-radius: 12px; padding: 2px 8px;", 
-            "Vyonish": "background-color: #B2FF59; color: black; border-radius: 12px; padding: 2px 8px;"
-        }
-        return user_colors.get(val_str, "")
+        style = ''
+        if s in ["Closed – Won", "Closed - Won"]:
+             style = 'background-color: #C8E6C9; color: #1B5E20;'
+        elif s in ["Closed – Lost", "Closed - Lost"]:
+             style = 'background-color: #ECEFF1; color: #37474F;'
+             
+        return [style] * len(row)
+
+    def highlight_today(val):
+        """
+        Highlight cell if date is today (Urgent).
+        """
+        try:
+            today = datetime.now().date()
+            if val == today:
+                 # Match "Follow-up scheduled" style
+                 return 'background-color: #FFE0B2; color: #E65100; font-weight: bold;'
+        except: pass
+        return ''
 
     # --- DIALOG FOR EDITING (Supported in St 1.43) ---
     @st.dialog("✏️ Edit Lead Details")
@@ -1757,8 +1905,16 @@ if "CRM Grid" in page:
     # Rename 'status' to 'Status' for styling consistency
     display_df.rename(columns={"status": "Status"}, inplace=True)
 
+    # --- GLOBAL HEIGHT CALCULATION ---
+    total_content_height = (len(df) + 1) * 35 + 10
+    final_height = min(total_content_height, 20000) 
+    final_height = max(final_height, 400) # Increased min height for usability
+
     if is_wrap:
         # --- HTML WRAPPED VIEW ---
+        # Fixed Width/Scale for Wrap View since we removed usage of variable zoom
+        scale_val = 1.0
+        width_str = "100%"
         
         # 1. Convert Links to HTML
         def make_link(url, text, icon=""):
@@ -1780,174 +1936,166 @@ if "CRM Grid" in page:
             "calledBy": "Called By", "meetingBy": "Meeting By", "closedBy": "Closed By"
         }, inplace=True)
 
-        # --- GOOGLE SHEETS STYLE STATUS CHIPS (HTML) ---
-        def make_status_chip(val):
-            if not val or str(val) == "nan": return ""
-            style = get_status_style(val) # Returns "bg:..; col:..; ..."
-            return f'<div style="{style} display: inline-block; white-space: nowrap; font-size: 0.85rem; margin: 0;">{val}</div>'
+        # Mapping logic cleared to allow Styler to handle background
 
-        display_df_html['Status'] = display_df_html['Status'].apply(make_status_chip)
         
         # --- ADD EDIT BUTTON (If in Edit Mode) ---
-        # The user triggers this by clicking the 'Edit ID' button we inject.
-        # Streamlit doesn't support onclick -> python easily in raw HTML. 
-        # Hack: We use a column configure in `st.dataframe` usually, but we are in HTML.
-        # Solution: We can't easily trigger the python callback from raw HTML to open the specific ID dialog without a rerun.
-        # HOWEVER, we can use `st.column_config.LinkColumn` in `st.dataframe`... NO, we are using `to_html`.
-        # Agent Decision: For "Wrap in Edit Mode", we will simply display the `st.dataframe` WITH `st.column_config.TextColumn` wrapped?
-        # WAIT! Streamlit 1.35+ added `width="large"` but no max-height wrap.
-        # Let's use the 'Link Query Param' trick.
-        
         if mode == "✏️ Edit":
-            # Add Actions Column
-            # Self-href to same page with query param ?edit_id=<ID>
-            # We must detect current URL? No, just ?edit_id=...
-            # This triggers a reload, which we catch at top of script?
-            # Actually easier: We use a button in the toolbar to 'Edit Selected' if the user can select?
-            # No, user wants row alignment.
-            
-            # Let's try rendering `st.button` for each row? Too slow.
-            # Let's use the Query Param Link hack.
-            
             df_ids = df["id"].tolist()
             display_df_html.insert(0, "Action", [f'<a href="?edit_id={i}" target="_self" style="text-decoration:none;">✏️ Edit</a>' for i in df_ids])
             
             # CHECK QUERY PARAMS HERE (Local catch)
-            qp = st.query_params
+            # Use safe extraction for streamlit new versions if needed
+            try:
+                qp = st.query_params
+            except:
+                qp = st.experimental_get_query_params()
+                
             if "edit_id" in qp:
                 edit_id = qp["edit_id"]
-                # Clear param to prevent loop
-                # st.query_params.clear() # This might refresh again. 
-                # Better: Set session state trigger and clear.
                 st.session_state.edit_trigger = edit_id
-                st.query_params.clear()
+                
+                # Clear param
+                try:
+                    st.query_params.clear()
+                except:
+                    st.experimental_set_query_params()
+                    
                 st.rerun()
 
-        # 3. Apply Styler
-        # Note: We must map styles using the NEW column names
+        # 3. Create HTML for Wrapped View
+        # Exclude 'Status' and 'Priority' from base props
+        non_styled_cols = [c for c in display_df_html.columns if c not in ['Status', 'Priority']]
+
         styled_html = display_df_html.style\
+            .map(get_status_style, subset=['Status'])\
+            .map(get_priority_style, subset=['Priority'])\
             .map(get_user_style, subset=['Called By', 'Meeting By', 'Closed By'])\
+            .map(highlight_today, subset=['Next Follow-up'])\
+            .set_properties(**base_props, subset=non_styled_cols)\
+            .apply(highlight_closed_rows, axis=1)\
             .hide(axis="index")\
-            .set_properties(**base_props)\
             .format({"Last Follow-up": "{:%d/%m/%Y}", "Next Follow-up": "{:%d/%m/%Y}", "Meeting Date": "{:%d/%m/%Y}"}, na_rep="")\
             .to_html(escape=False)
 
-        # 4. Inject Custom Table CSS (Google Sheets Look)
+        # 4. Inject Custom Table CSS (Streamlit Native Look)
+        current_zoom = st.session_state.get('zoom_level', 100)
+        zoom_ratio = current_zoom / 100.0
+        base_font_size = 14 * zoom_ratio
+        
+        # Scale padding
+        p_v = 8 * zoom_ratio
+        p_h = 10 * zoom_ratio
+        th_p = 12 * zoom_ratio
+        
         table_css = f"""
         <style>
         .wrap-table-container {{
             max-height: {final_height}px;
             overflow-y: auto;
             border: 1px solid {border_col};
-            border-radius: 4px; /* Sharper corners like generic sheet container */
+            border-radius: 4px;
             background-color: {base_props.get('background-color', '#fff')};
-            
-            /* ZOOM & WIDTH LOGIC */
-            zoom: {scale_val};
-            width: {width_str} !important;
-            min-width: {width_str} !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
+            width: 100% !important;
             display: block;
         }}
         .wrap-table-container table {{
             width: 100%;
-            border-collapse: collapse; /* Critical for grid lines */
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            table-layout: fixed; /* Helps with aggressive wrapping */
+            border-collapse: collapse;
+            font-family: "Source Sans Pro", sans-serif; /* Streamlit Font */
+            font-size: {base_font_size}px !important;
+            color: {base_props.get('color', '#31333F')};
         }}
         .wrap-table-container th {{
-            background-color: {header_bg};
-            color: {header_col};
             position: sticky;
             top: 0;
             z-index: 10;
-            padding: 8px 6px; /* Tighter headers */
+            padding: {th_p}px {p_h}px !important; /* Scaled padding */
             text-align: left;
             font-weight: 600;
-            border: 1px solid {border_col}; /* Full Grid */
-            font-size: 0.85rem;
+            font-size: {base_font_size}px !important;
+            
+            /* Streamlit Native Header Style */
+            background-color: {header_bg if st.session_state.theme == 'dark' else '#ffffff'}; 
+            color: {header_col if st.session_state.theme == 'dark' else 'rgba(49, 51, 63, 0.6)'};
+            border-bottom: 2px solid {border_col if st.session_state.theme == 'dark' else 'rgba(49, 51, 63, 0.1)'};
         }}
         .wrap-table-container td {{
-            padding: 6px 8px; /* Sheets-like density */
-            border: 1px solid {border_col}; /* Full Grid */
-            border-top: none; /* Collapse fix */
-            color: {base_props.get('color', '#333')};
-            
-            /* ALIGNMENT */
-            vertical-align: middle;
+            padding: {p_v}px {p_h}px !important; /* Scaled padding */
+            border-bottom: 1px solid {border_col if st.session_state.theme == 'dark' else 'rgba(49, 51, 63, 0.1)'};
+            vertical-align: top; /* Better for wrapped text */
             text-align: left;
             
-            /* WRAPPING MAGIC */
+            /* WRAPPING ENABLED */
             white-space: normal !important; 
             word-wrap: break-word;
+            line-height: 1.5;
+            font-size: {base_font_size}px !important;
         }}
-        /* Specific column tweaks */
-        .wrap-table-container td:nth-child(2) {{ font-weight: 600; }} /* Business Name */
+        .wrap-table-container tr:hover td {{
+            background-color: { 'rgba(255,255,255,0.05)' if st.session_state.theme == 'dark' else '#f8f9fb' };
+        }}
         </style>
         """
-        
         st.markdown(table_css, unsafe_allow_html=True)
         st.markdown(f'<div class="wrap-table-container">{styled_html}</div>', unsafe_allow_html=True)
 
     else:
         # NORMAL MODE (Edit or Read)
         # If Edit Mode -> st.data_editor
-        # If Read Mode -> st.dataframe
-        # BUT user wanted "Wrap in Edit Mode". We handled that above by allowing 'Edit' links in Wrap.
-        # Now we handle 'Edit Mode' WITHOUT wrap (Standard Grid).
-        
         if mode == "✏️ Edit":
              st.caption("📍 Standard Grid Edit (No Wrap). Double-click cells to modify.")
+             
+             # --- AUTO-SAVE CALLBACK ---
+             def auto_save_crm_grid(snapshot_df):
+                 changes = st.session_state.get("crm_grid", {})
+                 edited_rows = changes.get("edited_rows", {})
+                 added_rows = changes.get("added_rows", [])
+                 deleted_rows = changes.get("deleted_rows", [])
+                 
+                 count = 0
+                 if edited_rows:
+                     for index, updates in edited_rows.items():
+                         if index < len(snapshot_df):
+                             lead_id = int(snapshot_df.iloc[index]["id"])
+                             if update_lead(lead_id, updates):
+                                 count += 1
+                 if added_rows:
+                     for row in added_rows:
+                         if not row.get("businessName"): row["businessName"] = "New Business"
+                         if create_lead(row):
+                             count += 1
+                 if deleted_rows:
+                     for index in deleted_rows:
+                         if index < len(snapshot_df):
+                             lead_id = int(snapshot_df.iloc[index]["id"])
+                             if delete_lead(lead_id):
+                                 count += 1
+                 if count > 0:
+                     st.toast(f"💾 Auto-saved {count} changes!", icon="✅")
+
              edited_df = st.data_editor(
                 df[cols],
                 column_config=grid_config,
-                hide_index=True,
+                hide_index=False, # Show row numbers explicitly
                 use_container_width=True,
                 num_rows="dynamic",
                 key="crm_grid",
                 height=int(final_height),
-                column_order=display_cols 
+                column_order=display_cols,
+                on_change=auto_save_crm_grid,
+                kwargs={"snapshot_df": df}
             )
-             if save_clicked:
-                # ... save logic reuse ...
-                changes = st.session_state.get("crm_grid", {})
-                edited_rows = changes.get("edited_rows", {})
-                added_rows = changes.get("added_rows", [])
-                deleted_rows = changes.get("deleted_rows", [])
-                
-                count = 0
-                if edited_rows:
-                    for index, updates in edited_rows.items():
-                        if index < len(df):
-                            lead_id = int(df.iloc[index]["id"])
-                            if update_lead(lead_id, updates):
-                                count += 1
-                if added_rows:
-                    for row in added_rows:
-                        if not row.get("businessName"): row["businessName"] = "New Business"
-                        if create_lead(row):
-                            count += 1
-                if deleted_rows:
-                    for index in deleted_rows:
-                            if index < len(df):
-                                lead_id = int(df.iloc[index]["id"])
-                                if delete_lead(lead_id):
-                                    count += 1
-                if count > 0:
-                    st.success(f"Processed {count} changes!")
-                    time.sleep(1)
-                    st.rerun()
-                else:
-                    st.info("No changes to save.")
         
         else:
-             # Standard Read Only
+            # Standard Read Only
             styled_df = display_df.style\
                 .map(get_status_style, subset=['Status'])\
+                .map(get_priority_style, subset=['priority'])\
                 .map(get_user_style, subset=['calledBy', 'meetingBy', 'closedBy'])\
-                .set_properties(**base_props)\
+                .set_properties(**base_props, subset=[c for c in display_df.columns if c not in ['Status', 'priority']])\
+                .map(highlight_today, subset=['nextFollowUpDate'])\
+                .apply(highlight_closed_rows, axis=1)\
                 .format({"lastFollowUpDate": "{:%d/%m/%Y}", "nextFollowUpDate": "{:%d/%m/%Y}"}, na_rep="")
                 
             read_only_config = grid_config.copy()
@@ -1957,10 +2105,9 @@ if "CRM Grid" in page:
             st.dataframe(
                 styled_df, 
                 column_config=read_only_config,
-
                 use_container_width=True, 
                 height=int(final_height),
-                hide_index=True
+                hide_index=False # Show row numbers explicitly
             )
 
 # ==========================
@@ -1970,7 +2117,7 @@ if "CRM Grid" in page:
 # TOOL: SPREADSHEET INTELLIGENCE
 # ==========================
 if "Spreadsheet" in page:
-    st.title("🧠 Spreadsheet Intelligence Tool")
+    st.title("📗 Spreadsheet Intelligence Tool")
 
     st.markdown("""
     Advanced analysis for Excel workbooks. Splits duplicates/uniques by sheet and finds new rows across files.
@@ -2772,7 +2919,7 @@ if "Spreadsheet" in page:
 
 # ================== POWER DIALER ==================
 if "Power Dialer" in page:
-    st.title("📞 Power Dialer Mode")
+    st.title("🎧 Power Dialer Mode")
     
     leads = fetch_data(LEADS_API)
     if not leads:
@@ -3227,7 +3374,12 @@ if "Lead Generator" in page:
 
 # ================== GOOGLE MAPS SCRAPER ==================
 if "Google Maps Scraper" in page:
-    st.title("🗺️ Google Maps Scraper")
+    st.title("📍 Google Maps Scraper")
+    
+    # INIT SESSION STATE
+    if 'scraper_running' not in st.session_state:
+        st.session_state.scraper_running = False
+        
     st.markdown("Scrape business leads directly from Google Maps using Playwright.")
 
     with st.container(border=True):
@@ -3242,7 +3394,11 @@ if "Google Maps Scraper" in page:
     output_file = "scraped_results.csv"
     if os.path.exists(output_file) and not start_scrape:
         try:
-            df_existing = pd.read_csv(output_file)
+            if os.stat(output_file).st_size == 0:
+                df_existing = pd.DataFrame()
+            else:
+                df_existing = pd.read_csv(output_file)
+            
             if not df_existing.empty:
                 st.markdown("---")
                 st.subheader(f"📊 Previous Scrape Results ({len(df_existing)} leads)")
@@ -3304,14 +3460,46 @@ if "Google Maps Scraper" in page:
                         st.success(f"✅ Successfully imported {count} leads to CRM!")
                         time.sleep(1.5)
                         st.rerun()
+
+                # Add explicit Save to History button
+                if st.button("📂 Save to Scraped Leads History", use_container_width=True):
+                    try:
+                        csv_for_history = df_display_existing.to_csv(index=False)
+                        # Attempt to infer query from first row address or use Timestamp
+                        ts = datetime.now().strftime("%Y-%m-%d %H:%M")
+                        q_name = f"Manual Save - {ts}"
+                        
+                        # POST to backend
+                        requests.post(
+                            EXECUTIONS_API, 
+                            json={
+                                "query": "Manual Save", 
+                                "location": "Unknown", 
+                                "name": q_name,
+                                "leadsGenerated": len(df_display_existing),
+                                "status": "Success",
+                                "fileContent": csv_for_history
+                            },
+                            timeout=10
+                        )
+                        st.toast("✅ Saved to Scraped Leads History!")
+                        time.sleep(1)
+                    except Exception as h_err:
+                        st.error(f"Save Error: {h_err}")
         except Exception as e:
-            st.info(f"Could not load previous results: {e}")
+            if "No columns to parse" not in str(e):
+                st.info(f"Could not load previous results: {e}")
 
     if start_scrape:
         if not target_business or not target_location:
             st.error("Please provide both Business Type and Location.")
         else:
             search_query = f"{target_business} in {target_location}"
+            
+            # Persist params for autosave
+            st.session_state['last_scrape_business'] = target_business
+            st.session_state['last_scrape_location'] = target_location
+            
             output_file = "scraped_results.csv"
             
             # Remove previous file if exists
@@ -3328,61 +3516,9 @@ if "Google Maps Scraper" in page:
                 "-O", f"../{output_file}"
             ]
             
+            # Status container placeholder
             status_container = st.empty()
-            status_container.markdown(f"""
-            <div style="
-                background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-                border-radius: 16px;
-                padding: 24px 32px;
-                margin: 20px 0;
-                box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                animation: pulse 2s ease-in-out infinite;
-            ">
-                <div style="display: flex; align-items: center; gap: 16px;">
-                    <div style="
-                        width: 48px;
-                        height: 48px;
-                        background: rgba(255, 255, 255, 0.2);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 24px;
-                        animation: spin 2s linear infinite;
-                    ">
-                        🚀
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="
-                            color: white;
-                            font-size: 18px;
-                            font-weight: 700;
-                            margin-bottom: 4px;
-                        ">
-                            Agents Deployed!
-                        </div>
-                        <div style="
-                            color: rgba(255, 255, 255, 0.9);
-                            font-size: 14px;
-                            font-weight: 500;
-                        ">
-                            Searching for <strong>'{search_query}'</strong>...
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <style>
-                @keyframes pulse {{
-                    0%, 100% {{ transform: scale(1); box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3); }}
-                    50% {{ transform: scale(1.02); box-shadow: 0 12px 48px rgba(59, 130, 246, 0.5); }}
-                }}
-                @keyframes spin {{
-                    from {{ transform: rotate(0deg); }}
-                    to {{ transform: rotate(360deg); }}
-                }}
-            </style>
-            """, unsafe_allow_html=True)
+            status_container.info("Initializing scraper...")
             
             import subprocess
             import time
@@ -3405,320 +3541,405 @@ if "Google Maps Scraper" in page:
                     text=True
                 )
                 
-                # Monitor progress while scraper runs
-                last_progress = ""
-                while process.poll() is None:
-                    # Check if progress file exists and read it
-                    if os.path.exists(progress_file):
-                        try:
-                            with open(progress_file, "r") as f:
-                                progress = f.read().strip()
-                                if progress and progress != last_progress:
-                                    last_progress = progress
-                                    # Parse: "1/13|Dentist in Gotri, Vadodara"
-                                    parts = progress.split("|")
-                                    if len(parts) == 2:
-                                        count_info = parts[0]
-                                        current_query = parts[1]
-                                        
-                                        # Update status with current keyword
-                                        status_container.markdown(f"""
-                                        <div style="
-                                            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-                                            border-radius: 16px;
-                                            padding: 24px 32px;
-                                            margin: 20px 0;
-                                            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
-                                            border: 1px solid rgba(255, 255, 255, 0.2);
-                                            animation: pulse 2s ease-in-out infinite;
-                                        ">
-                                            <div style="display: flex; align-items: center; gap: 16px;">
-                                                <div style="
-                                                    width: 48px;
-                                                    height: 48px;
-                                                    background: rgba(255, 255, 255, 0.2);
-                                                    border-radius: 50%;
-                                                    display: flex;
-                                                    align-items: center;
-                                                    justify-content: center;
-                                                    font-size: 24px;
-                                                    animation: spin 2s linear infinite;
-                                                ">
-                                                    🚀
-                                                </div>
-                                                <div style="flex: 1;">
-                                                    <div style="
-                                                        color: white;
-                                                        font-size: 18px;
-                                                        font-weight: 700;
-                                                        margin-bottom: 4px;
-                                                    ">
-                                                        Agents Deployed! ({count_info})
-                                                    </div>
-                                                    <div style="
-                                                        color: rgba(255, 255, 255, 0.9);
-                                                        font-size: 14px;
-                                                        font-weight: 500;
-                                                    ">
-                                                        Now searching: <strong>'{current_query}'</strong>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <style>
-                                            @keyframes pulse {{
-                                                0%, 100% {{ transform: scale(1); box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3); }}
-                                                50% {{ transform: scale(1.02); box-shadow: 0 12px 48px rgba(59, 130, 246, 0.5); }}
-                                            }}
-                                            @keyframes spin {{
-                                                from {{ transform: rotate(0deg); }}
-                                                to {{ transform: rotate(360deg); }}
-                                            }}
-                                        </style>
-                                        """, unsafe_allow_html=True)
-                        except:
-                            pass
-                    
-                    time.sleep(0.5)  # Check every 500ms
+                # Monitor loop removed for background logic
+                pass
                 
-                # Wait for process to complete
-                process.wait()
-                result = process
-                
-                if result.returncode == 0:
-                    status_container.success("✅ Scraping Complete!")
-                    
-                    if os.path.exists(output_file):
-                        df_res = pd.read_csv(output_file)
-                        if not df_res.empty:
-                            st.subheader(f"Results ({len(df_res)} found)")
-                            
-                            # Reorder and Rename Columns for better structure
-                            # Expected cols: clinic_name, address, phone_number, website_url, email, place_url
-                            
-                            # 1. Define Mapping
-                            col_map = {
-                                "clinic_name": "Business Name",
-                                "phone_number": "Phone Number",
-                                "address": "Address",
-                                "website_url": "Website",
-                                "email": "Email",
-                                "place_url": "Maps Link"
-                            }
-                            
-                            # 2. Rename existing columns
-                            df_res.rename(columns=col_map, inplace=True)
-                            
-                            # 3. Define Output Order
-                            desired_order = ["Business Name", "Phone Number", "Address", "Website", "Email", "Maps Link"]
-                            
-                            # 4. Filter to only columns that exist (in case scraper missed some)
-                            final_cols = [c for c in desired_order if c in df_res.columns]
-                            
-                            # Add any other random columns found at the end
-                            remaining_cols = [c for c in df_res.columns if c not in final_cols]
-                            final_cols.extend(remaining_cols)
-                            
-                            df_display = df_res[final_cols]
-                            
-                            st.dataframe(df_display, use_container_width=True)
-                            
-                            # --- SAVE TO HISTORY ---
-                            try:
-                                # Prepare CSV string
-                                csv_for_history = df_display.to_csv(index=False)
-                                
-                                # Send to Backend
-                                requests.post(
-                                    EXECUTIONS_API, 
-                                    json={
-                                        "query": target_business, 
-                                        "location": target_location, 
-                                        "name": f"{target_business}_{target_location}",
-                                        "leadsGenerated": len(df_res),
-                                        "status": "Success",
-                                        "fileContent": csv_for_history
-                                    },
-                                    timeout=10
-                                )
-                                st.toast("✅ Scrape automatically saved to History!", icon="💾")
-                            except Exception as h_err:
-                                print(f"History Save Error: {h_err}")
-
-                            csv = df_display.to_csv(index=False).encode('utf-8')
-                            st.download_button(
-                                "📥 Download CSV",
-                                csv,
-                                "leads.csv",
-                                "text/csv",
-                                key='download-csv',
-                                type="primary"
-                            )
-                            
-                            # Option to Import to CRM
-                            if st.button("💾 Add to CRM"):
-                                count = 0
-                                prog_bar = st.progress(0)
-                                for idx, row in df_display.iterrows():
-                                    payload = {
-                                        # Map scraped columns to CRM columns
-                                        "businessName": str(row.get('clinic_name') or row.get('name') or row.get('Business Name') or target_business),
-                                        "phone": str(row.get('phone_number') or row.get('Phone') or row.get('Phone Number') or ""),
-                                        "address": str(row.get('address') or row.get('Address') or ""),
-                                        "email": str(row.get('email') or row.get('Email') or ""),
-                                        "status": "Generated",
-                                        "priority": "WARM"
-                                    }
-                                    if create_lead(payload):
-                                        count += 1
-                                    prog_bar.progress(min((idx+1)/len(df_res), 1.0))
-                                st.success(f"Added {count} leads to CRM!")
-                                time.sleep(1)
-                                st.rerun()
-
-                        else:
-                            st.warning("No data found. Try a broader location or clearer business type.")
-                    else:
-                        st.error("Output file not generated.")
-                else:
-                    st.error("Scraper failed.")
-                    with st.expander("Show Error Logs"):
-                        st.code(result.stderr)
+                # Result processing logic removed
+                st.session_state.scraper_process = process
+                st.session_state.scraper_running = True
+                st.rerun()
                         
             except Exception as e:
                 st.error(f"Execution Error: {e}")
 
-# ================== LEAD GEN HISTORY ==================
-if "Lead Gen History" in page:
-    st.title("📜 Lead Generation History")
+    # --- BACKGROUND MONITOR ---
+    if st.session_state.scraper_running:
+        status_container = st.empty()
+        
+        # Get Process
+        process = st.session_state.get('scraper_process')
 
-    # --- IMPORT LAST SCRAPE ---
-    if os.path.exists("scraped_results.csv"):
-        with st.expander("📥 Import Last Local Scrape", expanded=False):
-            st.caption("Found 'scraped_results.csv' on disk.")
+        # Robust check if process is actually running
+        if process:
+            # Poll status
+            poll = process.poll()
             
-            # Helper to guess basic defaults
-            def_q = "Dentist"
-            def_l = "Location"
+            if poll is None:
+                # --- RUNNING ---
+                # Read progress
+                progress_file = "scraper_progress.txt"
+                count_info = "Starting..."
+                current_query = "Initializing..."
+                
+                if os.path.exists(progress_file):
+                    try:
+                        with open(progress_file, "r") as f:
+                            progress = f.read().strip()
+                            parts = progress.split("|")
+                            if len(parts) == 2:
+                                count_info = parts[0]
+                                current_query = parts[1]
+                    except: pass
+                
+                status_container.markdown(f"""
+                <div style="
+                    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+                    border-radius: 16px;
+                    padding: 24px 32px;
+                    margin: 20px 0;
+                    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    animation: pulse 2s ease-in-out infinite;
+                ">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div style="
+                            width: 48px;
+                            height: 48px;
+                            background: rgba(255, 255, 255, 0.2);
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 24px;
+                            animation: spin 2s linear infinite;
+                        ">
+                            🚀
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="
+                                color: white;
+                                font-size: 18px;
+                                font-weight: 700;
+                                margin-bottom: 4px;
+                            ">
+                                Agents Deployed! ({count_info})
+                            </div>
+                            <div style="
+                                color: rgba(255, 255, 255, 0.9);
+                                font-size: 14px;
+                                font-weight: 500;
+                            ">
+                                Now searching: <strong>'{current_query}'</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    @keyframes pulse {{
+                        0%, 100% {{ transform: scale(1); box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3); }}
+                        50% {{ transform: scale(1.02); box-shadow: 0 12px 48px rgba(59, 130, 246, 0.5); }}
+                    }}
+                    @keyframes spin {{
+                        from {{ transform: rotate(0deg); }}
+                        to {{ transform: rotate(360deg); }}
+                    }}
+                </style>
+                """, unsafe_allow_html=True)
+
+                if st.button("🛑 Stop Scraper"):
+                    process.terminate()
+                    st.session_state.scraper_running = False
+                    st.rerun()
+
+                time.sleep(1)
+                st.rerun()
             
-            c1, c2 = st.columns(2)
-            i_query = c1.text_input("Query Used", def_q, key="imp_q")
-            i_loc = c2.text_input("Location Used", def_l, key="imp_l")
-            
-            # Dynamic default name
-            def_name = f"{i_query}_{i_loc}"
-            i_name = st.text_input("File Name", value=def_name, key="imp_n")
-            
-            if st.button("Save to History", type="secondary", key="btn_imp_save"):
-                 try:
-                     df_last = pd.read_csv("scraped_results.csv")
-                     csv_str = df_last.to_csv(index=False)
-                     
-                     requests.post(EXECUTIONS_API, json={
-                         "query": i_query,
-                         "location": i_loc,
-                         "name": i_name,
-                         "leadsGenerated": len(df_last),
-                         "status": "Success",
-                         "fileContent": csv_str
-                     })
-                     st.toast("✅ Imported!")
-                     time.sleep(1)
-                     st.rerun()
-                 except Exception as e:
-                     st.error(f"Import failed: {e}")
-    
+            else:
+                # --- FINISHED ---
+                st.session_state.scraper_running = False
+                
+                if poll == 0:
+                    status_container.success("✅ Scraping Complete!")
+                    st.balloons()
+                    
+                    output_file = "scraped_results.csv"
+                    # --- POST PROCESSING LOGIC ---
+                    if os.path.exists(output_file):
+                        df_res = pd.DataFrame()
+                        if os.stat(output_file).st_size == 0:
+                             st.warning("⚠️ Scraper finished but no data was found. Please try a different location or business type.")
+                        else:
+                            try:
+                                df_res = pd.read_csv(output_file)
+                            except pd.errors.EmptyDataError:
+                                st.warning("⚠️ Scraper finished but the results file was empty.")
+                        
+                        if not df_res.empty:
+                            st.info("🔄 Syncing with database...")
+                            
+                            # Prepare Batch Payload
+                            leads_payload = []
+                            for _, row in df_res.iterrows():
+                                leads_payload.append({
+                                    "businessName": str(row.get('clinic_name') or row.get('Business Name') or "Unknown"),
+                                    "phone": str(row.get('phone_number') or row.get('Phone Number') or ""),
+                                    "address": str(row.get('address') or row.get('Address') or ""),
+                                    "email": str(row.get('email') or row.get('Email') or ""),
+                                    "website": str(row.get('website_url') or row.get('Website') or ""),
+                                    "status": "Generated",
+                                    "priority": "WARM",
+                                    "source": "Scraper",
+                                    "query": target_business,
+                                    "location": target_location
+                                })
+                            
+                            # Send to Bulk Endpoint
+                            try:
+                                api_url = f"{BACKEND_BASE}/leads/bulk"
+                                resp = requests.post(api_url, json=leads_payload, timeout=30)
+                                if resp.status_code == 200:
+                                    res_data = resp.json()
+                                    new_count = res_data.get('count', 0)
+                                    total_proc = res_data.get('totalProcessed', 0)
+                                    dup_count = total_proc - new_count
+                                    
+                                    st.success(f"✅ Processing Complete: {new_count} new leads added to CRM!")
+                                    if dup_count > 0:
+                                        st.warning(f"⚠️ {dup_count} leads were duplicates and skipped (already in DB).")
+                                    
+                                    # Show Data
+                                    col_map = {
+                                        "clinic_name": "Business Name",
+                                        "phone_number": "Phone Number",
+                                        "address": "Address",
+                                        "website_url": "Website",
+                                        "email": "Email",
+                                        "place_url": "Maps Link"
+                                    }
+                                    df_res.rename(columns=col_map, inplace=True)
+                                    
+                                    # Add CRM Columns
+                                    if "Status" not in df_res.columns: df_res["Status"] = "Generated"
+                                    if "Priority" not in df_res.columns: df_res["Priority"] = "WARM"
+                                    
+                                    st.dataframe(df_res, use_container_width=True)
+                                    
+                                    # Save to History (Automatic)
+                                    try:
+                                        csv_for_history = df_res.to_csv(index=False)
+                                        
+                                        # Use persisted params or fallback
+                                        s_bus = st.session_state.get('last_scrape_business', target_business)
+                                        s_loc = st.session_state.get('last_scrape_location', target_location)
+                                        
+                                        q_name = f"{s_bus} - {s_loc}"
+                                        
+                                        requests.post(
+                                            EXECUTIONS_API, 
+                                            json={
+                                                "query": f"{s_bus} in {s_loc}", 
+                                                "location": s_loc, 
+                                                "name": q_name,
+                                                "leadsGenerated": len(df_res), # Save TOTAL scraped, not just new
+                                                "status": "Success",
+                                                "fileContent": csv_for_history
+                                            },
+                                            timeout=10
+                                        )
+                                        st.success(f"✅ Auto-saved results to Scraped Leads History ({len(df_res)} records)")
+                                    except Exception as h_err:
+                                        st.error(f"Auto-save to History Failed: {h_err}")
+
+                                else:
+                                    st.error(f"Failed to sync with DB. Status: {resp.status_code}")
+                            except Exception as e:
+                                st.error(f"Failed to connect to backend: {e}")
+                                
+                            if st.button("🗑️ Clear Results"):
+                                st.rerun()
+
+                    else:
+                        status_container.error("❌ Scraper failed.")
+                        with st.expander("Logs"):
+                            if process.stderr: st.code(process.stderr.read())
+        else:
+            st.session_state.scraper_running = False
+            st.rerun()
+
+# ================== LEAD GEN HISTORY ==================
+# ================== SCRAPED LEADS (History + Editing) ==================
+if "Scraped Leads" in page:
+    st.title("Lead Staging & Import")
+    st.markdown("Review, edit, and import your scraped leads before pushing them to the main CRM.")
+
     # 1. Fetch Summary List
     executions = fetch_data(EXECUTIONS_API)
     
     if not executions:
-        st.info("No history found.")
+        st.info("No scraped data found.")
     else:
-        # Convert to DataFrame
         df_hist = pd.DataFrame(executions)
         
-        # Display Config
-        st.markdown("### 🗂 Past Scrapes")
+        # Prepare minimal list
+        if "name" not in df_hist.columns:
+            df_hist["name"] = "Untitled"
         
-        # Prepare DF for Editor
-        disp_cols = ["id", "name", "date", "query", "location", "leadsGenerated", "status"]
-        
-        # Ensure columns exist safely
-        for col in disp_cols:
-             if col not in df_hist.columns:
-                 df_hist[col] = None
-
-        # Fallback Name if empty
-        df_hist["name"] = df_hist.apply(lambda x: x["name"] if (x["name"] and str(x["name"]) != "nan") else f"{x['query']} - {x['location']}", axis=1)
-
-        # Date formatting
+        # Formatting
         try:
-            df_hist["date"] = pd.to_datetime(df_hist["date"]).dt.strftime("%Y-%m-%d %H:%M")
-        except: pass
-        
-        # Configure Grid with Selection
-        event = st.dataframe(
-            df_hist[disp_cols],
-            use_container_width=True,
-            hide_index=True,
-            on_select="rerun",
-            selection_mode="single-row"
-        )
-        
-        # CHECK SELECTION
-        if len(event.selection.rows) > 0:
-            selected_idx = event.selection.rows[0]
-            # Get ID from the displayed dataframe's index mapping
-            selected_row = df_hist.iloc[selected_idx]
-            exec_id = selected_row["id"]
+            df_hist["date_fmt"] = pd.to_datetime(df_hist["date"]).dt.strftime("%d %b %H:%M")
+        except:
+            df_hist["date_fmt"] = df_hist["date"]
             
-            st.divider()
-            st.markdown(f"### 📂 File: {selected_row['name']}")
+        df_hist["label"] = df_hist.apply(lambda x: f"{x['name']} ({x['leadsGenerated']}) - {x['date_fmt']}", axis=1)
+        
+        # --- CONTROL BAR (Card Style) ---
+        with st.container(border=True):
+            c_sel, c_meta, c_ren = st.columns([0.4, 0.4, 0.2])
             
-            # Fetch Full Data (including Content)
-            try:
-                r_det = requests.get(f"{EXECUTIONS_API}/{exec_id}")
-                if r_det.status_code == 200:
-                    details = r_det.json()
-                    file_content = details.get("fileContent", "")
+            with c_sel:
+                # Selection handling
+                if "selected_scrape_id" not in st.session_state:
+                    st.session_state.selected_scrape_id = None
                     
-                    # RENAME UI
-                    with st.container(border=True):
-                        c1, c2 = st.columns([3, 1])
-                        current_name = details.get("name") or selected_row['name']
-                        new_name = c1.text_input("Rename File", value=current_name, key=f"ren_{exec_id}")
-                        if c2.button("💾 Update Name", key=f"btn_ren_{exec_id}", use_container_width=True):
-                            requests.put(f"{EXECUTIONS_API}/{exec_id}", json={"name": new_name})
-                            st.success("✅ Name Updated!")
-                            time.sleep(1)
-                            st.rerun()
+                def_idx = 0
+                if st.session_state.selected_scrape_id:
+                    try:
+                        match = df_hist[df_hist["id"] == st.session_state.selected_scrape_id]
+                        if not match.empty:
+                            def_idx = df_hist.index.get_loc(match.index[0])
+                    except: pass
+    
+                sel_label = st.selectbox(
+                    "Select Session",
+                    options=df_hist["label"].tolist(),
+                    index=def_idx,
+                    key="scrape_selector_box",
+                    label_visibility="collapsed"
+                )
+                
+                # Find ID
+                sel_row = df_hist[df_hist["label"] == sel_label].iloc[0]
+                st.session_state.selected_scrape_id = sel_row["id"]
+            
+            with c_meta:
+                # Clean metadata display
+                st.markdown(f"**📅 Date:** {sel_row['date_fmt']} &nbsp;&nbsp;|&nbsp;&nbsp; **📍 Location:** {sel_row['location']}")
+                
+            with c_ren:
+                with st.popover("Rename Session", use_container_width=True):
+                    new_name = st.text_input("New Name", value=sel_row["name"])
+                    if st.button("Save", type="primary"):
+                         try:
+                             requests.put(f"{EXECUTIONS_API}/{sel_row['id']}", json={"name": new_name})
+                             st.toast("Renamed updated successfully")
+                             time.sleep(0.5)
+                             st.rerun()
+                         except: pass
 
-                    # SHOW DATA
-                    if file_content:
-                        import io
-                        try:
-                            # Try parsing CSV
-                            df_data = pd.read_csv(io.StringIO(file_content))
-                            st.write(f"**Rows Found:** {len(df_data)}")
-                            st.dataframe(df_data, use_container_width=True)
-                            
-                            # Download Button
-                            st.download_button(
-                                "📥 Download CSV",
-                                file_content,
-                                f"{new_name}.csv",
-                                "text/csv",
-                                key=f"dl_{exec_id}"
-                            )
-                        except Exception as parse_err:
-                            st.error("Error parsing content.")
-                            st.text_area("Raw Content", file_content, height=200)
-                    else:
-                        st.warning("⚠️ No file content stored for this run.")
+        st.divider()
+
+        # REMOVE INDENTATION FOR EDITOR BLOCK
+        with st.container():
+            if st.session_state.selected_scrape_id:
+                # FETCH FULL RECORD (with fileContent)
+                try:
+                    res_detail = requests.get(f"{EXECUTIONS_API}/{st.session_state.selected_scrape_id}")
+                    if res_detail.status_code == 200:
+                        full_data = res_detail.json()
+                        csv_content = full_data.get("fileContent", "")
                         
-                else:
-                    st.error("Failed to load details from server.")
-            except Exception as e:
-                st.error(f"Error fetching details: {e}")
+                        if csv_content:
+                            # Parse CSV string
+                            from io import StringIO
+                            df_file = pd.read_csv(StringIO(csv_content))
+                            
+                            # --- 1. STANDARDIZE COLUMNS TO MATCH CRM ---
+                            col_map = {
+                                "clinic_name": "Company Name",
+                                "Business Name": "Company Name",
+                                "phone_number": "Phone Number",
+                                "address": "Address",
+                                "email": "Email",
+                                "website": "Website",
+                                "Website": "Website",
+                                "rating": "Rating",
+                                "reviews": "Reviews",
+                                "url": "Map", # Scraper usually dumps url here
+                                "google_maps_url": "Map",
+                                "place_url": "Map"
+                            }
+                            df_file.rename(columns=col_map, inplace=True)
+                            
+                            # Ensure essential columns exist
+                            desired_order = ["Company Name", "Phone Number", "Email", "Address", "Map", "Website", "Status", "Priority", "Notes"]
+                            for col in desired_order:
+                                if col not in df_file.columns:
+                                    if col == "Status": df_file[col] = "Generated"
+                                    elif col == "Priority": df_file[col] = "WARM"
+                                    elif col == "Notes": df_file[col] = "" 
+                                    else: df_file[col] = None
+                            
+                            # Reorder for UI
+                            other_cols = [c for c in df_file.columns if c not in desired_order]
+                            final_cols = desired_order + other_cols
+                            df_file = df_file[final_cols]
+
+                            # FORCE TEXT TYPES for editable columns
+                            text_cols = ["Company Name", "Phone Number", "Email", "Address", "Notes", "Map", "Website"]
+                            for t_c in text_cols:
+                                if t_c in df_file.columns:
+                                    df_file[t_c] = df_file[t_c].astype(str).replace("nan", "")
+                                    df_file[t_c] = df_file[t_c].replace("None", "")
+
+                            st.subheader(f"Editing: {full_data.get('name')}")
+                            
+                            # --- 2. CRM-STYLE COLUMN CONFIG ---
+                            # Using exact CRM styling where applicable
+                            staging_config = {
+                                "Company Name": st.column_config.TextColumn("Company Name", required=True, width="medium"),
+                                "Phone Number": st.column_config.TextColumn("Phone Number", width="medium"),
+                                "Email": st.column_config.TextColumn("Email", width="medium"),
+                                "Address": st.column_config.TextColumn("Address", width="large"),
+                                "Map": st.column_config.LinkColumn("Map", display_text="Open Map"),
+                                "Website": st.column_config.LinkColumn("Website", display_text="Visit"),
+                                "Status": st.column_config.SelectboxColumn("Status", options=["Generated", "Interested", "Not picking", "Asked to call later", "Meeting set", "Meeting Done", "Proposal sent", "Follow-up scheduled", "Not interested", "Closed - Won", "Closed - Lost"], default="Generated", required=True),
+                                "Priority": st.column_config.SelectboxColumn("Priority", options=["HOT", "WARM", "COLD"], default="WARM", required=True),
+                                "Notes": st.column_config.TextColumn("Notes", width="large"),
+                                "Rating": st.column_config.NumberColumn("Rating", format="%.1f ⭐"),
+                                "Reviews": st.column_config.NumberColumn("Reviews"),
+                            }
+                            
+                            edited_df = st.data_editor(
+                                df_file,
+                                num_rows="dynamic",
+                                use_container_width=True,
+                                key=f"editor_{st.session_state.selected_scrape_id}",
+                                height=600,
+                                column_config=staging_config,
+                                column_order=final_cols
+                            )
+                            
+                            # AUTO-SAVE LOGIC
+                            if not edited_df.equals(df_file):
+                                new_csv = edited_df.to_csv(index=False)
+                                try:
+                                    # Optimistic update or silent save
+                                    requests.put(
+                                        f"{EXECUTIONS_API}/{st.session_state.selected_scrape_id}", 
+                                        json={"fileContent": new_csv}
+                                    )
+                                    st.toast("✅ Changes saved automatically!", icon="💾")
+                                except Exception as e:
+                                    st.error(f"Auto-save failed: {e}")
+                            
+                            # Export Button
+                            st.download_button(
+                                "📥 Download as CSV",
+                                edited_df.to_csv(index=False).encode('utf-8'),
+                                f"{full_data.get('name').replace(' ', '_')}.csv",
+                                "text/csv",
+                                key=f"dl_{st.session_state.selected_scrape_id}",
+                                use_container_width=True
+                            )
+                            
+
+                        else:
+                            st.warning("⚠️ This record has no CSV content attached.")
+                    else:
+                        st.error("Failed to load details.")
+                except Exception as e:
+                    st.error(f"Error loading data: {e}")
+            else:
+                st.info("👈 Select a scrape session from the left to view data.")
  
- 
+  

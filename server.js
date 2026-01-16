@@ -288,7 +288,8 @@ app.post("/lead-gen", async (req, res) => {
             email: record["Email"] || record["email"],
             query,
             location,
-            status: "Generated"
+            status: "Generated",
+            source: "Scraper"
           }
         });
 
@@ -374,6 +375,56 @@ app.post("/leads", async (req, res) => {
 
     res.json(lead);
   } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Bulk Create Leads (with Deduplication)
+app.post("/leads/bulk", async (req, res) => {
+  try {
+    const leads = req.body; // Expecting array of lead objects
+    if (!Array.isArray(leads)) {
+      return res.status(400).json({ error: "Expected an array of leads" });
+    }
+
+    let createdCount = 0;
+    const errors = [];
+
+    for (const data of leads) {
+      try {
+        const businessName = data.businessName || "Unknown";
+        const phone = data.phone || null;
+
+        // Deduplication Logic
+        const whereClause = {};
+        if (phone && phone.length > 5) whereClause.phone = phone;
+        else whereClause.businessName = businessName;
+
+        const [lead, created] = await Lead.findOrCreate({
+          where: whereClause,
+          defaults: {
+            ...data,
+            businessName,
+            status: data.status || "Generated",
+            source: data.source || "Scraper"
+          }
+        });
+
+        if (created) createdCount++;
+      } catch (err) {
+        errors.push({ name: data.businessName, error: err.message });
+      }
+    }
+
+    res.json({
+      success: true,
+      count: createdCount,
+      totalProcessed: leads.length,
+      errors: errors.length > 0 ? errors : undefined
+    });
+
+  } catch (e) {
+    console.error("Bulk create error:", e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -579,8 +630,12 @@ app.get("/executions/:id", async (req, res) => {
 app.put("/executions/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
-    await Execution.update({ name }, { where: { id } });
+    const { name, fileContent } = req.body;
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (fileContent) updateData.fileContent = fileContent;
+
+    await Execution.update(updateData, { where: { id } });
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

@@ -1,0 +1,1126 @@
+2026-01-13 17:45:48 [scrapy.utils.log] INFO: Scrapy 2.12.0 started (bot: dental_scraper)
+2026-01-13 17:45:48 [scrapy.utils.log] INFO: Versions: lxml 6.0.2.0, libxml2 2.14.6, cssselect 1.3.0, parsel 1.10.0, w3lib 2.3.1, Twisted 25.5.0, Python 3.9.6 (default, Dec  2 2025, 07:27:58) - [Clang 17.0.0 (clang-1700.6.3.2)], pyOpenSSL 25.3.0 (OpenSSL 3.5.4 30 Sep 2025), cryptography 46.0.3, Platform macOS-26.1-arm64-arm-64bit
+2026-01-13 17:45:48 [scrapy.addons] INFO: Enabled addons:
+[]
+2026-01-13 17:45:48 [scrapy.extensions.telnet] INFO: Telnet Password: c44d6a50aaf5628b
+2026-01-13 17:45:48 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.memusage.MemoryUsage',
+ 'scrapy.extensions.feedexport.FeedExporter',
+ 'scrapy.extensions.logstats.LogStats']
+2026-01-13 17:45:48 [scrapy.crawler] INFO: Overridden settings:
+{'BOT_NAME': 'dental_scraper',
+ 'DOWNLOAD_DELAY': 0.1,
+ 'LOG_LEVEL': 'INFO',
+ 'NEWSPIDER_MODULE': 'dental_scraper.spiders',
+ 'SPIDER_MODULES': ['dental_scraper.spiders'],
+ 'TWISTED_REACTOR': 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'}
+2026-01-13 17:45:48 [py.warnings] WARNING: /Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+
+2026-01-13 17:45:48 [scrapy.middleware] INFO: Enabled downloader middlewares:
+['scrapy.downloadermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'dental_scraper.middlewares.RotateUserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+2026-01-13 17:45:48 [scrapy.middleware] INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+2026-01-13 17:45:48 [scrapy.middleware] INFO: Enabled item pipelines:
+['dental_scraper.pipelines.DentalScraperPipeline']
+2026-01-13 17:45:48 [scrapy.core.engine] INFO: Spider opened
+2026-01-13 17:45:48 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2026-01-13 17:45:48 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023
+2026-01-13 17:45:48 [scrapy-playwright] INFO: Starting download handler
+2026-01-13 17:45:48 [scrapy-playwright] INFO: Starting download handler
+2026-01-13 17:45:53 [scrapy-playwright] INFO: Launching browser chromium
+2026-01-13 17:45:54 [scrapy-playwright] INFO: Browser chromium launched
+2026-01-13 17:45:58 [dental_spider] INFO: 🏠 Landed on Google Home. Checking for consent...
+2026-01-13 17:45:59 [dental_spider] INFO: 🍪 Found Consent Button on Home: 'reject all' (Aria: ). Clicking...
+2026-01-13 17:46:02 [dental_spider] INFO: ✅ Consent handled on Home.
+2026-01-13 17:46:02 [dental_spider] INFO: 📍 Detected Location: New York. Expanding search...
+2026-01-13 17:46:02 [dental_spider] INFO: 🚀 Generated 6 search variations.
+2026-01-13 17:46:19 [dental_spider] INFO: ⏳ Waiting for results feed...
+2026-01-13 17:46:24 [dental_spider] INFO: ⏳ Waiting for results feed...
+2026-01-13 17:46:24 [dental_spider] INFO: ⏳ Waiting for results feed...
+2026-01-13 17:46:24 [dental_spider] INFO: ⏳ Waiting for results feed...
+2026-01-13 17:46:24 [dental_spider] INFO: ⏳ Waiting for results feed...
+2026-01-13 17:46:24 [dental_spider] INFO: ⏳ Waiting for results feed...
+2026-01-13 17:46:24 [dental_spider] INFO: ✅ Results feed detected!
+2026-01-13 17:46:28 [dental_spider] INFO: ✅ Results feed detected!
+2026-01-13 17:46:28 [dental_spider] INFO: ✅ Results feed detected!
+2026-01-13 17:46:28 [dental_spider] INFO: ✅ Results feed detected!
+2026-01-13 17:46:28 [dental_spider] INFO: ✅ Results feed detected!
+2026-01-13 17:46:28 [dental_spider] INFO: ✅ Results feed detected!
+2026-01-13 17:46:47 [dental_spider] INFO: Found 20 places.
+2026-01-13 17:46:48 [scrapy.extensions.logstats] INFO: Crawled 7 pages (at 7 pages/min), scraped 0 items (at 0 items/min)
+2026-01-13 17:46:53 [dental_spider] INFO: Found 22 places.
+2026-01-13 17:46:53 [dental_spider] INFO: Found 22 places.
+2026-01-13 17:46:53 [dental_spider] INFO: Found 22 places.
+2026-01-13 17:46:53 [dental_spider] INFO: Found 22 places.
+2026-01-13 17:46:53 [dental_spider] INFO: Found 22 places.
+2026-01-13 17:47:49 [scrapy.extensions.logstats] INFO: Crawled 7 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2026-01-13 17:48:50 [scrapy.extensions.logstats] INFO: Crawled 17 pages (at 10 pages/min), scraped 3 items (at 3 items/min)
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Diamond+District+Dental+NYC+-+Midtown+Dentist/data=!4m7!3m6!1s0x89c258e4ed67c03b:0x552a45e0a6609cc1!8m2!3d40.7563177!4d-73.9800044!16s%2Fg%2F1tdw8zvt!19sChIJO8Bn7eRYwokRwZxgpuBFKlU> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Diamond+District+Dental+NYC+-+Midtown+Dentist/data=!4m7!3m6!1s0x89c258e4ed67c03b:0x552a45e0a6609cc1!8m2!3d40.7563177!4d-73.9800044!16s%2Fg%2F1tdw8zvt!19sChIJO8Bn7eRYwokRwZxgpuBFKlU", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Diamond+District+Dental+NYC+-+Midtown+Dentist/data=!4m7!3m6!1s0x89c258e4ed67c03b:0x552a45e0a6609cc1!8m2!3d40.7563177!4d-73.9800044!16s%2Fg%2F1tdw8zvt!19sChIJO8Bn7eRYwokRwZxgpuBFKlU", waiting until "load"
+
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/DENISE+CRAIG+Dental+Hygienist/data=!4m7!3m6!1s0x89c258e16abbf45b:0xa40a56286ddc7477!8m2!3d40.7588851!4d-73.9751898!16s%2Fg%2F1tdk1hqn!19sChIJW_S7auFYwokRd3TcbShWCqQ> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/DENISE+CRAIG+Dental+Hygienist/data=!4m7!3m6!1s0x89c258e16abbf45b:0xa40a56286ddc7477!8m2!3d40.7588851!4d-73.9751898!16s%2Fg%2F1tdk1hqn!19sChIJW_S7auFYwokRd3TcbShWCqQ", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/DENISE+CRAIG+Dental+Hygienist/data=!4m7!3m6!1s0x89c258e16abbf45b:0xa40a56286ddc7477!8m2!3d40.7588851!4d-73.9751898!16s%2Fg%2F1tdk1hqn!19sChIJW_S7auFYwokRd3TcbShWCqQ", waiting until "load"
+
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/New+York+DMD/data=!4m7!3m6!1s0x89c258ef74b77e1d:0xa537eb2e7440b1b3!8m2!3d40.764045!4d-73.968022!16s%2Fg%2F11b77f6p72!19sChIJHX63dO9YwokRs7FAdC7rN6U> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/New+York+DMD/data=!4m7!3m6!1s0x89c258ef74b77e1d:0xa537eb2e7440b1b3!8m2!3d40.764045!4d-73.968022!16s%2Fg%2F11b77f6p72!19sChIJHX63dO9YwokRs7FAdC7rN6U", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/New+York+DMD/data=!4m7!3m6!1s0x89c258ef74b77e1d:0xa537eb2e7440b1b3!8m2!3d40.764045!4d-73.968022!16s%2Fg%2F11b77f6p72!19sChIJHX63dO9YwokRs7FAdC7rN6U", waiting until "load"
+
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Esthetix+Dentist,+NYC%27s+Dental+Implant+%26+Cosmetic+Specialist/data=!4m7!3m6!1s0x89c2f69edbe7ffef:0x9740937468559c7e!8m2!3d40.8450168!4d-73.9408416!16s%2Fg%2F1tdx0gvt!19sChIJ7__n2572wokRfpxVaHSTQJc> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Esthetix+Dentist,+NYC%27s+Dental+Implant+%26+Cosmetic+Specialist/data=!4m7!3m6!1s0x89c2f69edbe7ffef:0x9740937468559c7e!8m2!3d40.8450168!4d-73.9408416!16s%2Fg%2F1tdx0gvt!19sChIJ7__n2572wokRfpxVaHSTQJc", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Esthetix+Dentist,+NYC%27s+Dental+Implant+%26+Cosmetic+Specialist/data=!4m7!3m6!1s0x89c2f69edbe7ffef:0x9740937468559c7e!8m2!3d40.8450168!4d-73.9408416!16s%2Fg%2F1tdx0gvt!19sChIJ7__n2572wokRfpxVaHSTQJc", waiting until "load"
+
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Expert+Dental+-+Midtown/data=!4m7!3m6!1s0x89c2590424ca2b81:0x473ca88d15cb6018!8m2!3d40.7503706!4d-73.9780354!16s%2Fg%2F1tvw5vj7!19sChIJgSvKJARZwokRGGDLFY2oPEc> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Expert+Dental+-+Midtown/data=!4m7!3m6!1s0x89c2590424ca2b81:0x473ca88d15cb6018!8m2!3d40.7503706!4d-73.9780354!16s%2Fg%2F1tvw5vj7!19sChIJgSvKJARZwokRGGDLFY2oPEc", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Expert+Dental+-+Midtown/data=!4m7!3m6!1s0x89c2590424ca2b81:0x473ca88d15cb6018!8m2!3d40.7503706!4d-73.9780354!16s%2Fg%2F1tvw5vj7!19sChIJgSvKJARZwokRGGDLFY2oPEc", waiting until "load"
+
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/City+Dental+Group+NYC/data=!4m7!3m6!1s0x89c25a115e46d915:0xf52cb27f5b311a25!8m2!3d40.7053407!4d-74.0138576!16s%2Fg%2F1vrqbkbt!19sChIJFdlGXhFawokRJRoxW3-yLPU> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/City+Dental+Group+NYC/data=!4m7!3m6!1s0x89c25a115e46d915:0xf52cb27f5b311a25!8m2!3d40.7053407!4d-74.0138576!16s%2Fg%2F1vrqbkbt!19sChIJFdlGXhFawokRJRoxW3-yLPU", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/City+Dental+Group+NYC/data=!4m7!3m6!1s0x89c25a115e46d915:0xf52cb27f5b311a25!8m2!3d40.7053407!4d-74.0138576!16s%2Fg%2F1vrqbkbt!19sChIJFdlGXhFawokRJRoxW3-yLPU", waiting until "load"
+
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Dental+Practice+Solutions+LLC/data=!4m7!3m6!1s0x83d93768d412d343:0x6a652e7cd4774aee!8m2!3d40.073132!4d-73.7098936!16s%2Fg%2F11vbxmz0nh!19sChIJQ9MS1Gg32YMR7kp31HwuZWo> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Dental+Practice+Solutions+LLC/data=!4m7!3m6!1s0x83d93768d412d343:0x6a652e7cd4774aee!8m2!3d40.073132!4d-73.7098936!16s%2Fg%2F11vbxmz0nh!19sChIJQ9MS1Gg32YMR7kp31HwuZWo", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Dental+Practice+Solutions+LLC/data=!4m7!3m6!1s0x83d93768d412d343:0x6a652e7cd4774aee!8m2!3d40.073132!4d-73.7098936!16s%2Fg%2F11vbxmz0nh!19sChIJQ9MS1Gg32YMR7kp31HwuZWo", waiting until "load"
+
+2026-01-13 17:48:50 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Dental+Consultants+of+New+York/data=!4m7!3m6!1s0x89c258e8de36cd23:0x5da7bc640de8234c!8m2!3d40.7646995!4d-73.963397!16s%2Fg%2F1td0nyh_!19sChIJI8023uhYwokRTCPoDWS8p10> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Dental+Consultants+of+New+York/data=!4m7!3m6!1s0x89c258e8de36cd23:0x5da7bc640de8234c!8m2!3d40.7646995!4d-73.963397!16s%2Fg%2F1td0nyh_!19sChIJI8023uhYwokRTCPoDWS8p10", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Dental+Consultants+of+New+York/data=!4m7!3m6!1s0x89c258e8de36cd23:0x5da7bc640de8234c!8m2!3d40.7646995!4d-73.963397!16s%2Fg%2F1td0nyh_!19sChIJI8023uhYwokRTCPoDWS8p10", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Diamond+District+Dental+NYC+-+Midtown+Dentist/data=!4m7!3m6!1s0x89c258e4ed67c03b:0x552a45e0a6609cc1!8m2!3d40.7563177!4d-73.9800044!16s%2Fg%2F1tdw8zvt!19sChIJO8Bn7eRYwokRwZxgpuBFKlU>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Diamond+District+Dental+NYC+-+Midtown+Dentist/data=!4m7!3m6!1s0x89c258e4ed67c03b:0x552a45e0a6609cc1!8m2!3d40.7563177!4d-73.9800044!16s%2Fg%2F1tdw8zvt!19sChIJO8Bn7eRYwokRwZxgpuBFKlU", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/DENISE+CRAIG+Dental+Hygienist/data=!4m7!3m6!1s0x89c258e16abbf45b:0xa40a56286ddc7477!8m2!3d40.7588851!4d-73.9751898!16s%2Fg%2F1tdk1hqn!19sChIJW_S7auFYwokRd3TcbShWCqQ>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/DENISE+CRAIG+Dental+Hygienist/data=!4m7!3m6!1s0x89c258e16abbf45b:0xa40a56286ddc7477!8m2!3d40.7588851!4d-73.9751898!16s%2Fg%2F1tdk1hqn!19sChIJW_S7auFYwokRd3TcbShWCqQ", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/New+York+DMD/data=!4m7!3m6!1s0x89c258ef74b77e1d:0xa537eb2e7440b1b3!8m2!3d40.764045!4d-73.968022!16s%2Fg%2F11b77f6p72!19sChIJHX63dO9YwokRs7FAdC7rN6U>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/New+York+DMD/data=!4m7!3m6!1s0x89c258ef74b77e1d:0xa537eb2e7440b1b3!8m2!3d40.764045!4d-73.968022!16s%2Fg%2F11b77f6p72!19sChIJHX63dO9YwokRs7FAdC7rN6U", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Esthetix+Dentist,+NYC%27s+Dental+Implant+%26+Cosmetic+Specialist/data=!4m7!3m6!1s0x89c2f69edbe7ffef:0x9740937468559c7e!8m2!3d40.8450168!4d-73.9408416!16s%2Fg%2F1tdx0gvt!19sChIJ7__n2572wokRfpxVaHSTQJc>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Esthetix+Dentist,+NYC%27s+Dental+Implant+%26+Cosmetic+Specialist/data=!4m7!3m6!1s0x89c2f69edbe7ffef:0x9740937468559c7e!8m2!3d40.8450168!4d-73.9408416!16s%2Fg%2F1tdx0gvt!19sChIJ7__n2572wokRfpxVaHSTQJc", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Expert+Dental+-+Midtown/data=!4m7!3m6!1s0x89c2590424ca2b81:0x473ca88d15cb6018!8m2!3d40.7503706!4d-73.9780354!16s%2Fg%2F1tvw5vj7!19sChIJgSvKJARZwokRGGDLFY2oPEc>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Expert+Dental+-+Midtown/data=!4m7!3m6!1s0x89c2590424ca2b81:0x473ca88d15cb6018!8m2!3d40.7503706!4d-73.9780354!16s%2Fg%2F1tvw5vj7!19sChIJgSvKJARZwokRGGDLFY2oPEc", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/City+Dental+Group+NYC/data=!4m7!3m6!1s0x89c25a115e46d915:0xf52cb27f5b311a25!8m2!3d40.7053407!4d-74.0138576!16s%2Fg%2F1vrqbkbt!19sChIJFdlGXhFawokRJRoxW3-yLPU>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/City+Dental+Group+NYC/data=!4m7!3m6!1s0x89c25a115e46d915:0xf52cb27f5b311a25!8m2!3d40.7053407!4d-74.0138576!16s%2Fg%2F1vrqbkbt!19sChIJFdlGXhFawokRJRoxW3-yLPU", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Dental+Practice+Solutions+LLC/data=!4m7!3m6!1s0x83d93768d412d343:0x6a652e7cd4774aee!8m2!3d40.073132!4d-73.7098936!16s%2Fg%2F11vbxmz0nh!19sChIJQ9MS1Gg32YMR7kp31HwuZWo>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Dental+Practice+Solutions+LLC/data=!4m7!3m6!1s0x83d93768d412d343:0x6a652e7cd4774aee!8m2!3d40.073132!4d-73.7098936!16s%2Fg%2F11vbxmz0nh!19sChIJQ9MS1Gg32YMR7kp31HwuZWo", waiting until "load"
+
+2026-01-13 17:48:51 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Dental+Consultants+of+New+York/data=!4m7!3m6!1s0x89c258e8de36cd23:0x5da7bc640de8234c!8m2!3d40.7646995!4d-73.963397!16s%2Fg%2F1td0nyh_!19sChIJI8023uhYwokRTCPoDWS8p10>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Dental+Consultants+of+New+York/data=!4m7!3m6!1s0x89c258e8de36cd23:0x5da7bc640de8234c!8m2!3d40.7646995!4d-73.963397!16s%2Fg%2F1td0nyh_!19sChIJI8023uhYwokRTCPoDWS8p10", waiting until "load"
+
+2026-01-13 17:49:44 [scrapy.core.downloader.tls] WARNING: Remote certificate is not valid for hostname "www.sohosmile.com"; VerificationError(errors=[DNSMismatch(mismatched_id=DNS_ID(hostname=b'www.sohosmile.com'))])
+2026-01-13 17:49:48 [scrapy.extensions.logstats] INFO: Crawled 37 pages (at 20 pages/min), scraped 15 items (at 12 items/min)
+2026-01-13 17:50:19 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Herald+Square+Dental+%26+The+Denture+Center/data=!4m7!3m6!1s0x89c259ac30613c9b:0x8256b738864992ac!8m2!3d40.7519467!4d-73.9911001!16s%2Fg%2F1tdn5037!19sChIJmzxhMKxZwokRrJJJhji3VoI> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Herald+Square+Dental+%26+The+Denture+Center/data=!4m7!3m6!1s0x89c259ac30613c9b:0x8256b738864992ac!8m2!3d40.7519467!4d-73.9911001!16s%2Fg%2F1tdn5037!19sChIJmzxhMKxZwokRrJJJhji3VoI", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Herald+Square+Dental+%26+The+Denture+Center/data=!4m7!3m6!1s0x89c259ac30613c9b:0x8256b738864992ac!8m2!3d40.7519467!4d-73.9911001!16s%2Fg%2F1tdn5037!19sChIJmzxhMKxZwokRrJJJhji3VoI", waiting until "load"
+
+2026-01-13 17:50:19 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Wall+Street+Dental+Spa+-+Financial+District/data=!4m7!3m6!1s0x89c25a1702a2ceab:0x75ffb990d55e0408!8m2!3d40.7069897!4d-74.0102726!16s%2Fg%2F1tf29lv6!19sChIJq86iAhdawokRCARe1ZC5_3U> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Wall+Street+Dental+Spa+-+Financial+District/data=!4m7!3m6!1s0x89c25a1702a2ceab:0x75ffb990d55e0408!8m2!3d40.7069897!4d-74.0102726!16s%2Fg%2F1tf29lv6!19sChIJq86iAhdawokRCARe1ZC5_3U", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Wall+Street+Dental+Spa+-+Financial+District/data=!4m7!3m6!1s0x89c25a1702a2ceab:0x75ffb990d55e0408!8m2!3d40.7069897!4d-74.0102726!16s%2Fg%2F1tf29lv6!19sChIJq86iAhdawokRCARe1ZC5_3U", waiting until "load"
+
+2026-01-13 17:50:21 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/NYC+Dental+Office/data=!4m7!3m6!1s0x89c259a90a370b29:0xd9c09ebb34352c3c!8m2!3d40.7492669!4d-73.9859059!16s%2Fg%2F1tf6bzdj!19sChIJKQs3CqlZwokRPCw1NLuewNk> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/NYC+Dental+Office/data=!4m7!3m6!1s0x89c259a90a370b29:0xd9c09ebb34352c3c!8m2!3d40.7492669!4d-73.9859059!16s%2Fg%2F1tf6bzdj!19sChIJKQs3CqlZwokRPCw1NLuewNk", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/NYC+Dental+Office/data=!4m7!3m6!1s0x89c259a90a370b29:0xd9c09ebb34352c3c!8m2!3d40.7492669!4d-73.9859059!16s%2Fg%2F1tf6bzdj!19sChIJKQs3CqlZwokRPCw1NLuewNk", waiting until "load"
+
+2026-01-13 17:50:21 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Advanced+Dental+Arts+NYC/data=!4m7!3m6!1s0x89c258e51e770df9:0x742671c0d1a7adab!8m2!3d40.7318018!4d-73.9931647!16s%2Fg%2F1tkr05dr!19sChIJ-Q13HuVYwokRq62n0cBxJnQ> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Advanced+Dental+Arts+NYC/data=!4m7!3m6!1s0x89c258e51e770df9:0x742671c0d1a7adab!8m2!3d40.7318018!4d-73.9931647!16s%2Fg%2F1tkr05dr!19sChIJ-Q13HuVYwokRq62n0cBxJnQ", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Advanced+Dental+Arts+NYC/data=!4m7!3m6!1s0x89c258e51e770df9:0x742671c0d1a7adab!8m2!3d40.7318018!4d-73.9931647!16s%2Fg%2F1tkr05dr!19sChIJ-Q13HuVYwokRq62n0cBxJnQ", waiting until "load"
+
+2026-01-13 17:50:21 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/New+York+General+Dentistry/data=!4m7!3m6!1s0x89c258e5a66f638f:0x4f9c91e71b92d9f9!8m2!3d40.7619525!4d-73.9689326!16s%2Fg%2F1tgny3v1!19sChIJj2NvpuVYwokR-dmSG-eRnE8> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/New+York+General+Dentistry/data=!4m7!3m6!1s0x89c258e5a66f638f:0x4f9c91e71b92d9f9!8m2!3d40.7619525!4d-73.9689326!16s%2Fg%2F1tgny3v1!19sChIJj2NvpuVYwokR-dmSG-eRnE8", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/New+York+General+Dentistry/data=!4m7!3m6!1s0x89c258e5a66f638f:0x4f9c91e71b92d9f9!8m2!3d40.7619525!4d-73.9689326!16s%2Fg%2F1tgny3v1!19sChIJj2NvpuVYwokR-dmSG-eRnE8", waiting until "load"
+
+2026-01-13 17:50:22 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/PDA+Dental/data=!4m7!3m6!1s0x89c25a17630efb83:0x21a4df11c57b47b8!8m2!3d40.7092051!4d-74.0101084!16s%2Fg%2F1tjmfkzb!19sChIJg_sOYxdawokRuEd7xRHfpCE> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/PDA+Dental/data=!4m7!3m6!1s0x89c25a17630efb83:0x21a4df11c57b47b8!8m2!3d40.7092051!4d-74.0101084!16s%2Fg%2F1tjmfkzb!19sChIJg_sOYxdawokRuEd7xRHfpCE", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/PDA+Dental/data=!4m7!3m6!1s0x89c25a17630efb83:0x21a4df11c57b47b8!8m2!3d40.7092051!4d-74.0101084!16s%2Fg%2F1tjmfkzb!19sChIJg_sOYxdawokRuEd7xRHfpCE", waiting until "load"
+
+2026-01-13 17:50:25 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Herald+Square+Dental+%26+The+Denture+Center/data=!4m7!3m6!1s0x89c259ac30613c9b:0x8256b738864992ac!8m2!3d40.7519467!4d-73.9911001!16s%2Fg%2F1tdn5037!19sChIJmzxhMKxZwokRrJJJhji3VoI>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Herald+Square+Dental+%26+The+Denture+Center/data=!4m7!3m6!1s0x89c259ac30613c9b:0x8256b738864992ac!8m2!3d40.7519467!4d-73.9911001!16s%2Fg%2F1tdn5037!19sChIJmzxhMKxZwokRrJJJhji3VoI", waiting until "load"
+
+2026-01-13 17:50:25 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Wall+Street+Dental+Spa+-+Financial+District/data=!4m7!3m6!1s0x89c25a1702a2ceab:0x75ffb990d55e0408!8m2!3d40.7069897!4d-74.0102726!16s%2Fg%2F1tf29lv6!19sChIJq86iAhdawokRCARe1ZC5_3U>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Wall+Street+Dental+Spa+-+Financial+District/data=!4m7!3m6!1s0x89c25a1702a2ceab:0x75ffb990d55e0408!8m2!3d40.7069897!4d-74.0102726!16s%2Fg%2F1tf29lv6!19sChIJq86iAhdawokRCARe1ZC5_3U", waiting until "load"
+
+2026-01-13 17:50:25 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/NYC+Dental+Office/data=!4m7!3m6!1s0x89c259a90a370b29:0xd9c09ebb34352c3c!8m2!3d40.7492669!4d-73.9859059!16s%2Fg%2F1tf6bzdj!19sChIJKQs3CqlZwokRPCw1NLuewNk>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/NYC+Dental+Office/data=!4m7!3m6!1s0x89c259a90a370b29:0xd9c09ebb34352c3c!8m2!3d40.7492669!4d-73.9859059!16s%2Fg%2F1tf6bzdj!19sChIJKQs3CqlZwokRPCw1NLuewNk", waiting until "load"
+
+2026-01-13 17:50:25 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Advanced+Dental+Arts+NYC/data=!4m7!3m6!1s0x89c258e51e770df9:0x742671c0d1a7adab!8m2!3d40.7318018!4d-73.9931647!16s%2Fg%2F1tkr05dr!19sChIJ-Q13HuVYwokRq62n0cBxJnQ>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Advanced+Dental+Arts+NYC/data=!4m7!3m6!1s0x89c258e51e770df9:0x742671c0d1a7adab!8m2!3d40.7318018!4d-73.9931647!16s%2Fg%2F1tkr05dr!19sChIJ-Q13HuVYwokRq62n0cBxJnQ", waiting until "load"
+
+2026-01-13 17:50:25 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/New+York+General+Dentistry/data=!4m7!3m6!1s0x89c258e5a66f638f:0x4f9c91e71b92d9f9!8m2!3d40.7619525!4d-73.9689326!16s%2Fg%2F1tgny3v1!19sChIJj2NvpuVYwokR-dmSG-eRnE8>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/New+York+General+Dentistry/data=!4m7!3m6!1s0x89c258e5a66f638f:0x4f9c91e71b92d9f9!8m2!3d40.7619525!4d-73.9689326!16s%2Fg%2F1tgny3v1!19sChIJj2NvpuVYwokR-dmSG-eRnE8", waiting until "load"
+
+2026-01-13 17:50:25 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/PDA+Dental/data=!4m7!3m6!1s0x89c25a17630efb83:0x21a4df11c57b47b8!8m2!3d40.7092051!4d-74.0101084!16s%2Fg%2F1tjmfkzb!19sChIJg_sOYxdawokRuEd7xRHfpCE>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/PDA+Dental/data=!4m7!3m6!1s0x89c25a17630efb83:0x21a4df11c57b47b8!8m2!3d40.7092051!4d-74.0101084!16s%2Fg%2F1tjmfkzb!19sChIJg_sOYxdawokRuEd7xRHfpCE", waiting until "load"
+
+2026-01-13 17:50:48 [scrapy.extensions.logstats] INFO: Crawled 39 pages (at 2 pages/min), scraped 15 items (at 0 items/min)
+2026-01-13 17:51:48 [scrapy.extensions.logstats] INFO: Crawled 50 pages (at 11 pages/min), scraped 16 items (at 1 items/min)
+2026-01-13 17:52:16 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Pearl+Dental+NYC/data=!4m7!3m6!1s0x89c25a1641854965:0x8614cbb7c017c162!8m2!3d40.7123834!4d-74.0079386!16s%2Fg%2F1yg6nr6fw!19sChIJZUmFQRZawokRYsEXwLfLFIY> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Pearl+Dental+NYC/data=!4m7!3m6!1s0x89c25a1641854965:0x8614cbb7c017c162!8m2!3d40.7123834!4d-74.0079386!16s%2Fg%2F1yg6nr6fw!19sChIJZUmFQRZawokRYsEXwLfLFIY", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Pearl+Dental+NYC/data=!4m7!3m6!1s0x89c25a1641854965:0x8614cbb7c017c162!8m2!3d40.7123834!4d-74.0079386!16s%2Fg%2F1yg6nr6fw!19sChIJZUmFQRZawokRYsEXwLfLFIY", waiting until "load"
+
+2026-01-13 17:52:16 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/NYC+Smile+Spa/data=!4m7!3m6!1s0x89c258f09fef805d:0xb6cff2ce09f38f2e!8m2!3d40.7637066!4d-73.970242!16s%2Fg%2F12lk_x74n!19sChIJXYDvn_BYwokRLo_zCc7yz7Y> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/NYC+Smile+Spa/data=!4m7!3m6!1s0x89c258f09fef805d:0xb6cff2ce09f38f2e!8m2!3d40.7637066!4d-73.970242!16s%2Fg%2F12lk_x74n!19sChIJXYDvn_BYwokRLo_zCc7yz7Y", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/NYC+Smile+Spa/data=!4m7!3m6!1s0x89c258f09fef805d:0xb6cff2ce09f38f2e!8m2!3d40.7637066!4d-73.970242!16s%2Fg%2F12lk_x74n!19sChIJXYDvn_BYwokRLo_zCc7yz7Y", waiting until "load"
+
+2026-01-13 17:52:16 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Sky+Dental/data=!4m7!3m6!1s0x89c25a114bb310d1:0x32089f56608289a0!8m2!3d40.708685!4d-74.011549!16s%2Fg%2F11b6j71zg0!19sChIJ0RCzSxFawokRoImCYFafCDI> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Sky+Dental/data=!4m7!3m6!1s0x89c25a114bb310d1:0x32089f56608289a0!8m2!3d40.708685!4d-74.011549!16s%2Fg%2F11b6j71zg0!19sChIJ0RCzSxFawokRoImCYFafCDI", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Sky+Dental/data=!4m7!3m6!1s0x89c25a114bb310d1:0x32089f56608289a0!8m2!3d40.708685!4d-74.011549!16s%2Fg%2F11b6j71zg0!19sChIJ0RCzSxFawokRoImCYFafCDI", waiting until "load"
+
+2026-01-13 17:52:16 [scrapy-playwright] WARNING: Closing page due to failed request: <GET https://www.google.com/maps/place/Pop+On+Veneers/data=!4m7!3m6!1s0x89c259e5918db61d:0x1cbf304d1bd60bf6!8m2!3d40.753767!4d-73.990762!16s%2Fg%2F11jpyyr33k!19sChIJHbaNkeVZwokR9gvWG00wvxw> exc_type=<class 'playwright._impl._errors.TimeoutError'> exc_msg=Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Pop+On+Veneers/data=!4m7!3m6!1s0x89c259e5918db61d:0x1cbf304d1bd60bf6!8m2!3d40.753767!4d-73.990762!16s%2Fg%2F11jpyyr33k!19sChIJHbaNkeVZwokR9gvWG00wvxw", waiting until "load"
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Pop+On+Veneers/data=!4m7!3m6!1s0x89c259e5918db61d:0x1cbf304d1bd60bf6!8m2!3d40.753767!4d-73.990762!16s%2Fg%2F11jpyyr33k!19sChIJHbaNkeVZwokR9gvWG00wvxw", waiting until "load"
+
+2026-01-13 17:52:20 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Pearl+Dental+NYC/data=!4m7!3m6!1s0x89c25a1641854965:0x8614cbb7c017c162!8m2!3d40.7123834!4d-74.0079386!16s%2Fg%2F1yg6nr6fw!19sChIJZUmFQRZawokRYsEXwLfLFIY>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Pearl+Dental+NYC/data=!4m7!3m6!1s0x89c25a1641854965:0x8614cbb7c017c162!8m2!3d40.7123834!4d-74.0079386!16s%2Fg%2F1yg6nr6fw!19sChIJZUmFQRZawokRYsEXwLfLFIY", waiting until "load"
+
+2026-01-13 17:52:20 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/NYC+Smile+Spa/data=!4m7!3m6!1s0x89c258f09fef805d:0xb6cff2ce09f38f2e!8m2!3d40.7637066!4d-73.970242!16s%2Fg%2F12lk_x74n!19sChIJXYDvn_BYwokRLo_zCc7yz7Y>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/NYC+Smile+Spa/data=!4m7!3m6!1s0x89c258f09fef805d:0xb6cff2ce09f38f2e!8m2!3d40.7637066!4d-73.970242!16s%2Fg%2F12lk_x74n!19sChIJXYDvn_BYwokRLo_zCc7yz7Y", waiting until "load"
+
+2026-01-13 17:52:20 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Sky+Dental/data=!4m7!3m6!1s0x89c25a114bb310d1:0x32089f56608289a0!8m2!3d40.708685!4d-74.011549!16s%2Fg%2F11b6j71zg0!19sChIJ0RCzSxFawokRoImCYFafCDI>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Sky+Dental/data=!4m7!3m6!1s0x89c25a114bb310d1:0x32089f56608289a0!8m2!3d40.708685!4d-74.011549!16s%2Fg%2F11b6j71zg0!19sChIJ0RCzSxFawokRoImCYFafCDI", waiting until "load"
+
+2026-01-13 17:52:20 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.google.com/maps/place/Pop+On+Veneers/data=!4m7!3m6!1s0x89c259e5918db61d:0x1cbf304d1bd60bf6!8m2!3d40.753767!4d-73.990762!16s%2Fg%2F11jpyyr33k!19sChIJHbaNkeVZwokR9gvWG00wvxw>
+Traceback (most recent call last):
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1853, in _inlineCallbacks
+    result = context.run(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/python/failure.py", line 467, in throwExceptionIntoGenerator
+    return g.throw(self.value.with_traceback(self.tb))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy/core/downloader/middleware.py", line 68, in process_request
+    return (yield download_func(request, spider))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/twisted/internet/defer.py", line 1257, in adapt
+    extracted: _SelfResultT | Failure = result.result()
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 324, in _download_request
+    return await self._download_request_with_page(request, page, spider)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 353, in _download_request_with_page
+    response, download = await self._get_response_and_download(request=request, page=page)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/scrapy_playwright/handler.py", line 447, in _get_response_and_download
+    response = await page.goto(url=request.url, **page_goto_kwargs)
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/async_api/_generated.py", line 8985, in goto
+    await self._impl_obj.goto(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_page.py", line 551, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+  File "/Users/satyajeetsinhrathod/Library/Python/3.9/lib/python/site-packages/playwright/_impl/_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.google.com/maps/place/Pop+On+Veneers/data=!4m7!3m6!1s0x89c259e5918db61d:0x1cbf304d1bd60bf6!8m2!3d40.753767!4d-73.990762!16s%2Fg%2F11jpyyr33k!19sChIJHbaNkeVZwokR9gvWG00wvxw", waiting until "load"
+
+2026-01-13 17:52:30 [scrapy.downloadermiddlewares.retry] ERROR: Gave up retrying <GET https://www.newyorkdentalspecialty.com/> (failed 3 times): [<twisted.python.failure.Failure twisted.internet.error.ConnectionLost: Connection to the other side was lost in a non-clean fashion: Connection lost.>]
+2026-01-13 17:52:44 [scrapy.core.engine] INFO: Closing spider (finished)
+2026-01-13 17:52:44 [scrapy.extensions.feedexport] INFO: Stored csv feed (34 items) in: test_output.csv
+2026-01-13 17:52:44 [scrapy.statscollectors] INFO: Dumping Scrapy stats:
+{'downloader/exception_count': 22,
+ 'downloader/exception_type_count/playwright._impl._errors.TimeoutError': 18,
+ 'downloader/exception_type_count/twisted.web._newclient.ResponseNeverReceived': 4,
+ 'downloader/request_bytes': 64710,
+ 'downloader/request_count': 107,
+ 'downloader/request_method_count/GET': 107,
+ 'downloader/response_bytes': 14395258,
+ 'downloader/response_count': 85,
+ 'downloader/response_status_count/200': 68,
+ 'downloader/response_status_count/301': 12,
+ 'downloader/response_status_count/403': 5,
+ 'elapsed_time_seconds': 415.821744,
+ 'feedexport/success_count/FileFeedStorage': 1,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2026, 1, 13, 12, 22, 44, 303120, tzinfo=datetime.timezone.utc),
+ 'httpcompression/response_bytes': 6424503,
+ 'httpcompression/response_count': 30,
+ 'item_scraped_count': 34,
+ 'items_per_minute': None,
+ 'log_count/ERROR': 19,
+ 'log_count/INFO': 44,
+ 'log_count/WARNING': 20,
+ 'memusage/max': 237584384,
+ 'memusage/startup': 63979520,
+ 'playwright/context_count': 1,
+ 'playwright/context_count/max_concurrent': 1,
+ 'playwright/context_count/persistent/False': 1,
+ 'playwright/context_count/remote/False': 1,
+ 'playwright/page_count': 59,
+ 'playwright/page_count/closed': 52,
+ 'playwright/page_count/max_concurrent': 13,
+ 'playwright/request_count': 13456,
+ 'playwright/request_count/method/GET': 13420,
+ 'playwright/request_count/method/POST': 36,
+ 'playwright/request_count/navigation': 59,
+ 'playwright/request_count/resource_type/document': 59,
+ 'playwright/request_count/resource_type/fetch': 4,
+ 'playwright/request_count/resource_type/font': 173,
+ 'playwright/request_count/resource_type/image': 4767,
+ 'playwright/request_count/resource_type/other': 56,
+ 'playwright/request_count/resource_type/ping': 17,
+ 'playwright/request_count/resource_type/script': 589,
+ 'playwright/request_count/resource_type/stylesheet': 67,
+ 'playwright/request_count/resource_type/xhr': 7724,
+ 'playwright/response_count': 9855,
+ 'playwright/response_count/method/GET': 9833,
+ 'playwright/response_count/method/POST': 22,
+ 'playwright/response_count/resource_type/document': 59,
+ 'playwright/response_count/resource_type/fetch': 4,
+ 'playwright/response_count/resource_type/font': 163,
+ 'playwright/response_count/resource_type/image': 3679,
+ 'playwright/response_count/resource_type/other': 56,
+ 'playwright/response_count/resource_type/ping': 12,
+ 'playwright/response_count/resource_type/script': 522,
+ 'playwright/response_count/resource_type/stylesheet': 66,
+ 'playwright/response_count/resource_type/xhr': 5294,
+ 'request_depth_max': 3,
+ 'response_received_count': 73,
+ 'responses_per_minute': None,
+ 'retry/count': 3,
+ 'retry/max_reached': 1,
+ 'retry/reason_count/twisted.web._newclient.ResponseNeverReceived': 3,
+ 'scheduler/dequeued': 107,
+ 'scheduler/dequeued/memory': 107,
+ 'scheduler/enqueued': 107,
+ 'scheduler/enqueued/memory': 107,
+ 'start_time': datetime.datetime(2026, 1, 13, 12, 15, 48, 481376, tzinfo=datetime.timezone.utc)}
+2026-01-13 17:52:44 [scrapy.core.engine] INFO: Spider closed (finished)
+2026-01-13 17:52:44 [scrapy-playwright] INFO: Closing download handler
+2026-01-13 17:52:44 [scrapy-playwright] INFO: Closing download handler
+2026-01-13 17:52:44 [scrapy-playwright] INFO: Closing browser
