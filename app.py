@@ -1004,6 +1004,8 @@ if st.session_state.theme == "dark":
 else:
     st.markdown(LIGHT_CSS, unsafe_allow_html=True)
 
+st.markdown(RESPONSIVE_CSS, unsafe_allow_html=True)
+
 # ================== SIDEBAR NAVIGATION ==================
 # ================== SIDEBAR NAVIGATION ==================
 import base64
