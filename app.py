@@ -3523,7 +3523,7 @@ if "Google Maps Scraper" in page:
             scraper_dir = os.path.join(os.getcwd(), "dental_scraper")
             # Output in root
             cmd = [
-                "python3", "-m", "scrapy", "crawl", "dental_spider",
+                sys.executable, "-m", "scrapy", "crawl", "dental_spider",
                 "-a", f"search_query={search_query}",
                 "-O", f"../{output_file}"
             ]
