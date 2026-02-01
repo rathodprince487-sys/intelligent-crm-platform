@@ -23,8 +23,10 @@ def render_sidebar_toggle():
     @media (min-width: 768px) {
         
         /* Transition for smooth width change */
+        /* Transition for smooth width change */
         section[data-testid="stSidebar"] {
-            transition: width 0.3s ease-in-out, min-width 0.3s ease-in-out, max-width 0.3s ease-in-out !important;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            overflow-x: hidden !important;
         }
         
         /* Force Expanded Width */
@@ -37,7 +39,9 @@ def render_sidebar_toggle():
         section[data-testid="stSidebar"] div[role="radiogroup"] label p {
             white-space: nowrap !important;
             overflow: hidden !important;
-            text-overflow: ellipsis !important;
+            text-overflow: clip !important;
+            transition: opacity 0.3s ease, transform 0.3s ease, width 0.3s ease;
+            transform-origin: left center;
         }
     
         /* Toggle Button Style (Desktop) */
@@ -53,7 +57,7 @@ def render_sidebar_toggle():
             color: #555;
             padding: 5px;
             border-radius: 5px;
-            transition: color 0.2s, left 0.3s ease-in-out;
+            transition: color 0.2s, left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             display: block;
         }
         #sidebar-custom-toggle:hover {
@@ -71,9 +75,12 @@ def render_sidebar_toggle():
         }
     
         /* 2. Hide Texts in Radio Buttons (Navigation) */
+        /* 2. Hide Texts with Fade */
         body.sidebar-mj-collapsed section[data-testid="stSidebar"] div[role="radiogroup"] label p {
-            display: none !important;
             opacity: 0 !important;
+            transform: scaleX(0) translateX(-10px);
+            width: 0 !important;
+            margin: 0 !important;
         }
         
         /* 3. Center Icons in Radio Buttons */
@@ -215,6 +222,36 @@ def render_sidebar_toggle():
             padding-bottom: 2px !important; 
         }
     
+        /* === NO MEETINGS TEXT === */
+        
+        .no-meetings-text {
+            color: rgba(49, 51, 63, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+        }
+
+        /* Collapsed State for No Meetings */
+        body.sidebar-mj-collapsed section[data-testid="stSidebar"] .no-meetings-text {
+            font-size: 0 !important;
+            color: transparent !important;
+            margin: 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            width: 100% !important;
+        }
+        
+        body.sidebar-mj-collapsed section[data-testid="stSidebar"] .no-meetings-text::after {
+            content: "none";
+            font-size: 0.8rem !important;
+            color: rgba(49, 51, 63, 0.6) !important;
+            visibility: visible !important;
+            display: block !important;
+            text-align: center !important;
+            width: 100% !important;
+            margin-left: -5px; /* Visual centering adjustment for shrunk sidebar */
+        }
+
         /* Adjust Toggle Button Position when collapsed */
         body.sidebar-mj-collapsed #sidebar-custom-toggle {
             left: 18px; 
