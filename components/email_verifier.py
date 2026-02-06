@@ -75,6 +75,9 @@ def update_cache(email, result):
 
 def check_rate_limit():
     """Simple rate limiting - max 1 request per 2 seconds."""
+    if "last_verification_time" not in st.session_state:
+        st.session_state.last_verification_time = None
+        
     if st.session_state.last_verification_time:
         time_since_last = (datetime.now() - st.session_state.last_verification_time).total_seconds()
         if time_since_last < 2:
