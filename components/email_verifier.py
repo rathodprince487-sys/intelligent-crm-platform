@@ -163,6 +163,7 @@ def render_email_verifier():
     # Import Google Fonts
     st.markdown("""
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     """, unsafe_allow_html=True)
     
     # Stunning Premium Header
@@ -711,63 +712,69 @@ def render_email_verifier():
                 ">📊 Detailed Analysis</h3>
                 """, unsafe_allow_html=True)
                 
-                c1, c2, c3, c4, c5 = st.columns(5)
+                # ROW 1: Quality, SMTP, Social
+                c1, c2, c3 = st.columns(3)
                 
                 with c1:
                     st.markdown(f"""
                     <div class="metric-box">
-                        <div class="metric-label">⭐ Quality</div>
-                        <div class="metric-value">{score * 100:.0f}</div>
-                        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.25rem;">out of 100</div>
+                        <div class="metric-label">⭐ Validity Score</div>
+                        <div class="metric-value">{score * 100:.0f}%</div>
+                        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem;">Confidence Level</div>
                     </div>
                     """, unsafe_allow_html=True)
-                    st.progress(score)
 
                 with c2:
+                    smtp = details.get('smtpCheck', 'Skipped')
+                    is_connected = smtp == "Connected" or smtp == "Verified"
+                    smtp_icon = "🟢" if is_connected else ("🔴" if smtp == "Failed" or smtp == "Rejected" else "⚪")
+                    st.markdown(f"""
+                    <div class="metric-box">
+                        <div class="metric-label">📧 SMTP Check</div>
+                        <div class="metric-value" style="font-size: 2rem;">{smtp_icon}</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.8;">{smtp}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                with c3:
+                    social = details.get('socialProfile', {}) or {}
+                    has_social = social.get('hasProfile', False)
+                    st.markdown(f"""
+                    <div class="metric-box">
+                        <div class="metric-label">👤 Social Profile</div>
+                        <div class="metric-value" style="color: {'#8b5cf6' if has_social else '#9ca3af'}; font-size: 2rem;">
+                            {'Found' if has_social else 'None'}
+                        </div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.8;">Gravatar / Web</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                st.write("") # Spacer
+
+                # ROW 2: Disposable, Role Account
+                c4, c5 = st.columns(2)
+
+                with c4:
                     is_disp = details.get('isDisposable', False)
                     st.markdown(f"""
                     <div class="metric-box">
-                        <div class="metric-label">🗑️ Disposable</div>
+                        <div class="metric-label">🗑️ Disposable Email</div>
                         <div class="metric-value" style="color: {'#ef4444' if is_disp else '#10b981'};">
-                            {'❌' if is_disp else '✅'}
+                            {'Yes' if is_disp else 'No'}
                         </div>
-                        <div style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;">{'Yes' if is_disp else 'No'}</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.8;">Temporary Mailbox</div>
                     </div>
                     """, unsafe_allow_html=True)
 
-                with c3:
+                with c5:
                     is_role = details.get('isRole', False)
                     st.markdown(f"""
                     <div class="metric-box">
                         <div class="metric-label">👔 Role Account</div>
                         <div class="metric-value" style="color: {'#fbbf24' if is_role else '#10b981'};">
-                            {'⚠️' if is_role else '✅'}
+                            {'Yes' if is_role else 'No'}
                         </div>
-                        <div style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;">{'Yes' if is_role else 'No'}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
-
-                with c4:
-                    smtp = details.get('smtpCheck', 'Skipped')
-                    smtp_icon = "🟢" if smtp == "Connected" or smtp == "Verified" else ("🔴" if smtp == "Failed" or smtp == "Rejected" else "⚪")
-                    st.markdown(f"""
-                    <div class="metric-box">
-                        <div class="metric-label">📧 SMTP</div>
-                        <div class="metric-value" style="font-size: 2rem;">{smtp_icon}</div>
-                        <div style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;">{smtp}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                with c5:
-                    social = details.get('socialProfile', {}) or {}
-                    has_social = social.get('hasProfile', False)
-                    st.markdown(f"""
-                    <div class="metric-box">
-                        <div class="metric-label">👤 Social</div>
-                        <div class="metric-value" style="color: {'#8b5cf6' if has_social else '#9ca3af'}; font-size: 2rem;">
-                            {'👤' if has_social else '👻'}
-                        </div>
-                        <div style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;">{'Found' if has_social else 'None'}</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.8;">admin@, info@, etc.</div>
                     </div>
                     """, unsafe_allow_html=True)
                 
