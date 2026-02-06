@@ -142,6 +142,16 @@ section[data-testid="stSidebar"] {
 }
 */
 
+/* Remove padding from sidebar for cleaner look */
+section[data-testid="stSidebar"] > div:first-child {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+section[data-testid="stSidebar"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 /* Sidebar Radius Adjustments */
 section[data-testid="stSidebar"] div[role="radiogroup"] {
     gap: 8px;
@@ -156,8 +166,8 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label {
 section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
     transform: translateX(3px);
 }
-/* Hide Radio Circles */
-div[role="radiogroup"] > label > div:first-child {
+/* Hide Radio Circles (Sidebar Only) */
+section[data-testid="stSidebar"] div[role="radiogroup"] > label > div:first-child {
     display: none !important;
 }
 div[role="radiogroup"] label {
@@ -165,46 +175,104 @@ div[role="radiogroup"] label {
 }
 
 /* --- MOBILE RESPONSIVE OPTIMIZATIONS --- */
+/* --- MOBILE RESPONSIVE OPTIMIZATIONS --- */
 @media only screen and (max-width: 768px) {
-    /* Maximize horizontal space */
+    /* 1. Global Layout & Spacing */
     .block-container {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        padding-top: 3rem !important;
+        padding-left: 3.8rem !important; /* Push content right to clear 50px sidebar */
+        padding-right: 0.5rem !important;
+        padding-top: 4rem !important; /* Make space for header */
+        padding-bottom: 2rem !important;
+        max-width: 100vw !important;
     }
 
-    /* Stack flex containers vertically if needed */
-    .row-widget.stHorizontal {
-        flex-direction: column !important;
-    }
-    
-    /* Ensure cards take full width */
-    .metric-card, .meeting-card {
+    /* 2. Grid System Reset */
+    /* Force all columns to stack */
+    div[data-testid="column"] {
         width: 100% !important;
-        margin-bottom: 12px !important;
+        flex: 1 1 auto !important;
+        min-width: 100% !important;
+        margin-bottom: 1rem !important;
     }
     
-    /* Adjust Font Sizes */
-    h1 { font-size: 1.75rem !important; }
+    /* 3. Typography Adjustments */
+    h1 { font-size: 1.75rem !important; line-height: 1.2 !important; }
     h2 { font-size: 1.5rem !important; }
     h3 { font-size: 1.25rem !important; }
+    p, li, label, .stMarkdown { font-size: 1rem !important; }
     
-    /* Improve Grid Scroll */
-    div[data-testid="stDataEditor"] {
+    /* 4. Component Specifics */
+    
+    /* Metric Cards - Full Width */
+    .metric-card {
         width: 100% !important;
-        overflow-x: auto !important;
+        margin-bottom: 12px !important;
+        padding: 16px !important; /* Reduce padding slightly */
+    }
+    
+    /* Meeting Cards - Compact View */
+    .meeting-card {
+        width: 100% !important;
+        flex-direction: row !important; /* Keep date on left */
+        align-items: flex-start !important;
+        padding: 10px !important;
+    }
+    .mc-details {
+        width: 100% !important;
+        overflow: hidden;
+    }
+    
+    /* 5. Data Tables & Grids */
+    div[data-testid="stDataFrame"], 
+    div[data-testid="stTable"] {
+        width: 100% !important;
+        overflow-x: auto !important; /* Enable scroll */
         display: block !important;
     }
     
-    /* Make buttons larger for touch */
+    /* 6. Inputs & Buttons - Touch Friendly */
+    .stTextInput input, .stSelectbox div[data-testid="stMarkdownContainer"], .stButton button {
+        min-height: 48px !important; /* Larger touch targets */
+        font-size: 16px !important; /* Prevent iOS zoom */
+    }
     div.stButton > button {
         width: 100% !important;
-        min-height: 48px !important;
-        margin-bottom: 8px !important;
     }
     
-    /* Hide decorative status bar on mobile to save space */
+    /* 7. Hide Non-Critical Elements */
     footer { display: none !important; }
+    div[data-testid="stDecoration"] { display: none !important; }
+    
+    /* 8. Charts */
+    /* Ensure charts don't overflow */
+    .js-plotly-plot, .plot-container {
+        width: 100% !important;
+    }
+    
+    /* 9. Sidebar Adjustments */
+    section[data-testid="stSidebar"] {
+        /* width handled by sidebar.py component (70px vs 260px) */
+        height: 100vh !important;
+    }
+    
+    /* FIX: Remove excess padding on mobile sidebar items to align icons */
+    section[data-testid="stSidebar"] div[role="radiogroup"] label {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        text-align: center !important;
+        justify-content: center !important;
+        display: flex !important;
+    }
+
+    /* Ensure close button is visible (Streamlit native) */
+    button[kind="header"] {
+        display: block !important; /* Ensure header buttons like close are visible */
+    }
+    
+    /* Fix header z-index to stay on top if needed, or hide if it interferes with sidebar */
+    header[data-testid="stHeader"] {
+        z-index: 100000 !important;
+    }
 }
 </style>
 """
@@ -248,7 +316,13 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
     background-color: #ffffff !important;
     color: #1a1a1a !important;
     border: 1px solid #e0e0e0 !important;
-    border-radius: 8px !important;
+    border-radius: 4px !important;
+}
+/* Focus States for Inputs */
+.stTextInput > div > div > input:focus, 
+.stSelectbox > div > div > div:focus {
+    border-color: #1a73e8 !important;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2) !important;
 }
 
 /* Cards */
@@ -567,7 +641,37 @@ div.stButton > button:hover {
 div.stButton > button[kind="primary"] {
     background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
     color: white !important;
-    border: none !important;
+/* Primary Button - Google Blue */
+div.stButton > button[kind="primary"] {
+    background-color: #1a73e8 !important;
+    background-image: none !important; /* Remove gradient */
+    color: white !important;
+    border: 1px solid transparent !important;
+    border-radius: 100px !important; /* Pill shape */
+    font-weight: 500 !important;
+    font-family: 'Google Sans', Roboto, sans-serif !important;
+    padding: 0 24px !important;
+    height: 36px !important; /* Standard height */
+    line-height: 36px !important;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15) !important;
+    transition: background-color .2s, box-shadow .2s, color .2s;
+}
+div.stButton > button[kind="primary"]:hover {
+    background-color: #174ea6 !important; /* Darker blue on hover */
+    box-shadow: 0 2px 6px 2px rgba(60,64,67,0.15) !important;
+}
+div.stButton > button:not([kind="primary"]) {
+    border-radius: 100px !important;
+    color: #1a73e8 !important;
+    border: 1px solid #dadce0 !important;
+    background-color: #fff !important;
+    font-weight: 500 !important;
+    font-family: 'Google Sans', Roboto, sans-serif !important;
+}
+div.stButton > button:not([kind="primary"]):hover {
+    background-color: #f1f3f4 !important;
+    border-color: #dadce0 !important;
+    color: #174ea6 !important;
 }
 
 /* Focus States */
@@ -988,31 +1092,39 @@ th {
     border-bottom: 1px solid #1e293b !important;
 }
 
-/* Buttons - Subtle Secondary, Vibrant Primary */
-div.stButton > button {
-    background-color: rgba(255, 255, 255, 0.04) !important;
-    color: #e2e8f0 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 8px;
-    font-weight: 500;
+/* Buttons - FORCE Hyper-Transparent Pill Style with Attribute Selectors */
+div[class*="stButton"] > button, 
+div[class*="stDownloadButton"] > button,
+button[kind="primary"],
+button[kind="secondary"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    color: #475569 !important; /* Slate 600 for visibility on light bg */
+    border: 1px solid rgba(0, 0, 0, 0.15) !important; /* Darker border for light mode */
+    border-radius: 50px !important; /* Full capsule/pill shape */
+    font-weight: 600 !important;
+    padding: 0.4rem 1.2rem !important;
+    backdrop-filter: none; 
+    transition: all 0.2s ease;
+    box-shadow: none !important;
 }
-div.stButton > button:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border-color: #cbd5e1 !important;
-    color: #fff !important;
-}
-/* Primary Action Button - Premium Gradient */
-div.stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; /* Amber 500 -> 600 */
-    color: #ffffff !important;
-    border: none !important;
-    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
-    font-weight: 600;
-}
-div.stButton > button[kind="primary"]:hover {
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+
+div[class*="stButton"] > button:hover, 
+div[class*="stDownloadButton"] > button:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important; /* Subtle dark wash on hover */
+    border-color: rgba(0, 0, 0, 0.3) !important; 
+    color: #0f172a !important; /* Darker text */
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
 }
+
+/* Specific Override for Primary if needed to stand out slightly more, but keeping transparent base */
+div[class*="stButton"] > button[kind="primary"] {
+    border-width: 2px !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    color: #0f172a !important;
+}
+
 
 /* File Uploader - Integrated Dark Style */
 div[data-testid="stFileUploader"] > div {
@@ -1108,33 +1220,58 @@ div[role="radiogroup"] label:hover {
 # 4. SHARED RESPONSIVE CSS (Mobile Optimization - Enhanced)
 RESPONSIVE_CSS = """
 <style>
+/* --- SMOOTH SCROLLING & PERFORMANCE --- */
+html {
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+body {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
 /* --- MOBILE RESPONSIVENESS (Screens < 768px) --- */
 @media only screen and (max-width: 768px) {
     
     /* 1. Main Container Padding */
     .block-container {
-        padding-top: 3rem !important; /* Space for hamburger menu */
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        padding-bottom: 4rem !important;
+        padding-top: 2.5rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        padding-bottom: 3rem !important;
         max-width: 100vw !important;
+        overflow-x: hidden !important;
     }
 
     /* 2. Header & Titles Scaling */
-    h1 { font-size: 1.6rem !important; line-height: 1.2 !important; }
-    h2 { font-size: 1.4rem !important; }
-    h3 { font-size: 1.2rem !important; }
-    p, div, label { font-size: 14px !important; }
+    h1 { 
+        font-size: 1.5rem !important; 
+        line-height: 1.3 !important;
+        margin-bottom: 0.75rem !important;
+    }
+    h2 { 
+        font-size: 1.25rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    h3 { 
+        font-size: 1.1rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    p, div, label { 
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
     
-    /* 3. Force Column Stacking (The Critical Fix) */
+    /* 3. Force Column Stacking */
     div[data-testid="column"] {
         width: 100% !important;
         flex: 1 1 auto !important;
         min-width: 100% !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 0.75rem !important;
     }
     
-    /* EXCEPTION: Content Action Buttons Row (Keep Horizontal) */
+    /* EXCEPTION: Content Action Buttons Row */
     div[data-testid="stVerticalBlock"]:has(.css-actions-row) div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
         width: auto !important;
         min-width: unset !important;
@@ -1144,42 +1281,185 @@ RESPONSIVE_CSS = """
 
     /* 4. Touch-Friendly Inputs & Buttons */
     div.stButton > button {
-        width: 100% !important; /* Full width buttons on mobile */
-        min-height: 48px !important; /* Touch target size */
-        margin-bottom: 8px !important;
+        width: 100% !important;
+        min-height: 50px !important;
+        margin-bottom: 0.5rem !important;
+        font-size: 15px !important;
+        padding: 12px 20px !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    div.stButton > button:active {
+        transform: scale(0.98) !important;
     }
     
     /* Exception for Actions Row Buttons */
     div[data-testid="stVerticalBlock"]:has(.css-actions-row) div.stButton > button {
          width: auto !important;
          min-height: 48px !important;
+         padding: 10px 16px !important;
     }
+    
+    /* Input Fields */
     div[data-testid="stTextInput"] input, 
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] {
-        min-height: 48px !important;
+    div[data-testid="stSelectbox"] div[data-baseweb="select"],
+    div[data-testid="stTextArea"] textarea {
+        min-height: 50px !important;
+        font-size: 16px !important;
+        padding: 12px !important;
+        border-radius: 8px !important;
     }
     
     /* 5. Data Tables/Editors Scroll */
-    div[data-testid="stDataFrame"], div[data-testid="stDataEditor"] {
+    div[data-testid="stDataFrame"], 
+    div[data-testid="stDataEditor"] {
         width: 100% !important;
         overflow-x: auto !important;
         display: block !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 8px !important;
     }
     
-    /* 6. Hide Sidebar default minimize arrow if it overlaps */
+    /* 6. Sidebar Optimization */
     section[data-testid="stSidebar"] {
-        z-index: 99999 !important; /* Ensure sidebar is on top */
+        z-index: 99999 !important;
+    }
+    
+    section[data-testid="stSidebar"] > div {
+        padding-top: 2rem !important;
+    }
+    
+    /* Sidebar Navigation Items */
+    section[data-testid="stSidebar"] div[role="radiogroup"] label {
+        min-height: 48px !important;
+        padding: 12px 16px !important;
+        margin-bottom: 4px !important;
     }
     
     /* 7. Card/Container Margins */
     div[data-testid="stVerticalBlock"] > div {
-        gap: 0.5rem !important;
+        gap: 0.75rem !important;
     }
     
-    /* 8. Google Toggle Widget Responsive Container */
+    /* 8. Metric Cards Mobile Optimization */
+    .metric-card {
+        padding: 1rem !important;
+        margin-bottom: 0.75rem !important;
+        border-radius: 12px !important;
+    }
+    
+    .metric-icon {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 1.25rem !important;
+    }
+    
+    .metric-label {
+        font-size: 0.875rem !important;
+    }
+    
+    .metric-value {
+        font-size: 1.5rem !important;
+    }
+    
+    /* 9. Meeting Cards Mobile */
+    .meeting-card {
+        padding: 0.75rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .mc-date-box {
+        min-width: 50px !important;
+        padding: 0.5rem !important;
+    }
+    
+    .mc-month {
+        font-size: 0.7rem !important;
+    }
+    
+    .mc-day {
+        font-size: 1.25rem !important;
+    }
+    
+    .mc-title, .mc-company {
+        font-size: 0.875rem !important;
+    }
+    
+    /* 10. Responsive Widgets */
     iframe {
         max-width: 100% !important;
+        height: auto !important;
     }
+    
+    /* 11. Expander Optimization */
+    div[data-testid="stExpander"] {
+        border-radius: 8px !important;
+    }
+    
+    div[data-testid="stExpander"] summary {
+        min-height: 48px !important;
+        padding: 12px !important;
+        font-size: 15px !important;
+    }
+    
+    /* 12. Select Box Dropdown */
+    div[data-baseweb="select"] > div {
+        min-height: 50px !important;
+    }
+    
+    /* 13. Radio Buttons */
+    div[role="radiogroup"] label {
+        min-height: 44px !important;
+        padding: 10px 12px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    /* 14. File Uploader */
+    div[data-testid="stFileUploader"] {
+        padding: 1rem !important;
+    }
+    
+    div[data-testid="stFileUploader"] button {
+        min-height: 50px !important;
+        width: 100% !important;
+    }
+    
+    /* 15. Tabs */
+    div[data-baseweb="tab-list"] button {
+        min-height: 48px !important;
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+    }
+    
+    /* 16. Alerts/Messages */
+    div[data-testid="stAlert"] {
+        padding: 1rem !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+    }
+    
+    /* 17. Progress Bar */
+    div[data-testid="stProgress"] {
+        height: 8px !important;
+    }
+    
+    /* 18. Spinner */
+    div[data-testid="stSpinner"] {
+        min-height: 60px !important;
+    }
+}
+
+/* --- TABLET OPTIMIZATION (768px - 1024px) --- */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+    .block-container {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+    
+    h1 { font-size: 1.75rem !important; }
+    h2 { font-size: 1.5rem !important; }
+    h3 { font-size: 1.25rem !important; }
 }
 </style>
 """
@@ -1311,11 +1591,70 @@ def get_status_colors(theme):
 # Force "light" theme to ensure consistent UI rendering across all components
 st.session_state.theme = "light"
 
+# --- INIT ZOOM STATE ---
+if "zoom_level" not in st.session_state:
+    st.session_state.zoom_level = 90 # Default comfortable zoom
+
 st.markdown(COMMON_CSS, unsafe_allow_html=True)
 
 # Force Light CSS
 st.markdown(LIGHT_CSS, unsafe_allow_html=True)
 st.markdown(RESPONSIVE_CSS, unsafe_allow_html=True)
+
+# 🚀 FORCE BUTTON STYLES (Injected Last to Override Everything)
+st.markdown("""
+<style>
+/* FINAL BUTTON OVERRIDE - Hyper-Transparent Pill */
+div[data-testid="stButton"] > button, 
+div[data-testid="stDownloadButton"] > button,
+div[class*="stButton"] > button,
+div[class*="stDownloadButton"] > button,
+div[data-testid="stTooltipHoverTarget"] > button,
+div[data-testid="stPopover"] > button,
+button[data-testid="stPopoverButton"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    color: #334155 !important; /* Slate 700 - Visible on Light BG */
+    border: 1px solid #cbd5e1 !important; /* Slate 300 Border */
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    padding: 0.35rem 1.1rem !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease;
+}
+
+div[data-testid="stButton"] > button:hover, 
+div[data-testid="stDownloadButton"] > button:hover,
+div[class*="stButton"] > button:hover,
+div[class*="stDownloadButton"] > button:hover,
+div[data-testid="stTooltipHoverTarget"] > button:hover,
+div[data-testid="stPopover"] > button:hover,
+button[data-testid="stPopoverButton"]:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border-color: #94a3b8 !important; /* Slate 400 */
+    color: #0f172a !important; /* Slate 900 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    transform: translateY(-1px);
+}
+
+/* Primary Button Override - Transparent with Amber Border */
+div[data-testid="stButton"] > button[kind="primary"],
+div[class*="stButton"] > button[kind="primary"],
+div[data-testid="stTooltipHoverTarget"] > button[kind="primary"],
+div[data-testid="stPopover"] > button[kind="primary"] {
+    background-color: transparent !important;
+    border: 2px solid #f59e0b !important; /* Amber Border */
+    color: #d97706 !important; /* Amber Text */
+}
+div[data-testid="stButton"] > button[kind="primary"]:hover,
+div[class*="stButton"] > button[kind="primary"]:hover,
+div[data-testid="stTooltipHoverTarget"] > button[kind="primary"]:hover,
+div[data-testid="stPopover"] > button[kind="primary"]:hover {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15) !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Global Padding Fix (Move content higher)
 st.markdown("""
@@ -1362,12 +1701,24 @@ else:
     st.sidebar.title("SHDPIXEL")
 
 # Helper for Animated Icons
-def get_icon_html(icon_name, width=60):
-    icon_path = f"assets/icons/{icon_name}"
-    if os.path.exists(icon_path):
+# Helper for Animated Icons
+def get_icon_html(icon_name, width=60, class_name=""):
+    # Check paths
+    possible_paths = [f"assets/icons/{icon_name}", f"assets/{icon_name}"]
+    icon_path = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            icon_path = p
+            break
+            
+    if icon_path:
         b64 = get_sidebar_img_b64(icon_path)
-        return f'<img src="data:image/png;base64,{b64}" style="width: {width}px; height: auto; vertical-align: middle; margin-right: 15px;">'
+        return f'<img src="data:image/png;base64,{b64}" class="{class_name}" style="width: {width}px; height: auto; vertical-align: middle; margin-right: 15px;">'
     return ""
+
+# Navigation
+# Import Component
+from components.email_verifier import render_email_verifier
 
 # Navigation
 page = st.sidebar.radio(
@@ -1379,49 +1730,28 @@ page = st.sidebar.radio(
         # "Lead Generator", 
         "Scraped Leads",
         "Spreadsheet Tool",
-        "Google Maps Scraper"
+        "Google Maps Scraper",
+        "Email Verifier"
     ],
     label_visibility="collapsed"
 )
-st.sidebar.markdown("---") 
 
-    # ... (Rest of Sidebar code remains, skipping to Main Page replacement)
+st.markdown(f"""
+<style>
+/* 7. Email Verifier */
+section[data-testid="stSidebar"] div[role="radiogroup"] label:nth-child(7)::before {{
+    content: "" !important;
+    background-image: url('data:image/png;base64,{get_sidebar_img_b64("assets/email_verifier_icon.png")}') !important;
+    background-size: 20px 20px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    display: inline-block !important;
+}}
+</style>
+""", unsafe_allow_html=True)
 
-# ... (We will use a separate Replace block for the main page to avoid replacing huge chunks of unrelated code) 
-# I will actually split this into two calls for safety or just target the sidebar first. 
-# wait, I can only do one replacement per tool call effectively if they are far apart. 
-# I'll do Sidebar first.
-
-# --- SETTINGS (Bottom) ---
-# st.sidebar.header("⚙️ Settings")
-
-# Theme Toggle
-# if st.session_state.theme == "light":
-#     if st.sidebar.button("🌙 Switch to Dark Mode", use_container_width=True):
-#         st.session_state.theme = "dark"
-#         st.rerun()
-# else:
-#     if st.sidebar.button("☀️ Switch to Light Mode", use_container_width=True):
-#         st.session_state.theme = "light"
-#         st.rerun()
-
-# Seed Data Button (Demo Mode)
-# Seed Data Button (Live Mode Only)
-if IS_LIVE_ENV:
-    if st.sidebar.button("🌱 Add Dummy Data", use_container_width=True, help="Injects 10 sample leads for demo purposes"):
-        try:
-            # Check if backend is reachable first
-            r = requests.post(f"{BACKEND_BASE}/leads/seed", timeout=10)
-            if r.status_code == 200:
-                st.toast("✅ Dummy data added!", icon="🌱")
-                time.sleep(1)
-                st.rerun()
-            else:
-                st.error(f"Failed to seed data. Status: {r.status_code}")
-        except Exception as e:
-            st.error(f"Connection Error: {e}")
-
-st.sidebar.markdown("---")
 
 
 
@@ -1437,7 +1767,62 @@ div[data-testid="stDecoration"] {
 
 
 # --- UPCOMING MEETINGS WIDGET ---
-st.sidebar.markdown("### 📅 Upcoming Meetings")
+st.sidebar.markdown("""
+    <style>
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-25%); }
+    }
+    
+    .upcoming-header-base {
+        margin-top: 16px; 
+        margin-bottom: 8px; 
+        color: #9CA3AF; 
+        font-size: 0.75rem; 
+        font-weight: 600; 
+        letter-spacing: 0.05em; 
+        text-transform: uppercase;
+    }
+
+    /* STATIC HEADER (Expanded Mode) */
+    .header-static {
+        display: flex; 
+        align-items: center; 
+        gap: 6px;
+    }
+    
+    /* SCROLLING HEADER (Shrink Mode) */
+    .header-scroll {
+        display: none;
+        overflow: hidden;
+        white-space: nowrap;
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+    .header-scroll-inner {
+        display: inline-block;
+        animation: marquee 10s linear infinite;
+    }
+
+    /* TOGGLE LOGIC */
+    body.sidebar-mj-collapsed .header-static {
+        display: none !important;
+    }
+    body.sidebar-mj-collapsed .header-scroll {
+        display: block !important;
+    }
+    </style>
+
+    <div class="upcoming-header-base header-static">
+        <span style="font-size: 1rem;">📅</span> UPCOMING MEETINGS
+    </div>
+    
+    <div class="upcoming-header-base header-scroll">
+        <div class="header-scroll-inner">
+            <span>📅</span> UPCOMING MEETINGS &nbsp;&nbsp;&nbsp; <span>📅</span> UPCOMING MEETINGS &nbsp;&nbsp;&nbsp; <span>📅</span> UPCOMING MEETINGS &nbsp;&nbsp;&nbsp; <span>📅</span> UPCOMING MEETINGS &nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 try:
     # Quick lightweight check
     m_leads_raw = fetch_data(LEADS_API)
@@ -1582,75 +1967,43 @@ if "Dashboard" in page:
 
 # ================== CRM GRID (PIPELINE) ==================
 if "CRM Grid" in page:
-    st.markdown(f"""<h1 style='display: flex; align-items: center;'><i class="fas fa-user-friends" style="margin-right: 15px; color: #2563EB;"></i> Advanced CRM Grid</h1>""", unsafe_allow_html=True)
+    # Animated Funnel Icon (CRM Pipeline)
+    animated_crm_svg = """<svg width="65" height="65" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 15px;">
+<defs>
+<linearGradient id="funnelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+<stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+</linearGradient>
+<filter id="glowFunnel">
+<feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+<feMerge>
+<feMergeNode in="coloredBlur"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+<rect x="5" y="5" width="90" height="90" rx="18" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+<path d="M20 25 L80 25 L55 65 L55 85 L45 85 L45 65 L20 25Z" stroke="url(#funnelGrad)" stroke-width="4" stroke-linejoin="round" fill="rgba(59, 130, 246, 0.1)" style="filter: url(#glowFunnel);"/>
+<g>
+<circle cx="35" cy="20" r="3" fill="#60a5fa" style="animation: drop 2.5s infinite linear 0s; opacity: 0;"/>
+<circle cx="65" cy="20" r="3" fill="#a78bfa" style="animation: drop 2.5s infinite linear 1.2s; opacity: 0;"/>
+<circle cx="50" cy="20" r="3" fill="#f472b6" style="animation: drop 2.5s infinite linear 0.6s; opacity: 0;"/>
+</g>
+<style>
+@keyframes drop {
+0% { cy: 20; opacity: 0; transform: scale(1); }
+10% { opacity: 1; }
+50% { cy: 55; opacity: 1; transform: scale(0.8); }
+70% { cy: 75; opacity: 1; transform: scale(0.6); }
+90% { cy: 88; opacity: 0; transform: scale(0); }
+100% { cy: 88; opacity: 0; }
+}
+</style>
+</svg>"""
+
+    st.markdown(f"""<div style='display: flex; align-items: center;'>{animated_crm_svg}<h1 style='display: inline; margin: 0;'>Advanced CRM Grid</h1></div>""", unsafe_allow_html=True)
     
-    # --- File Import Section ---
-    with st.expander("📂 Import Leads (CSV/Excel)"):
-        uploaded_file = st.file_uploader("Upload file", type=['csv', 'xlsx'])
-        if uploaded_file:
-            try:
-                if uploaded_file.name.endswith('.csv'):
-                    import_df = pd.read_csv(uploaded_file)
-                else:
-                    import_df = pd.read_excel(uploaded_file)
-                
-                st.write(f"Preview: {len(import_df)} rows found")
-                st.dataframe(import_df.head(), use_container_width=True)
-                
-                if st.button("🚀 Import Now"):
-                    count = 0
-                    progress_bar = st.progress(0, text="Importing...")
-                    
-                    for idx, row in import_df.iterrows():
-                        # Smarter Mapping based on screenshot
-                        # 1. Business Name
-                        biz = row.get("Company Name") or row.get("Business Name") or row.get("Company")
-                        name = row.get("Name") or row.get("Contact Name") or row.get("Person")
-                        
-                        # If Company Name is missing, use Name as Business Name (and leave contact empty)
-                        if pd.isna(biz) or str(biz).strip() == "":
-                            business_name = name if (not pd.isna(name)) else "Unknown Business"
-                            contact_name = ""
-                        else:
-                            business_name = biz
-                            contact_name = name if (not pd.isna(name)) else ""
-
-                        # 2. Status & Priority
-                        raw_status = row.get("Status")
-                        status = raw_status if (not pd.isna(raw_status) and str(raw_status).strip() != "") else "Generated"
-                        
-                        raw_prio = row.get("Priority")
-                        priority = raw_prio if (not pd.isna(raw_prio) and str(raw_prio).upper() in ["HOT", "WARM", "COLD"]) else "WARM"
-
-                        # 3. Dates
-                        last_f = row.get("Last Follow up Date") or row.get("Last Follow Up")
-                        next_f = row.get("Next Follow-up Date") or row.get("Next Follow Up")
-
-                        # Clean phone
-                        phone_val = str(row.get("Phone Number") or row.get("Phone") or row.get("Contact") or "")
-                        if phone_val == "nan": phone_val = ""
-
-                        payload = {
-                            "businessName": str(business_name),
-                            "contactName": str(contact_name),
-                            "phone": phone_val,
-                            "email": str(row.get("Email") or row.get("Email Address") or ""),
-                            "address": str(row.get("Address") or row.get("Location") or ""),
-                            "status": str(status),
-                            "priority": str(priority),
-                            "lastFollowUpDate": str(last_f) if not pd.isna(last_f) else None,
-                            "nextFollowUpDate": str(next_f) if not pd.isna(next_f) else None
-                        }
-                        
-                        if create_lead(payload):
-                            count += 1
-                        progress_bar.progress(min((idx + 1) / len(import_df), 1.0))
-                    
-                    st.success(f"Successfully imported {count} leads!")
-                    st.rerun()
-
-            except Exception as e:
-                st.error(f"Error reading file: {e}")
+    # --- File Import Section Removed (Moved to Command Center Popover) ---
 
     # --- Grid Section ---
     leads = fetch_data(LEADS_API)
@@ -1760,76 +2113,213 @@ if "CRM Grid" in page:
     for date_col in ["lastFollowUpDate", "nextFollowUpDate", "meetingDate"]:
         df[date_col] = pd.to_datetime(df[date_col], errors='coerce').dt.date
 
+    # Helper for Export
+    import io
+    def to_excel(df_to_save):
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df_to_save.to_excel(writer, index=False, sheet_name='CRM_Leads')
+        return output.getvalue()
+    
     # --- GOOGLE SHEETS FUNCTIONALITY: FILTERS & SEARCH ---
+    
+    # --- INIT STATE (Restored) ---
+    if "mode_state" not in st.session_state:
+        st.session_state.mode_state = "👁️ Read Only"
+    mode = st.session_state.mode_state
+
+    # --- PREMIUM COMMAND CENTER UI ---
     st.markdown("""
     <style>
-    .filter-bar {
-        background: rgba(150, 150, 150, 0.05);
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-    .grid-footer {
-        background: #f8f9fa;
-        padding: 5px 15px;
-        border-radius: 0 0 8px 8px;
-        border-top: 1px solid #ddd;
-        font-size: 0.85rem;
-        color: #666;
-        display: flex;
-        justify-content: space-between;
-        margin-top: -5px;
-    }
-    /* GRID HEADER STYLING (Sheets Style) */
-    div[data-testid="stDataEditor"] .glide-grid-header {
-        background: #f1f3f4 !important;
-        font-weight: bold !important;
+    /* Command Center Container */
+    div[data-testid="stVerticalBlock"] > div[style*="border"] {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
     }
     
-    /* Overall grid border for Sheet look */
-    div[data-testid="stDataEditor"] {
-        border: 1px solid #e0e0e0 !important;
+    /* Input Fields in Command Center */
+    .stTextInput input, .stSelectbox div[data-baseweb="select"] > div {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+    }
+    
+    /* Action Buttons (Segmented Look) */
+    .action-btn-group {
+        display: flex;
+        gap: 5px;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 4px;
+        border-radius: 8px;
+    }
+    /* Sticky Command Center Logic */
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(div.sticky-command-center-target) {
+        position: sticky !important;
+        top: 3.75rem !important; /* Below Streamlit Header */
+        z-index: 100 !important;
+        background: rgba(255, 255, 255, 0.95); /* High opacity background */
+        backdrop-filter: blur(10px);
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    /* Dark mode support for sticky header */
+    @media (prefers-color-scheme: dark) {
+        div[data-testid="stVerticalBlockBorderWrapper"]:has(div.sticky-command-center-target) {
+            background: rgba(30, 41, 59, 0.95);
+        }
     }
     </style>
     """, unsafe_allow_html=True)
 
-    # --- CALLBACKS ---
-    def clear_all_filters_cb():
-        st.session_state.global_search_input = ""
-        st.session_state.f_status_multi = []
-        st.session_state.f_prio_multi = []
+    # 1. COMMAND CENTER CONTAINER
+    with st.container(border=True):
+        # STICKY TARGET MARKER
+        st.markdown('<div class="sticky-command-center-target"></div>', unsafe_allow_html=True)
+        
+        # Top Row: Search & Core Filters
+        c1, c2, c3 = st.columns([3, 1.5, 1.5])
+        
+        with c1:
+            search_q = st.text_input("🔍 Search Database", placeholder="Name, Company, Phone...", label_visibility="collapsed", key="global_search_input")
+            
+        with c2:
+            status_keys = list(STATUS_PALETTE.keys())
+            if "Generated" not in status_keys: status_keys.insert(0, "Generated")
+            f_status = st.multiselect("Status", options=status_keys, placeholder="Filter Status", label_visibility="collapsed", key="f_status_multi")
+            
+        with c3:
+            f_prio = st.multiselect("Priority", options=["HOT", "WARM", "COLD"], placeholder="Filter Priority", label_visibility="collapsed", key="f_prio_multi")
 
-    # 1. SEARCH & FILTERS ROW
-    col_search, col_status, col_prio, col_clear, col_export = st.columns([2.5, 1.5, 1.2, 0.4, 1])
-    
-    with col_search:
-        search_q = st.text_input("🔍 Search", placeholder="Search name, company, notes...", label_visibility="collapsed", key="global_search_input")
-    
-    with col_status:
-        # Sync Options with Palette Keys to ensure 100% match
-        status_keys = list(STATUS_PALETTE.keys())
-        if "Generated" not in status_keys: status_keys.insert(0, "Generated")
-        status_options = status_keys
-        f_status = st.multiselect("Filter Status", options=status_options, placeholder="All Statuses", label_visibility="collapsed", key="f_status_multi")
-    
-    with col_prio:
-        f_prio = st.multiselect("Filter Priority", options=["HOT", "WARM", "COLD"], placeholder="All Priorities", label_visibility="collapsed", key="f_prio_multi")
+        st.write("") # Spacer
+        
+        # Bottom Row: Pro Actions & View Controls
+        # Left: Import/Export | Right: View Modes
+        ac_left, ac_mid, ac_right = st.columns([2, 2, 2])
+        
+        with ac_left:
+            # Compact Import/Export Cluster
+            sub_c1, sub_c2 = st.columns(2)
+            with sub_c1:
+                with st.popover("📂 Import", use_container_width=True):
+                    st.markdown("### Import Leads")
+                    uploaded_file = st.file_uploader("Upload CSV/Excel", type=['csv', 'xlsx'], key="crm_importer")
+                    if uploaded_file:
+                        try:
+                            if uploaded_file.name.endswith('.csv'):
+                                import_df = pd.read_csv(uploaded_file)
+                            else:
+                                import_df = pd.read_excel(uploaded_file)
+                            
+                            st.caption(f"Preview: {len(import_df)} rows ready")
+                            
+                            if st.button("🚀 Run Import", key="btn_run_import"):
+                                count = 0
+                                progress_bar = st.progress(0, text="Importing...")
+                                
+                                for idx, row in import_df.iterrows():
+                                    biz = row.get("Company Name") or row.get("Business Name") or row.get("Company")
+                                    name = row.get("Name") or row.get("Contact Name") or row.get("Person")
+                                    
+                                    if pd.isna(biz) or str(biz).strip() == "":
+                                        business_name = name if (not pd.isna(name)) else "Unknown Business"
+                                        contact_name = ""
+                                    else:
+                                        business_name = biz
+                                        contact_name = name if (not pd.isna(name)) else ""
 
-    with col_clear:
-        st.button("🧹", help="Clear All Filters", on_click=clear_all_filters_cb)
-    
-    with col_export:
-        import io
-        def to_excel(df_to_save):
-            output = io.BytesIO()
-            with pd.ExcelWriter(output, engine='openpyxl') as writer:
-                df_to_save.to_excel(writer, index=False, sheet_name='CRM_Leads')
-            return output.getvalue()
+                                    raw_status = row.get("Status")
+                                    status = raw_status if (not pd.isna(raw_status) and str(raw_status).strip() != "") else "Generated"
+                                    
+                                    raw_prio = row.get("Priority")
+                                    priority = raw_prio if (not pd.isna(raw_prio) and str(raw_prio).upper() in ["HOT", "WARM", "COLD"]) else "WARM"
 
-    # 2. APPLY REACTIVE FILTERING
+                                    last_f = row.get("Last Follow up Date") or row.get("Last Follow Up")
+                                    next_f = row.get("Next Follow-up Date") or row.get("Next Follow Up")
+
+                                    phone_val = str(row.get("Phone Number") or row.get("Phone") or row.get("Contact") or "")
+                                    if phone_val == "nan": phone_val = ""
+
+                                    payload = {
+                                        "businessName": str(business_name),
+                                        "contactName": str(contact_name),
+                                        "phone": phone_val,
+                                        "email": str(row.get("Email") or row.get("Email Address") or ""),
+                                        "address": str(row.get("Address") or row.get("Location") or ""),
+                                        "status": str(status),
+                                        "priority": str(priority),
+                                        "lastFollowUpDate": str(last_f) if not pd.isna(last_f) else None,
+                                        "nextFollowUpDate": str(next_f) if not pd.isna(next_f) else None
+                                    }
+                                    
+                                    if create_lead(payload):
+                                        count += 1
+                                    progress_bar.progress(min((idx + 1) / len(import_df), 1.0))
+                                
+                                st.success(f"Done! {count} leads imported.")
+                                st.rerun()
+
+                        except Exception as e:
+                            st.error(f"Error: {e}")
+            with sub_c2:
+                # Export Logic Wrapper
+                if not df.empty:
+                    excel_data = to_excel(df)
+                    st.download_button("📥 Export", data=excel_data, file_name="crm_export.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True)
+                else:
+                    st.button("📥 Export", disabled=True, use_container_width=True)
+
+        with ac_mid:
+            # ZOOM CONTROLS (Middle Cluster)
+            z_out, z_val, z_in = st.columns([1, 2, 1])
+            
+            with z_out:
+                if st.button("➖", use_container_width=True, help="Zoom Out"):
+                    st.session_state.zoom_level = max(50, st.session_state.zoom_level - 10)
+                    st.rerun()
+            
+            with z_val:
+                st.markdown(f"<div style='text-align:center; padding-top:10px; font-weight:bold; color:#64748b;'>{st.session_state.zoom_level}%</div>", unsafe_allow_html=True)
+                
+            with z_in:
+                if st.button("➕", use_container_width=True, help="Zoom In"):
+                    st.session_state.zoom_level = min(200, st.session_state.zoom_level + 10)
+                    st.rerun()
+
+        with ac_right:
+            # VIEW MODE TOGGLES (Segmented Control Feel)
+            # Edit | Wrap | Reset
+            v1, v2, v3 = st.columns(3)
+            
+            with v1:
+                # Mode Toggle
+                if mode == "👁️ Read Only":
+                    if st.button("✏️ Edit", use_container_width=True, help="Switch to Edit Mode"):
+                         st.session_state.mode_state = "✏️ Edit"
+                         st.rerun()
+                else:
+                    if st.button("👁️ Read", use_container_width=True, help="Switch to Read Only"):
+                         st.session_state.mode_state = "👁️ Read Only"
+                         st.rerun()
+            
+            with v2:
+                # Text Wrap
+                is_wrapped = st.session_state.get("wrap_text", False)
+                icon_w = "📏" if is_wrapped else "↩️"
+                if st.button(f"{icon_w} Wrap", use_container_width=True):
+                     st.session_state.wrap_text = not is_wrapped
+                     st.rerun()
+            
+            with v3:
+                 if st.button("🔄 Reset", use_container_width=True, help="Clear Filters"):
+                     clear_all_filters_cb()
+                     st.rerun()
+
+    # 2. FILTER LOGIC APPLICATION (Behind the scenes)
     if not df.empty:
         if search_q:
             mask = df.astype(str).apply(lambda x: x.str.contains(search_q, case=False, na=False)).any(axis=1)
@@ -1839,138 +2329,23 @@ if "CRM Grid" in page:
         if f_prio:
             df = df[df['priority'].isin(f_prio)]
 
-        # --- SORTING LOGIC ---
-        # -1 = Urgent (Follow-up is TODAY)
-        #  0 = Normal
-        #  1 = Closed - Lost (Bottom)
-        
+        # Sort Logic
         today_date = datetime.now().date()
-        
         def get_sort_key(row):
-            # 1. Check Closed-Lost (Deprioritize)
             st_val = str(row.get('status', '')).strip()
-            if st_val in ["Closed – Lost", "Closed - Lost"]:
-                return 1
-            
-            # 2. Check Follow-up Date (Prioritize)
+            if st_val in ["Closed – Lost", "Closed - Lost"]: return 1
             d = row.get('nextFollowUpDate')
-            # Ensure d is a valid date object for comparison
-            if d == today_date:
-                return -1
-                
+            if d == today_date: return -1
             return 0
 
         df['_sort_key'] = df.apply(get_sort_key, axis=1)
-        
-        # Sort: SortKey ASC, then ID DESC (Newest first)
-        df = df.sort_values(by=['_sort_key', 'id'], ascending=[True, False])
-        df = df.drop(columns=['_sort_key'])
-            
-    with col_export:
-        if not df.empty:
-            excel_data = to_excel(df)
-            st.download_button(
-                label="📥 Export Excel",
-                data=excel_data,
-                file_name=f"CRM_Export_{time.strftime('%Y%m%d_%H%M')}.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                help="Download filtered leads to Excel",
-                use_container_width=True
-            )
-        else:
-            st.button("📥 Export", disabled=True, use_container_width=True)
+        df = df.sort_values(by=['_sort_key', 'id'], ascending=[True, False]).drop(columns=['_sort_key'])
 
-    # --- INIT STATE ---
-    # Default State for Toolbar
-    if "mode_state" not in st.session_state:
-        st.session_state.mode_state = "👁️ Read Only"
-    mode = st.session_state.mode_state
-    
-    # Init Zoom default if not in session, but control handles it via key.
-    # We just need a default variable for the first pass calculation.
-    zoom_val = 90 
-    
-    # Init Font Size and Save State
-    fs = "16px"
-    save_clicked = False 
-
-    # --- RESPONSIVE LAYOUT LOGIC v6 (Fixed Selectors) ---
-    # zoom_val and scroll logic REMOVED. relying on native browser scroll.
-    
-    # --- CUSTOM TOOLBAR UI ---
-    st.markdown("""<div class="crm-toolbar"></div>""", unsafe_allow_html=True)
-    
-    # Simple Layout: Spacer | Actions
-    toolbar_c2, toolbar_c3 = st.columns([4.0, 2.5])
-    
-    with toolbar_c2:
-         st.write("") # Spacer
-
-    with toolbar_c3:
-        st.write("⚙️ **Actions**")
-        
-        # Init Zoom Level
-        if "zoom_level" not in st.session_state:
-            st.session_state.zoom_level = 100
-            
-        current_wrap = st.session_state.get("wrap_text", False)
-
-        # CSS Marker for Mobile Row Targeting
-        st.markdown('<div class="css-actions-row"></div>', unsafe_allow_html=True)
-
-        if current_wrap:
-             # Edit | Wrap | Zoom In | Zoom Out | Save | All
-             ac1, ac2, z_out, z_in, ac3, ac4 = st.columns([1, 1, 0.6, 0.6, 1, 1], gap="small")
-        else:
-             # Normal Layout
-             ac1, ac2, ac3, ac4 = st.columns([1, 1, 1, 1], gap="small") 
-        
-        with ac1:
-             # Edit/Read Toggle
-             if mode == "👁️ Read Only":
-                 if st.button("✏️", use_container_width=True, key="btn_edit_mode", help="Switch to Edit Mode"):
-                     st.session_state.mode_state = "✏️ Edit" 
-                     st.rerun() 
-             else:
-                 if st.button("👁️", use_container_width=True, key="btn_read_mode", help="Switch to Read Only Mode"):
-                    st.session_state.mode_state = "👁️ Read Only"
-                    st.rerun()
-        
-        with ac2:
-            btn_label = "📏" if current_wrap else "↩️"
-            btn_help = "Standard Table View" if current_wrap else "Wrapped Text View"
-            if st.button(btn_label, use_container_width=True, help=btn_help, key="wrap_btn_toggle"):
-                st.session_state.wrap_text = not current_wrap
-                st.rerun()
-
-        if current_wrap:
-             with z_out:
-                  # Use unique key per render if needed, but fixed key is better for debounce
-                  if st.button("➖", use_container_width=True, help="Zoom Out (10%)", key="zoom_out_btn"):
-                       # Ensure int
-                       curr = int(st.session_state.get('zoom_level', 100))
-                       st.session_state.zoom_level = max(50, curr - 10)
-                       st.rerun()
-             
-             # Display current zoom level with a small hack using a disabled button styling or just centering logic
-             # But here we just assume it's sandwiched
-             
-             with z_in:
-                  if st.button("➕", use_container_width=True, help="Zoom In (10%)", key="zoom_in_btn"):
-                       curr = int(st.session_state.get('zoom_level', 100))
-                       st.session_state.zoom_level = min(200, curr + 10)
-                       st.rerun()
-
-        with ac3:
-             # Auto-Save Indicator (Visual only)
-             if mode == "✏️ Edit":
-                  st.button("⚡", disabled=True, use_container_width=True, help="Auto-save enabled", key="btn_autosave_indicator")
-             else:
-                  st.button("🔒", disabled=True, use_container_width=True, help="Read Only", key="btn_readonly_indicator")
-
-        with ac4:
-            # "All" / Show All icon
-            st.button("📑", use_container_width=True, key="btn_show_all", help="Show All Rows / Reset Filters", on_click=clear_all_filters_cb)
+    # --- Re-Index for "Sr No" Display (1-based) ---
+    if not df.empty:
+        df = df.reset_index(drop=True)
+        df.index = df.index + 1
+    df.index.name = "Sr No"
 
     # CSS Injection (Clean Native)
     grid_css_conditional = ""
@@ -2046,10 +2421,28 @@ if "CRM Grid" in page:
     }}
     
     /* NATIVE SCROLL LOGIC ONLY */
-    div[data-testid="stDataEditor"] {{
+    /* NATIVE SCROLL LOGIC & ZOOM SCALING */
+    /* NATIVE SCROLL LOGIC & ZOOM SCALING */
+    /* NATIVE SCROLL LOGIC & ZOOM SCALING */
+    /* NATIVE SCROLL LOGIC & ZOOM SCALING */
+    div[data-testid="stDataEditor"],
+    div[data-testid="stDataFrame"] {{
         width: 100% !important;
-        max-width: 100% !important;
+        max-width: none !important;
         overflow: auto !important;
+        /* ZOOM SCALING LOGIC (Using 'zoom' for better reflow on Mac/Chrome) */
+        zoom: {st.session_state.zoom_level / 100.0};
+        
+        /* Force Width Compensation to prevent right-side gap */
+        /* If zoom is 0.8 (80%), width needs to be 125% to fill the 100% container visual width */
+        width: {100 * (100 / st.session_state.zoom_level)}% !important;
+    }}
+
+    /* FORCE INNER CHILDREN TO FILL WIDTH */
+    div[data-testid="stDataEditor"] > div,
+    div[data-testid="stDataFrame"] > div {{
+        width: 100% !important;
+        max-width: none !important;
     }}
     
     {grid_css_conditional}
@@ -2238,6 +2631,9 @@ if "CRM Grid" in page:
     # --- RENDER GRID ---
     # Determine Logic State
     is_wrap = st.session_state.get("wrap_text", False)
+    
+    # --- INIT GRID VARS ---
+    fs = "14px"
     
     # --- COMMON SETUP FOR BOTH VIEWS ---
     base_props = {'font-size': fs, 'height': 'auto'}
@@ -2480,11 +2876,20 @@ if "CRM Grid" in page:
 # TOOL: SPREADSHEET INTELLIGENCE
 # ==========================
 if "Spreadsheet" in page:
-    st.markdown(f"""<h1 style='display: flex; align-items: center;'>{get_icon_html('chart.png', 65)} Spreadsheet Intelligence</h1>""", unsafe_allow_html=True)
-
-    st.markdown("""
-    Advanced analysis for Excel workbooks. Splits duplicates/uniques by sheet and finds new rows across files.
-    """)
+    # Enhanced Header with Premium UI
+    # Embedded Refined SVG with 3D Effect
+    icon_svg = """<svg width="74" height="74" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(16, 124, 65, 0.3)"/></filter><rect x="8" y="8" width="48" height="48" rx="8" fill="#107C41" style="filter: url(#shadow);"/><linearGradient id="grad1" x1="8" y1="8" x2="56" y="56" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#21A366"/><stop offset="100%" stop-color="#107C41"/></linearGradient><rect x="8" y="8" width="48" height="48" rx="8" fill="url(#grad1)"/><path d="M22 8V56" stroke="white" stroke-width="2" stroke-opacity="0.4"/><path d="M40 8V56" stroke="white" stroke-width="2" stroke-opacity="0.4"/><path d="M8 24H56" stroke="white" stroke-width="2" stroke-opacity="0.4"/><path d="M8 40H56" stroke="white" stroke-width="2" stroke-opacity="0.4"/><rect x="25" y="27" width="12" height="10" rx="2" fill="white" fill-opacity="0.9" style="animation: pulseCell 3s infinite;"/></svg>"""
+    
+    st.markdown(f"""<style>@keyframes floatIcon {{ 0%, 100% {{ transform: perspective(500px) rotateY(10deg) rotateX(5deg) translateY(0px); }} 50% {{ transform: perspective(500px) rotateY(10deg) rotateX(5deg) translateY(-8px); }} }} @keyframes pulseCell {{ 0%, 100% {{ fill-opacity: 0.9; }} 50% {{ fill-opacity: 0.4; }} }}</style><div style="background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%); border-radius: 20px; padding: 28px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025); border: 1px solid rgba(255, 255, 255, 0.8); margin-bottom: 24px; display: flex; align-items: center; gap: 24px; position: relative; overflow: hidden;">
+<div style="position: absolute; top: -20px; right: -20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(33, 163, 102, 0.08) 0%, rgba(255, 255, 255, 0) 70%); border-radius: 50%; pointer-events: none;"></div>
+<div style="flex-shrink: 0; animation: floatIcon 6s ease-in-out infinite;">
+{icon_svg}
+</div>
+<div style="z-index: 1;">
+<h1 style="margin: 0; font-size: 2.5rem; color: #0f172a; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; font-family: 'Inter', sans-serif;">Spreadsheet Intelligence</h1>
+<p style="margin: 8px 0 0 0; color: #475569; font-size: 1.1rem; font-weight: 500; line-height: 1.5;">Unlock insights from your Excel files. Deduplicate, compare, and analyze data with precision.</p>
+</div>
+</div>""", unsafe_allow_html=True)
 
     import io
     import re
@@ -2502,12 +2907,31 @@ if "Spreadsheet" in page:
         s = re.sub(r'[^a-zA-Z0-9\s]', '', s)
         return s if s.strip() != "" else None
 
+    # Helper for styled sub-sections
+    def styled_header(title, icon="🚀"):
+        st.markdown(f"""
+        <div style="
+            padding: 10px 15px;
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            margin: 20px 0 10px 0;
+            border-radius: 0 8px 8px 0;
+        ">
+            <h3 style="margin:0; font-size:1.1rem; color:#334155; display:flex; align-items:center; gap:8px;">
+                <span>{icon}</span> {title}
+            </h3>
+        </div>
+        """, unsafe_allow_html=True)
+
     tab1, tab2, tab3 = st.tabs(["📂 Single File Analysis (Dups vs Uniques)", "🔁 1-vs-1 Comparison", "📚 Multi-File vs Baseline"])
 
     # ==========================
     # TAB 1: SINGLE FILE (ALL SHEETS)
     # ==========================
     with tab1:
+        styled_header("Single File Duplicate Analysis")
+        st.markdown("<p style='color:#64748b; margin-bottom:15px; font-size:0.95rem;'>Process a workbook to separate Duplicates and Unique rows into distinct sheets.</p>", unsafe_allow_html=True)
+
         # Define Helper
         def load_excel_safe_single(file_obj, respect_filters=True):
             if not respect_filters:
@@ -3982,11 +4406,32 @@ div[data-testid="stVerticalBlock"]:has(div#{key}) {{
                 if prio_key not in st.session_state:
                     st.session_state[prio_key] = current_prio
                 
-                # Priority Dropdown
+                # Priority Dropdown Options
                 prio_opts = ["HOT", "WARM", "COLD"]
                 if current_prio not in prio_opts: prio_opts.append(current_prio)
                 
-                new_prio = st.selectbox("PRIORITY", prio_opts, key=prio_key)
+                # Display Mapping (Emojis for colored dots)
+                prio_map = {
+                    "HOT": "🔴 HOT",
+                    "WARM": "🟠 WARM",
+                    "COLD": "🔵 COLD"
+                }
+
+                # Custom Styled Label (Matches Image 2)
+                st.markdown("""
+                    <div style="font-size: 0.75rem; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 4px;">
+                        PRIORITY
+                    </div>
+                """, unsafe_allow_html=True)
+                
+                # Selectbox with collapsed label and custom formatting
+                new_prio = st.selectbox(
+                    "Priority_Select", 
+                    prio_opts, 
+                    format_func=lambda x: prio_map.get(x, x),
+                    key=prio_key,
+                    label_visibility="collapsed"
+                )
                 
                 # Update if changed
                 if new_prio != current_prio:
@@ -4244,32 +4689,52 @@ if "Google Maps Scraper" in page:
     if 'scraper_running' not in st.session_state:
         st.session_state.scraper_running = False
         
-    # --- STATE MANAGEMENT BRIDGE ---
-    # We use a native Streamlit checkbox to track the toggle state.
-    # We HIDE it visually using CSS so the user doesn't see it, 
-    # but the JS bridge can still click it programmatically.
-    
-    st.markdown("""
-    <style>
-    /* HIDE the specific checkbox used for state management */
-    /* We target all checkboxes on this page view since it's the only one here. */
-    div[data-testid="stCheckbox"] {
-        visibility: hidden !important;
-        height: 0 !important;
-        width: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        position: absolute !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # --- STATE MANAGEMENT BRIDGE REMOVED TO FIX CHECKBOX VISIBILITY ---
+    # The previous CSS here was hiding ALL checkboxes globally.
     
     if 'google_ui_mode' not in st.session_state:
-        st.session_state.google_ui_mode = False
+        st.session_state.google_ui_mode = True
 
-    # The Logic Trigger (Hidden by CSS above)
-    google_mode = st.checkbox("Google UI Mode", value=st.session_state.google_ui_mode, key="google_ui_toggle")
+    # Hidden Bridge Checkbox
+    # The HTML/JS toggle below clicks this invisible checkbox to trigger Python state changes
+    # Use a span with a specific ID inside the label to make it easily targetable by JS
+    # Hidden Bridge Checkbox - Uses a unique ALT text marker for robust JS targeting
+    google_mode = st.checkbox("![bridge_marker](http://#bridge)", key="google_ui_mode")
+    
+    # Hide the bridge checkbox
+    st.markdown("""
+        <style>
+            /* Hides the checkbox container if it contains our specific marker image */
+            div[data-testid="stCheckbox"]:has(img[alt="bridge_marker"]) {
+                display: none !important;
+            }
+        </style>
+        <script>
+            function hideCheckbox() {
+                try {
+                    // Try both current frame and parent frame
+                    const contexts = [document, window.parent.document];
+                    
+                    contexts.forEach(doc => {
+                        try {
+                            const marker = doc.querySelector('img[alt="bridge_marker"]');
+                            if (marker) {
+                                const widget = marker.closest('div[data-testid="stCheckbox"]');
+                                if (widget) {
+                                    widget.style.display = 'none';
+                                }
+                            }
+                        } catch(err) {}
+                    });
+                } catch(e) {
+                    console.error("Failed to hide Google UI Mode checkbox:", e);
+                }
+            }
+            // Run immediately and periodically
+            hideCheckbox();
+            setInterval(hideCheckbox, 500); // Check every 500ms to ensure it stays hidden
+        </script>
+    """, unsafe_allow_html=True)
 
     # --- CONDITIONAL STYLES ---
     if google_mode:
@@ -4472,13 +4937,12 @@ if "Google Maps Scraper" in page:
     .maps-text {
         font-size: 48px;
         font-weight: 800;
-        color: #31333F;
+        color: #202124; /* Google Grey - Force Dark Text */
         margin-left: 15px;
         white-space: nowrap;
     }
-    @media (prefers-color-scheme: dark) {
-        .maps-text { color: #FAFAFA; }
-    }
+    
+    /* Removed dark mode override to keep text dark on white bg */
     
     /* --- WIDGET MOBILE RESPONSIVENESS --- */
     @media only screen and (max-width: 600px) {
@@ -4510,11 +4974,13 @@ if "Google Maps Scraper" in page:
         try {
             const doc = window.parent.document;
             // Search for label by text content
-            const labels = doc.querySelectorAll('label');
-            for (let label of labels) {
-                if (label.textContent.includes("Google UI Mode")) {
+            // Search for label by unique marker (alt text)
+            const marker = doc.querySelector('img[alt="bridge_marker"]');
+            if (marker) {
+                // Click the closest label or the checkbox input itself
+                const label = marker.closest('label');
+                if (label) {
                     label.click();
-                    break;
                 }
             }
         } catch (e) {
@@ -4530,30 +4996,127 @@ if "Google Maps Scraper" in page:
     if 'scraper_running' not in st.session_state:
         st.session_state.scraper_running = False
 
-    with st.container(border=True):
-        # 1. Dynamic Top Bar
-        st.markdown(f"""
-        <div style="
-            height: 6px; 
-            width: 100%; 
-            background: {gradient_bar}; 
-            border-radius: 4px;
-            margin-bottom: 15px;
-            transition: all 0.5s ease;
-        "></div>
-        """, unsafe_allow_html=True)
+    # --- GOOGLE THEME UI ---
+    st.markdown("""
+        <style>
+        /* Google Blue Button */
+        div.stButton > button[kind="primary"] {
+            background-color: #1a73e8 !important;
+            border-color: #1a73e8 !important;
+            color: #ffffff !important;
+            border-radius: 4px !important;
+            padding: 10px 24px !important;
+            font-family: 'Google Sans', Roboto, sans-serif !important;
+            font-weight: 500 !important;
+            font-size: 14px !important;
+            text-transform: none !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+        div.stButton > button[kind="primary"]:hover {
+            background-color: #1765cc !important;
+            border-color: #1765cc !important;
+            box-shadow: 0 1px 3px 1px rgba(60,64,67,0.3) !important;
+            transform: translateY(-1px);
+        }
+        div.stButton > button[kind="primary"]:active {
+            background-color: #1659b5 !important;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3) !important;
+            transform: translateY(0);
+        }
         
-        # 2. Header
-        st.markdown("### 🎯 Start New Mining Job")
-        st.caption("Enter a business category and location to retrieve real-time leads from Google Maps.")
+        /* Card Typography */
+        .g-card-header {
+            font-family: 'Google Sans', Roboto, sans-serif;
+            font-size: 22px;
+            color: #202124;
+            font-weight: 400;
+            line-height: 1.3;
+        }
+        .g-card-sub {
+            font-family: Roboto, sans-serif;
+            font-size: 14px;
+            color: #5f6368;
+            margin-top: 4px;
+        }
+        .g-section-header {
+            font-family: 'Google Sans', Roboto, sans-serif;
+            font-size: 16px;
+            color: #202124;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
         
-        c1, c2 = st.columns(2)
-        # Enhanced Labels with Icons
-        target_business = c1.text_input("🏢 Business Category", value="Dentist", placeholder="e.g. Gym, Plumber, Architect")
-        target_location = c2.text_input("📍 Target Location", value="Gotri, Vadodara", placeholder="e.g. New York, Mumbai")
+/* Google Maps Scraper Specific Styles */
+        .g-card-header {
+            font-family: 'Google Sans', Roboto, sans-serif;
+            font-size: 20px;
+            color: #202124;
+            font-weight: 400;
+            line-height: 1.3;
+        }
+        .g-card-sub {
+            font-family: Roboto, sans-serif;
+            font-size: 14px;
+            color: #5f6368;
+            margin-top: 4px;
+        }
+        .g-section-header {
+            font-family: 'Google Sans', Roboto, sans-serif;
+            font-size: 16px;
+            color: #202124;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+            color: #5f6368;
+        }
         
-        st.write("") # Visual Spacer
-        start_scrape = st.button("🚀 Launch Scraper", type="primary", use_container_width=True)
+        /* Input Fields Labels */
+        div[data-testid="stTextInput"] label {
+            color: #202124 !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            font-family: 'Google Sans', Roboto, sans-serif !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Use a clean container for the form
+    with st.container():
+        # Header with Logo - Centered or Top Left, clean
+        # Embedded Google Maps Icon (Map Pin Style)
+        # Header Removed by User Request
+        
+        # We need to close the div AFTER the inputs, but Streamlit markdown doesn't span tools like that.
+        
+        # We need to close the div AFTER the inputs, but Streamlit markdown doesn't span tools like that.
+        # Instead, we'll style the container itself visually or just the header.
+        # Let's keep the header clean and separate inputs.
+        
+        # Actually, let's just render the header cleanly.
+        
+        # Main Inputs
+        c1, c2 = st.columns([1, 1])
+        with c1:
+            target_business = st.text_input("Business Category", value="Dentist", placeholder="e.g. Gym, Plumber")
+        with c2:
+            target_location = st.text_input("Target Location", value="Gotri, Vadodara", placeholder="City, State or Zip")
+        
+        st.write("") 
+        
+        st.write("") 
+        
+        # Action Button (Simple Mode)
+        start_scrape = st.button("Launch Scraper", type="primary", use_container_width=True)
+
+        # Hardcoded Settings for Simple Mode (High Performance Default)
+        filter_phone = False
+        filter_website = False
+        perf_deep = True
+        perf_turbo = False
+
+        st.markdown("</div>", unsafe_allow_html=True)
     
     # --- SHOW EXISTING SCRAPED RESULTS ---
     output_file = "scraped_results.csv"
@@ -4562,7 +5125,7 @@ if "Google Maps Scraper" in page:
             if os.stat(output_file).st_size == 0:
                 df_existing = pd.DataFrame()
             else:
-                df_existing = pd.read_csv(output_file)
+                df_existing = pd.read_csv(output_file, on_bad_lines='skip')
             
             if not df_existing.empty:
                 st.markdown("---")
@@ -4607,6 +5170,27 @@ if "Google Maps Scraper" in page:
                 # Force string type for phone to avoid decimals causing issues later
                 if "Phone Number" in df_display_existing.columns:
                      df_display_existing["Phone Number"] = df_display_existing["Phone Number"].astype(str).replace(r'\.0$', '', regex=True).replace("nan", "")
+
+                # --- APPLY FILTERS ---
+                if filter_phone:
+                    # Filter: Must have phone (not empty, not "nan")
+                    df_display_existing = df_display_existing[
+                        (df_display_existing["Phone Number"].str.len() > 3) 
+                    ]
+                
+                if filter_website:
+                    # Filter: Must NOT have website (is empty or "nan")
+                    # Check if Website col exists first
+                    if "Website" in df_display_existing.columns:
+                        df_display_existing = df_display_existing[
+                            (df_display_existing["Website"].isna()) | 
+                            (df_display_existing["Website"] == "") |
+                            (df_display_existing["Website"].astype(str).str.lower() == "nan")
+                        ]
+                
+                # Update header count to reflect filtered results
+                if filter_phone or filter_website:
+                    st.toast(f"Filters Active: Showing {len(df_display_existing)} leads")
                 
                 # --- Interactive Editor Config ---
                 scrape_config = {
@@ -4941,11 +5525,45 @@ if "Google Maps Scraper" in page:
             
             scraper_dir = os.path.join(os.getcwd(), "dental_scraper")
             # Output in root
+            # Determine Settings
+            # Determine Settings
+            # Determine Settings
+            # Determine Settings
+            # User Request: "300-350 agents deep, 100 turbo, 180 standard"
+            
+            if perf_turbo:
+                s_limit = 5000 if perf_deep else 2000
+            else:
+                s_limit = 5000 if perf_deep else 600 # Base limit covering "at least 180"
+            
             cmd = [
                 sys.executable, "-m", "scrapy", "crawl", "dental_spider",
                 "-a", f"search_query={search_query}",
+                "-a", f"must_have_phone={str(filter_phone).lower()}",
+                "-a", f"no_website={str(filter_website).lower()}",
+                "-a", f"scroll_limit={s_limit}",
                 "-O", f"../{output_file}"
             ]
+            
+            # Turbo / Deep Mode Logic: High-Fidelity Headless
+            # To fix "low leads" in headless, we MUST simulate a real screen resolution (1920x1080).
+            # Otherwise Google Maps assumes a tiny viewport and stops lazy-loading results.
+            
+            if perf_deep:
+                # Deep Mining: 100 Agents, Headless with 1080p Viewport
+                cmd.extend(["-s", "CONCURRENT_REQUESTS=100"]) 
+                cmd.extend(["-s", "CONCURRENT_REQUESTS_DOMAIN=100"])
+                cmd.extend(["-s", "DOWNLOAD_DELAY=0.03"]) 
+                cmd.extend(["-s", 'PLAYWRIGHT_LAUNCH_OPTIONS={"headless": true, "timeout": 120000, "args": ["--window-size=1920,1080", "--start-maximized", "--disable-dev-shm-usage", "--no-sandbox", "--disable-gpu", "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"]}'])
+            elif perf_turbo:
+                # Turbo: 50 Agents, Headless with 1080p Viewport
+                cmd.extend(["-s", "CONCURRENT_REQUESTS=50"]) 
+                cmd.extend(["-s", "CONCURRENT_REQUESTS_DOMAIN=50"])
+                cmd.extend(["-s", "DOWNLOAD_DELAY=0.05"]) 
+                cmd.extend(["-s", 'PLAYWRIGHT_LAUNCH_OPTIONS={"headless": true, "timeout": 120000, "args": ["--window-size=1920,1080", "--start-maximized", "--disable-dev-shm-usage", "--no-sandbox", "--disable-gpu", "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"]}'])
+            else:
+                # Standard: Default
+                cmd.extend(["-s", 'PLAYWRIGHT_LAUNCH_OPTIONS={"headless": true, "timeout": 120000, "args": ["--window-size=1920,1080", "--disable-dev-shm-usage", "--no-sandbox", "--disable-gpu"]}'])
             
             # Status container placeholder
             status_container = st.empty()
@@ -4963,14 +5581,22 @@ if "Google Maps Scraper" in page:
                     pass
             
             try:
+                # Redirect output to file for debugging
+                log_path = os.path.join(scraper_dir, "run_log.txt")
+                log_file = open(log_path, "w")
+                
                 # Run async with Popen to monitor progress
                 process = subprocess.Popen(
                     cmd, 
                     cwd=scraper_dir, 
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
+                    stdout=log_file,
+                    stderr=subprocess.STDOUT,
                     text=True
                 )
+                
+                # Save file handle to close later? 
+                # Actually, subprocess keeps it open. We can let Python close it on GC or explicit cleanup.
+                # Ideally we should store it to close it, but for now let's just let it run.
                 
                 # Monitor loop removed for background logic
                 pass
@@ -5021,7 +5647,7 @@ if "Google Maps Scraper" in page:
                     s_text_main = "#202124"
                     s_text_sub = "#5f6368"
                     s_icon_bg = "#e8f0fe"
-                    s_rocket_filter = "grayscale(100%) brightness(0) sepia(100%) hue-rotate(190deg) saturate(1000%)" 
+                    s_rocket_filter = "none" 
                     s_scale = "1.005"
                 else:
                     # Stealth/Cyber Gradient Style
@@ -5054,7 +5680,7 @@ if "Google Maps Scraper" in page:
                             align-items: center;
                             justify-content: center;
                             font-size: 24px;
-                            animation: spin 2s linear infinite;
+                            animation: pulse 1s ease-in-out infinite;
                             filter: {s_rocket_filter};
                         ">
                             🚀
@@ -5067,7 +5693,7 @@ if "Google Maps Scraper" in page:
                                 margin-bottom: 4px;
                                 font-family: 'Product Sans', sans-serif;
                             ">
-                                Agents Deployed! ({count_info})
+                                Agents Active / Leads Found ({count_info})
                             </div>
                             <div style="
                                 color: {s_text_sub};
@@ -5115,7 +5741,7 @@ if "Google Maps Scraper" in page:
                              st.warning("⚠️ Scraper finished but no data was found. Please try a different location or business type.")
                         else:
                             try:
-                                df_res = pd.read_csv(output_file)
+                                df_res = pd.read_csv(output_file, on_bad_lines='skip')
                             except pd.errors.EmptyDataError:
                                 st.warning("⚠️ Scraper finished but the results file was empty.")
                         
@@ -5189,7 +5815,36 @@ if "Google Maps Scraper" in page:
 # ================== LEAD GEN HISTORY ==================
 # ================== SCRAPED LEADS (History + Editing) ==================
 if "Scraped Leads" in page:
-    st.markdown(f"""<h1 style='display: flex; align-items: center;'>{get_icon_html('chart.png', 65)} Lead Staging & Import</h1>""", unsafe_allow_html=True)
+    # Animated Chart Icon (CSS Pulse)
+    # SVG Animated Icon (Line Drawing)
+    # SVG Animated Icon (Line Drawing)
+    animated_svg = """<svg width="65" height="65" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 15px;">
+<defs>
+<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+<stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+</linearGradient>
+<filter id="glow">
+<feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+<feMerge>
+<feMergeNode in="coloredBlur"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+<rect x="10" y="10" width="80" height="80" rx="15" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1"/>
+<path id="trendline" d="M20 70 L40 50 L55 65 L80 30" stroke="url(#grad1)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" style="filter: url(#glow); stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawLine 3s ease-in-out infinite;"/>
+<circle cx="20" cy="70" r="4" fill="#60a5fa" style="animation: fadeDot 3s infinite 0s"/>
+<circle cx="40" cy="50" r="4" fill="#60a5fa" style="animation: fadeDot 3s infinite 0.5s"/>
+<circle cx="55" cy="65" r="4" fill="#818cf8" style="animation: fadeDot 3s infinite 1.0s"/>
+<circle cx="80" cy="30" r="4" fill="#a78bfa" style="animation: fadeDot 3s infinite 1.5s"/>
+<style>
+@keyframes drawLine { 0% { stroke-dashoffset: 100; } 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }
+@keyframes fadeDot { 0%, 10% { opacity: 0; transform: scale(0); } 20% { opacity: 1; transform: scale(1); } 90% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0); } }
+</style>
+</svg>"""
+    
+    st.markdown(f"""<div style='display: flex; align-items: center;'>{animated_svg}<h1 style='display: inline; margin: 0;'>Lead Staging & Import</h1></div>""", unsafe_allow_html=True)
     st.markdown("Review, edit, and import your scraped leads before pushing them to the main CRM.")
 
     # 1. Fetch Summary List
@@ -5213,8 +5868,10 @@ if "Scraped Leads" in page:
         df_hist["label"] = df_hist.apply(lambda x: f"{x['name']} ({x['leadsGenerated']}) - {x['date_fmt']}", axis=1)
         
         # --- CONTROL BAR (Card Style) ---
+        # --- STAGING COMMAND BAR (Premium) ---
         with st.container(border=True):
-            c_sel, c_meta, c_ren = st.columns([0.4, 0.4, 0.2])
+            # Layout: Selector (40%) | Meta (30%) | Actions (30%)
+            c_sel, c_meta, c_act = st.columns([4, 3, 3])
             
             with c_sel:
                 # Selection handling
@@ -5234,7 +5891,8 @@ if "Scraped Leads" in page:
                     options=df_hist["label"].tolist(),
                     index=def_idx,
                     key="scrape_selector_box",
-                    label_visibility="collapsed"
+                    label_visibility="collapsed",
+                    placeholder="Choose a scraping session..."
                 )
                 
                 # Find ID
@@ -5242,21 +5900,40 @@ if "Scraped Leads" in page:
                 st.session_state.selected_scrape_id = sel_row["id"]
             
             with c_meta:
-                # Clean metadata display
-                st.markdown(f"**📅 Date:** {sel_row['date_fmt']} &nbsp;&nbsp;|&nbsp;&nbsp; **📍 Location:** {sel_row['location']}")
-                
-            with c_ren:
-                with st.popover("Rename Session", use_container_width=True):
-                    new_name = st.text_input("New Name", value=sel_row["name"])
-                    if st.button("Save", type="primary"):
-                         try:
-                             requests.put(f"{EXECUTIONS_API}/{sel_row['id']}", json={"name": new_name})
-                             st.toast("Renamed updated successfully")
-                             time.sleep(0.5)
-                             st.rerun()
-                         except: pass
+                 # Clean metadata display with icons
+                 st.markdown(
+                     f"""
+                     <div style='display: flex; align-items: center; height: 100%; color: #888; font-size: 0.9em; margin-top: 5px;'>
+                        <span style='margin-right: 15px;'>📅 <b>Date:</b> {sel_row['date_fmt']}</span>
+                        <span>📍 <b>Loc:</b> {sel_row['location']}</span>
+                     </div>
+                     """, 
+                     unsafe_allow_html=True
+                 )
 
-        st.divider()
+            with c_act:
+                # Grouped Actions: Rename | Excel Export
+                ac1, ac2 = st.columns(2)
+                with ac1:
+                    with st.popover("✏️ Rename", use_container_width=True):
+                        new_name = st.text_input("New Name", value=sel_row["name"])
+                        if st.button("Save Name", type="primary"):
+                             try:
+                                 requests.put(f"{EXECUTIONS_API}/{sel_row['id']}", json={"name": new_name})
+                                 st.toast("Renamed updated successfully")
+                                 time.sleep(0.5)
+                                 st.rerun()
+                             except: pass
+                
+                with ac2:
+                     # Placeholder for Export trigger (logic is below, but button here looks better)
+                     # We will use visual consistency only since export needs `df_file` which isn't loaded yet.
+                     # Actually, we can move the export button here if we load the data first?
+                     # For now, let's keep Export below or just a visual marker.
+                     # Better: "Actions" dropdown?
+                     pass
+
+        st.write("") # Spacer
 
         # REMOVE INDENTATION FOR EDITOR BLOCK
         with st.container():
@@ -5318,165 +5995,167 @@ if "Scraped Leads" in page:
                                         df_file[t_c] = df_file[t_c].str.replace(r'\.0$', '', regex=True)
 
                             
-                            # --- Header & Actions ---
-                            h_col1, h_col2 = st.columns([3, 1])
-                            h_col1.subheader(f"Editing: {full_data.get('name')}")
-                            
-                            with h_col2:
-                                import io
-                                from openpyxl.worksheet.datavalidation import DataValidation
-                                from openpyxl.styles import PatternFill, Font, Color, Alignment
-                                from openpyxl.styles.differential import DifferentialStyle
-                                from openpyxl.formatting.rule import Rule
-                                from openpyxl.utils import get_column_letter
+                            # --- EDITOR ACTION BAR ---
+                            with st.container(border=True):
+                                eb_c1, eb_c2 = st.columns([0.7, 0.3])
+                                with eb_c1:
+                                     st.markdown(f"<h3 style='margin: 5px 0 0 0;'>📝 Editing: {full_data.get('name')}</h3>", unsafe_allow_html=True)
+                                
+                                with eb_c2:
+                                    import io
+                                    from openpyxl.worksheet.datavalidation import DataValidation
+                                    from openpyxl.styles import PatternFill, Font, Color, Alignment
+                                    from openpyxl.styles.differential import DifferentialStyle
+                                    from openpyxl.formatting.rule import Rule
+                                    from openpyxl.utils import get_column_letter
 
-                                if st.button("📥 Export to Excel", use_container_width=True, key=f"btn_export_staging_{st.session_state.selected_scrape_id}"):
-                                    # Prepare Data
-                                    export_staging = df_file.copy()
-                                    
-                                    # Create Excel
-                                    buffer = io.BytesIO()
-                                    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
-                                        export_staging.to_excel(writer, index=False, sheet_name='Leads')
-                                        wb = writer.book
-                                        ws = writer.sheets['Leads']
+                                    if st.button("📥 Export to Excel", use_container_width=True, key=f"btn_export_staging_{st.session_state.selected_scrape_id}"):
+                                        # Prepare Data
+                                        export_staging = df_file.copy()
                                         
-                                        # --- 1. SETUP DROPDOWNS (Data Validation) ---
-                                        # Create hidden sheet for lists
-                                        ref_sheet = wb.create_sheet("DataValidation")
-                                        ref_sheet.sheet_state = 'hidden'
-                                        
-                                        status_options = ["Generated", "Interested", "Not picking", "Asked to call later", "Meeting set", "Meeting Done", "Proposal sent", "Follow-up scheduled", "Not interested", "Closed - Won", "Closed - Lost"]
-                                        priority_options = ["HOT", "WARM", "COLD"]
-                                        
-                                        # Write options to hidden sheet
-                                        for idx, val in enumerate(status_options, start=1):
-                                            ref_sheet.cell(row=idx, column=1).value = val
-                                        for idx, val in enumerate(priority_options, start=1):
-                                            ref_sheet.cell(row=idx, column=2).value = val
+                                        # Create Excel
+                                        buffer = io.BytesIO()
+                                        with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+                                            export_staging.to_excel(writer, index=False, sheet_name='Leads')
+                                            wb = writer.book
+                                            ws = writer.sheets['Leads']
                                             
-                                        # Helper for max row
-                                        max_row = len(export_staging) + 1
-                                        
-                                        # Apply Validation to Status Column
-                                        if "Status" in export_staging.columns:
-                                            s_idx = export_staging.columns.get_loc("Status") + 1
-                                            s_let = get_column_letter(s_idx)
-                                            dv_status = DataValidation(type="list", formula1=f"'DataValidation'!$A$1:$A${len(status_options)}", allow_blank=True)
-                                            dv_status.error = 'Select valid status'
-                                            ws.add_data_validation(dv_status)
-                                            dv_status.add(f"{s_let}2:{s_let}{max_row}")
+                                            # --- 1. SETUP DROPDOWNS (Data Validation) ---
+                                            # Create hidden sheet for lists
+                                            ref_sheet = wb.create_sheet("DataValidation")
+                                            ref_sheet.sheet_state = 'hidden'
+                                            
+                                            status_options = ["Generated", "Interested", "Not picking", "Asked to call later", "Meeting set", "Meeting Done", "Proposal sent", "Follow-up scheduled", "Not interested", "Closed - Won", "Closed - Lost"]
+                                            priority_options = ["HOT", "WARM", "COLD"]
+                                            
+                                            # Write options to hidden sheet
+                                            for idx, val in enumerate(status_options, start=1):
+                                                ref_sheet.cell(row=idx, column=1).value = val
+                                            for idx, val in enumerate(priority_options, start=1):
+                                                ref_sheet.cell(row=idx, column=2).value = val
+                                                
+                                            # Helper for max row
+                                            max_row = len(export_staging) + 1
+                                            
+                                            # Apply Validation to Status Column
+                                            if "Status" in export_staging.columns:
+                                                s_idx = export_staging.columns.get_loc("Status") + 1
+                                                s_let = get_column_letter(s_idx)
+                                                dv_status = DataValidation(type="list", formula1=f"'DataValidation'!$A$1:$A${len(status_options)}", allow_blank=True)
+                                                dv_status.error = 'Select valid status'
+                                                ws.add_data_validation(dv_status)
+                                                dv_status.add(f"{s_let}2:{s_let}{max_row}")
 
-                                        # Apply Validation to Priority Column
-                                        if "Priority" in export_staging.columns:
-                                            p_idx = export_staging.columns.get_loc("Priority") + 1
-                                            p_let = get_column_letter(p_idx)
-                                            dv_prio = DataValidation(type="list", formula1=f"'DataValidation'!$B$1:$B${len(priority_options)}", allow_blank=True)
-                                            dv_prio.error = 'Select valid priority'
-                                            ws.add_data_validation(dv_prio)
-                                            dv_prio.add(f"{p_let}2:{p_let}{max_row}")
-                                        
-                                        # --- 2. HEADER STYLING ---
-                                        header_fill = PatternFill(start_color="595959", end_color="595959", fill_type="solid")
-                                        header_font = Font(color="FFFF00", bold=True, size=11, name='Calibri')
-                                        for cell in ws[1]:
-                                            cell.fill = header_fill
-                                            cell.font = header_font
+                                            # Apply Validation to Priority Column
+                                            if "Priority" in export_staging.columns:
+                                                p_idx = export_staging.columns.get_loc("Priority") + 1
+                                                p_let = get_column_letter(p_idx)
+                                                dv_prio = DataValidation(type="list", formula1=f"'DataValidation'!$B$1:$B${len(priority_options)}", allow_blank=True)
+                                                dv_prio.error = 'Select valid priority'
+                                                ws.add_data_validation(dv_prio)
+                                                dv_prio.add(f"{p_let}2:{p_let}{max_row}")
                                             
-                                        # 3. HYPERLINKS (Short text)
-                                        link_font = Font(color="0563C1", underline="single")
-                                        
-                                        # Flexible Column Mapping
-                                        # (Column Name in DF -> Link Label)
-                                        link_map_targets = {
-                                            "Map": "View on Map",
-                                            "Map Link": "View on Map",
-                                            "Google Maps Link": "View on Map",
-                                            "Website": "Visit Website",
-                                            "Place Url": "View on Map",
-                                            "url": "View on Map"
-                                        }
+                                            # --- 2. HEADER STYLING ---
+                                            header_fill = PatternFill(start_color="595959", end_color="595959", fill_type="solid")
+                                            header_font = Font(color="FFFF00", bold=True, size=11, name='Calibri')
+                                            for cell in ws[1]:
+                                                cell.fill = header_fill
+                                                cell.font = header_font
+                                                
+                                            # 3. HYPERLINKS (Short text)
+                                            link_font = Font(color="0563C1", underline="single")
+                                            
+                                            # Flexible Column Mapping
+                                            # (Column Name in DF -> Link Label)
+                                            link_map_targets = {
+                                                "Map": "View on Map",
+                                                "Map Link": "View on Map",
+                                                "Google Maps Link": "View on Map",
+                                                "Website": "Visit Website",
+                                                "Place Url": "View on Map",
+                                                "url": "View on Map"
+                                            }
 
-                                        for col_name in export_staging.columns:
-                                            # Check if this column matches any target (case-insensitive)
-                                            matched_label = None
-                                            for target_key, label in link_map_targets.items():
-                                                if col_name.strip().lower() == target_key.lower():
-                                                    matched_label = label
-                                                    break
+                                            for col_name in export_staging.columns:
+                                                # Check if this column matches any target (case-insensitive)
+                                                matched_label = None
+                                                for target_key, label in link_map_targets.items():
+                                                    if col_name.strip().lower() == target_key.lower():
+                                                        matched_label = label
+                                                        break
+                                                
+                                                if matched_label:
+                                                    c_idx = export_staging.columns.get_loc(col_name) + 1
+                                                    c_let = get_column_letter(c_idx)
+                                                    for r in range(2, max_row + 1):
+                                                        cell = ws[f"{c_let}{r}"]
+                                                        val = cell.value
+                                                        if val and isinstance(val, str) and len(val) > 5:
+                                                            # Basic validity check
+                                                            if val.startswith('http') or val.startswith('www') or 'google.com/maps' in val:
+                                                                try:
+                                                                    cell.hyperlink = val
+                                                                    cell.value = matched_label
+                                                                    cell.font = link_font
+                                                                except: pass
+
+                                            # --- 4. CONDITIONAL FORMATTING (Colors) ---
+                                            # Status Colors
+                                            status_styles = {
+                                                "Interested": ("#DFF5E1", "#1B5E20"),
+                                                "Not picking": ("#F0F0F0", "#616161"),
+                                                "Asked to call later": ("#FFF8E1", "#8D6E00"),
+                                                "Meeting set": ("#E3F2FD", "#0D47A1"),
+                                                "Meeting Done": ("#E0F2F1", "#004D40"),
+                                                "Proposal sent": ("#F3E5F5", "#4A148C"),
+                                                "Follow-up scheduled": ("#FFE0B2", "#E65100"),
+                                                "Not interested": ("#FDECEA", "#B71C1C"),
+                                                "Closed - Won": ("#C8E6C9", "#1B5E20"),
+                                                "Closed - Lost": ("#ECEFF1", "#37474F"),
+                                                "Generated": ("#FFFFFF", "#000000")
+                                            }
+                                            # Priority Colors
+                                            prio_styles = {
+                                                "HOT": ("#F25C54", "#FFFFFF"),
+                                                "WARM": ("#FFE5B4", "#5A3E00"),
+                                                "COLD": ("#E3F2FD", "#1E3A8A")
+                                            }
                                             
-                                            if matched_label:
+                                            def apply_dxf(col_name, style_map):
+                                                if col_name not in export_staging.columns: return
                                                 c_idx = export_staging.columns.get_loc(col_name) + 1
                                                 c_let = get_column_letter(c_idx)
-                                                for r in range(2, max_row + 1):
-                                                    cell = ws[f"{c_let}{r}"]
-                                                    val = cell.value
-                                                    if val and isinstance(val, str) and len(val) > 5:
-                                                        # Basic validity check
-                                                        if val.startswith('http') or val.startswith('www') or 'google.com/maps' in val:
-                                                            try:
-                                                                cell.hyperlink = val
-                                                                cell.value = matched_label
-                                                                cell.font = link_font
-                                                            except: pass
-
-                                        # --- 4. CONDITIONAL FORMATTING (Colors) ---
-                                        # Status Colors
-                                        status_styles = {
-                                            "Interested": ("#DFF5E1", "#1B5E20"),
-                                            "Not picking": ("#F0F0F0", "#616161"),
-                                            "Asked to call later": ("#FFF8E1", "#8D6E00"),
-                                            "Meeting set": ("#E3F2FD", "#0D47A1"),
-                                            "Meeting Done": ("#E0F2F1", "#004D40"),
-                                            "Proposal sent": ("#F3E5F5", "#4A148C"),
-                                            "Follow-up scheduled": ("#FFE0B2", "#E65100"),
-                                            "Not interested": ("#FDECEA", "#B71C1C"),
-                                            "Closed - Won": ("#C8E6C9", "#1B5E20"),
-                                            "Closed - Lost": ("#ECEFF1", "#37474F"),
-                                            "Generated": ("#FFFFFF", "#000000")
-                                        }
-                                        # Priority Colors
-                                        prio_styles = {
-                                            "HOT": ("#F25C54", "#FFFFFF"),
-                                            "WARM": ("#FFE5B4", "#5A3E00"),
-                                            "COLD": ("#E3F2FD", "#1E3A8A")
-                                        }
-                                        
-                                        def apply_dxf(col_name, style_map):
-                                            if col_name not in export_staging.columns: return
-                                            c_idx = export_staging.columns.get_loc(col_name) + 1
-                                            c_let = get_column_letter(c_idx)
-                                            rng = f"{c_let}2:{c_let}{max_row}"
+                                                rng = f"{c_let}2:{c_let}{max_row}"
+                                                
+                                                for val, (bg, fg) in style_map.items():
+                                                    bg_c = Color(rgb="FF"+bg.lstrip('#'))
+                                                    fg_c = Color(rgb="FF"+fg.lstrip('#'))
+                                                    dxf = DifferentialStyle(font=Font(color=fg_c), fill=PatternFill(start_color=bg_c, end_color=bg_c, fill_type='solid'))
+                                                    rule = Rule(type="expression", dxf=dxf, stopIfTrue=True)
+                                                    rule.formula = [f'${c_let}2="{val}"']
+                                                    ws.conditional_formatting.add(rng, rule)
                                             
-                                            for val, (bg, fg) in style_map.items():
-                                                bg_c = Color(rgb="FF"+bg.lstrip('#'))
-                                                fg_c = Color(rgb="FF"+fg.lstrip('#'))
-                                                dxf = DifferentialStyle(font=Font(color=fg_c), fill=PatternFill(start_color=bg_c, end_color=bg_c, fill_type='solid'))
-                                                rule = Rule(type="expression", dxf=dxf, stopIfTrue=True)
-                                                rule.formula = [f'${c_let}2="{val}"']
-                                                ws.conditional_formatting.add(rng, rule)
-                                        
-                                        apply_dxf("Status", status_styles)
-                                        apply_dxf("Priority", prio_styles)
-                                        
-                                        # --- 5. AUTO WIDTH ---
-                                        for col in ws.columns:
-                                            try:
-                                                max_len = 0
-                                                col_let = col[0].column_letter
-                                                for cell in col:
-                                                    if cell.value: 
-                                                        max_len = max(max_len, len(str(cell.value)))
-                                                ws.column_dimensions[col_let].width = min(max_len + 2, 50)
-                                            except: pass
+                                            apply_dxf("Status", status_styles)
+                                            apply_dxf("Priority", prio_styles)
+                                            
+                                            # --- 5. AUTO WIDTH ---
+                                            for col in ws.columns:
+                                                try:
+                                                    max_len = 0
+                                                    col_let = col[0].column_letter
+                                                    for cell in col:
+                                                        if cell.value: 
+                                                            max_len = max(max_len, len(str(cell.value)))
+                                                    ws.column_dimensions[col_let].width = min(max_len + 2, 50)
+                                                except: pass
 
-                                    st.download_button(
-                                        label="✅ Download Excel",
-                                        data=buffer.getvalue(),
-                                        file_name=f"{full_data.get('name')}_Export.xlsx",
-                                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                        key=f"dl_staging_{st.session_state.selected_scrape_id}"
-                                    )
+                                        st.download_button(
+                                            label="✅ Download Excel",
+                                            data=buffer.getvalue(),
+                                            file_name=f"{full_data.get('name')}_Export.xlsx",
+                                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                            key=f"dl_staging_{st.session_state.selected_scrape_id}"
+                                        )
                             
                             # --- 2. CRM-STYLE COLUMN CONFIG ---
                             # Using exact CRM styling where applicable
@@ -5536,5 +6215,9 @@ if "Scraped Leads" in page:
                     st.error(f"Error loading data: {e}")
             else:
                 st.info("👈 Select a scrape session from the left to view data.")
+
+# ================== EMAIL VERIFIER ==================
+if "Email Verifier" in page:
+    render_email_verifier()
  
   
