@@ -11,3 +11,4 @@ lxml==6.0.2
 markdown==3.9
 scrapy-playwright==0.0.33
 nest_asyncio==1.6.0
+streamlit-keyup==0.3.0
