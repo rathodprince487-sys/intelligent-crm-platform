@@ -2460,8 +2460,8 @@ if "CRM Grid" in page:
                                     }
                                     
                                     if create_lead(payload):
-                                    count += 1
-                                progress_bar.progress(min((idx + 1) / len(import_df), 1.0))
+                                        count += 1
+                                    progress_bar.progress(min((idx + 1) / len(import_df), 1.0))
                                     
                             st.success(f"Imported {count} leads!")
                             time.sleep(1)
