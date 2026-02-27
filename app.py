@@ -1775,7 +1775,6 @@ page = st.sidebar.radio(
     label_visibility="collapsed"
 )
 
-<<<<<<< HEAD
 st.markdown(f"""
 <style>
 /* 7. Email Verifier */
@@ -1792,7 +1791,6 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label:nth-child(7)::befo
 </style>
 """, unsafe_allow_html=True)
 
-=======
 # --- NAVIGATION RESET LOGIC ---
 # Detect if user switched pages manually via sidebar
 if "last_page" not in st.session_state:
@@ -1807,7 +1805,6 @@ if page != st.session_state["last_page"]:
 # Reset the flag so it doesn't affect future runs
 st.session_state["just_filtered"] = False
 
->>>>>>> 8d238bb57112f1a0d535b630dfebec335c88af10
 
 
 
@@ -2377,11 +2374,7 @@ if "CRM Grid" in page:
         c1, c2, c3 = st.columns([3, 1.5, 1.5])
         
         with c1:
-<<<<<<< HEAD
-            search_q = st.text_input("🔍 Search Database", placeholder="Name, Company, Phone...", label_visibility="collapsed", key="global_search_input")
-=======
             search_q = st_keyup("🔍 Search Database", placeholder="Name, Company, Phone...", label_visibility="collapsed", key="global_search_input")
->>>>>>> 8d238bb57112f1a0d535b630dfebec335c88af10
             
         with c2:
             status_keys = list(STATUS_PALETTE.keys())
@@ -2394,129 +2387,6 @@ if "CRM Grid" in page:
         st.write("") # Spacer
         
         # Bottom Row: Pro Actions & View Controls
-<<<<<<< HEAD
-        # Left: Import/Export | Right: View Modes
-        ac_left, ac_mid, ac_right = st.columns([2, 2, 2])
-        
-        with ac_left:
-            # Compact Import/Export Cluster
-            sub_c1, sub_c2 = st.columns(2)
-            with sub_c1:
-                with st.popover("📂 Import", use_container_width=True):
-                    st.markdown("### Import Leads")
-                    uploaded_file = st.file_uploader("Upload CSV/Excel", type=['csv', 'xlsx'], key="crm_importer")
-                    if uploaded_file:
-                        try:
-                            if uploaded_file.name.endswith('.csv'):
-                                import_df = pd.read_csv(uploaded_file)
-                            else:
-                                import_df = pd.read_excel(uploaded_file)
-                            
-                            st.caption(f"Preview: {len(import_df)} rows ready")
-                            
-                            if st.button("🚀 Run Import", key="btn_run_import"):
-                                count = 0
-                                progress_bar = st.progress(0, text="Importing...")
-                                
-                                for idx, row in import_df.iterrows():
-                                    biz = row.get("Company Name") or row.get("Business Name") or row.get("Company")
-                                    name = row.get("Name") or row.get("Contact Name") or row.get("Person")
-                                    
-                                    if pd.isna(biz) or str(biz).strip() == "":
-                                        business_name = name if (not pd.isna(name)) else "Unknown Business"
-                                        contact_name = ""
-                                    else:
-                                        business_name = biz
-                                        contact_name = name if (not pd.isna(name)) else ""
-
-                                    raw_status = row.get("Status")
-                                    status = raw_status if (not pd.isna(raw_status) and str(raw_status).strip() != "") else "Generated"
-                                    
-                                    raw_prio = row.get("Priority")
-                                    priority = raw_prio if (not pd.isna(raw_prio) and str(raw_prio).upper() in ["HOT", "WARM", "COLD"]) else "WARM"
-
-                                    last_f = row.get("Last Follow up Date") or row.get("Last Follow Up")
-                                    next_f = row.get("Next Follow-up Date") or row.get("Next Follow Up")
-
-                                    phone_val = str(row.get("Phone Number") or row.get("Phone") or row.get("Contact") or "")
-                                    if phone_val == "nan": phone_val = ""
-
-                                    payload = {
-                                        "businessName": str(business_name),
-                                        "contactName": str(contact_name),
-                                        "phone": phone_val,
-                                        "email": str(row.get("Email") or row.get("Email Address") or ""),
-                                        "address": str(row.get("Address") or row.get("Location") or ""),
-                                        "status": str(status),
-                                        "priority": str(priority),
-                                        "lastFollowUpDate": str(last_f) if not pd.isna(last_f) else None,
-                                        "nextFollowUpDate": str(next_f) if not pd.isna(next_f) else None
-                                    }
-                                    
-                                    if create_lead(payload):
-                                        count += 1
-                                    progress_bar.progress(min((idx + 1) / len(import_df), 1.0))
-                                
-                                st.success(f"Done! {count} leads imported.")
-                                st.rerun()
-
-                        except Exception as e:
-                            st.error(f"Error: {e}")
-            with sub_c2:
-                # Export Logic Wrapper
-                if not df.empty:
-                    excel_data = to_excel(df)
-                    st.download_button("📥 Export", data=excel_data, file_name="crm_export.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True)
-                else:
-                    st.button("📥 Export", disabled=True, use_container_width=True)
-
-        with ac_mid:
-            # ZOOM CONTROLS (Middle Cluster)
-            z_out, z_val, z_in = st.columns([1, 2, 1])
-            
-            with z_out:
-                if st.button("➖", use_container_width=True, help="Zoom Out"):
-                    st.session_state.zoom_level = max(50, st.session_state.zoom_level - 10)
-                    st.rerun()
-            
-            with z_val:
-                st.markdown(f"<div style='text-align:center; padding-top:10px; font-weight:bold; color:#64748b;'>{st.session_state.zoom_level}%</div>", unsafe_allow_html=True)
-                
-            with z_in:
-                if st.button("➕", use_container_width=True, help="Zoom In"):
-                    st.session_state.zoom_level = min(200, st.session_state.zoom_level + 10)
-                    st.rerun()
-
-        with ac_right:
-            # VIEW MODE TOGGLES (Segmented Control Feel)
-            # Edit | Wrap | Reset
-            v1, v2, v3 = st.columns(3)
-            
-            with v1:
-                # Mode Toggle
-                if mode == "👁️ Read Only":
-                    if st.button("✏️ Edit", use_container_width=True, help="Switch to Edit Mode"):
-                         st.session_state.mode_state = "✏️ Edit"
-                         st.rerun()
-                else:
-                    if st.button("👁️ Read", use_container_width=True, help="Switch to Read Only"):
-                         st.session_state.mode_state = "👁️ Read Only"
-                         st.rerun()
-            
-            with v2:
-                # Text Wrap
-                is_wrapped = st.session_state.get("wrap_text", False)
-                icon_w = "📏" if is_wrapped else "↩️"
-                if st.button(f"{icon_w} Wrap", use_container_width=True):
-                     st.session_state.wrap_text = not is_wrapped
-                     st.rerun()
-            
-            with v3:
-                 if st.button("🔄 Reset", use_container_width=True, help="Clear Filters"):
-                     clear_all_filters_cb()
-                     st.rerun()
-
-=======
         # Left: Zoom | Right: Actions (Import, Export, Edit, Cols, Wrap, Reset)
         # Give more space to Rights side for all the buttons
         # Bottom Row: Pro Actions & View Controls (Unified Single Row)
@@ -2555,24 +2425,41 @@ if "CRM Grid" in page:
                             progress_bar = st.progress(0, text="Importing...")
                             
                             for idx, row in import_df.iterrows():
-                                # Normalize Keys
-                                biz = row.get("Company Name") or row.get("Business Name") or row.get("Company")
-                                name = row.get("Name") or row.get("Contact Name") or row.get("Person")
-                                
-                                if pd.isna(biz) or str(biz).strip() == "":
-                                    if pd.isna(name): continue
-                                    biz = name
+                                    biz = row.get("Company Name") or row.get("Business Name") or row.get("Company")
+                                    name = row.get("Name") or row.get("Contact Name") or row.get("Person")
                                     
-                                payload = {
-                                    "businessName": str(biz),
-                                    "contactName": str(name) if not pd.isna(name) else "",
-                                    "phone": str(row.get("Phone") or row.get("Phone Number") or ""),
-                                    "email": str(row.get("Email") or ""),
-                                    "address": str(row.get("Address") or ""),
-                                    "status": "Generated",
-                                    "priority": "COLD"
-                                }
-                                if create_lead(payload):
+                                    if pd.isna(biz) or str(biz).strip() == "":
+                                        business_name = name if (not pd.isna(name)) else "Unknown Business"
+                                        contact_name = ""
+                                    else:
+                                        business_name = biz
+                                        contact_name = name if (not pd.isna(name)) else ""
+
+                                    raw_status = row.get("Status")
+                                    status = raw_status if (not pd.isna(raw_status) and str(raw_status).strip() != "") else "Generated"
+                                    
+                                    raw_prio = row.get("Priority")
+                                    priority = raw_prio if (not pd.isna(raw_prio) and str(raw_prio).upper() in ["HOT", "WARM", "COLD"]) else "WARM"
+
+                                    last_f = row.get("Last Follow up Date") or row.get("Last Follow Up")
+                                    next_f = row.get("Next Follow-up Date") or row.get("Next Follow Up")
+
+                                    phone_val = str(row.get("Phone Number") or row.get("Phone") or row.get("Contact") or "")
+                                    if phone_val == "nan": phone_val = ""
+
+                                    payload = {
+                                        "businessName": str(business_name),
+                                        "contactName": str(contact_name),
+                                        "phone": phone_val,
+                                        "email": str(row.get("Email") or row.get("Email Address") or ""),
+                                        "address": str(row.get("Address") or row.get("Location") or ""),
+                                        "status": str(status),
+                                        "priority": str(priority),
+                                        "lastFollowUpDate": str(last_f) if not pd.isna(last_f) else None,
+                                        "nextFollowUpDate": str(next_f) if not pd.isna(next_f) else None
+                                    }
+                                    
+                                    if create_lead(payload):
                                     count += 1
                                 progress_bar.progress(min((idx + 1) / len(import_df), 1.0))
                                     
@@ -2625,7 +2512,6 @@ if "CRM Grid" in page:
                  clear_all_filters_cb()
                  st.rerun()
 
->>>>>>> 8d238bb57112f1a0d535b630dfebec335c88af10
     # 2. FILTER LOGIC APPLICATION (Behind the scenes)
     if not df.empty:
         if search_q:
