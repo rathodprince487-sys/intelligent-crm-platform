@@ -12,6 +12,7 @@ import platform
 import json
 import streamlit.components.v1 as components
 from components.sidebar import render_sidebar_toggle
+from st_keyup import st_keyup
 
 # --- PLAYWRIGHT SETUP FOR CLOUD ---
 # Ensure browsers are installed (essential for Streamlit Cloud)
@@ -96,6 +97,47 @@ st.set_page_config(
 # Render the collapsible sidebar toggle (Must be called early)
 render_sidebar_toggle()
 
+# ================== STATUS CONFIGURATION (GLOBAL) ==================
+STATUS_PALETTE = {
+    "Interested":          {"bg": "#DFF5E1", "txt": "#1B5E20"}, # Light Green
+    "Not picking":         {"bg": "#F0F0F0", "txt": "#616161"}, # Light Grey
+    "Asked to call later": {"bg": "#FFF8E1", "txt": "#8D6E00"}, # Light Yellow
+    "Meeting set":         {"bg": "#E3F2FD", "txt": "#0D47A1"}, # Light Blue
+    "Meeting Done":        {"bg": "#E0F2F1", "txt": "#004D40"}, # Teal
+    "Proposal sent":       {"bg": "#F3E5F5", "txt": "#4A148C"}, # Lavender
+    "Follow-up scheduled": {"bg": "#FFE0B2", "txt": "#E65100"}, # Soft Orange
+    "Not interested":      {"bg": "#FDECEA", "txt": "#B71C1C"}, # Light Red
+    "Closed - Won":        {"bg": "#C8E6C9", "txt": "#1B5E20"}, # Strong Green
+    "Closed - Lost":       {"bg": "#ECEFF1", "txt": "#37474F"}, # Soft Dark Grey
+    "Generated":           {"bg": "#F5F5F5", "txt": "#616161"}, # Neutral
+}
+STATUS_PALETTE["Closed – Won"] = STATUS_PALETTE["Closed - Won"]
+STATUS_PALETTE["Closed – Lost"] = STATUS_PALETTE["Closed - Lost"]
+
+# --- GLOBAL FILTER HANDLER ---
+# Track if we are navigating via a dashboard card click
+if "just_filtered" not in st.session_state:
+    st.session_state["just_filtered"] = False
+
+# Process query parameters from dashboard interactions
+if "prio" in st.query_params:
+    prio_val = st.query_params["prio"]
+    st.session_state["f_prio_multi"] = [prio_val]
+    st.session_state["just_filtered"] = True
+    st.query_params.clear()
+
+if "status" in st.query_params:
+    status_val = st.query_params["status"]
+    # Find active status keys that match
+    status_keys = list(STATUS_PALETTE.keys())
+    matched = [k for k in status_keys if status_val.lower() in k.lower()]
+    if matched:
+        st.session_state["f_status_multi"] = matched
+    else:
+        st.session_state["f_status_multi"] = [status_val]
+    st.session_state["just_filtered"] = True
+    st.query_params.clear()
+
 # ================== STYLES ==================
 
 # 1. COMMON STYLES (Layout, Fonts, Transitions - Always Applied)
@@ -107,9 +149,14 @@ html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
 }
 
-/* Clean Header - Keep Toggle Button Visible */
+/* Clean Header - Hide Deploy & Menu, Keep Toggle Button Visible */
 header[data-testid="stHeader"] {
     background: transparent !important;
+}
+/* Hide Deploy Button & Toolbar (Three dots) */
+.stDeployButton, [data-testid="stToolbar"] {
+    display: none !important;
+    visibility: hidden !important;
 }
 /* Hide the colored decoration bar */
 div[data-testid="stDecoration"] {
@@ -1465,7 +1512,7 @@ body {
 """
 
 # ================== HELPER FUNCTIONS ==================
-def metric_card(label, value, icon="📊", color="blue"):
+def metric_card(label, value, icon="📊", color="blue", element_id=None):
     """
     Renders a styled metric card.
     color options: blue, green, amber, purple, rose
@@ -1497,8 +1544,11 @@ def metric_card(label, value, icon="📊", color="blue"):
     icon_bg = c["dark_bg"] if theme == "dark" else c["bg"]
     icon_col = c["dark_text"] if theme == "dark" else c["text"]
     
+    id_attr = f'id="{element_id}"' if element_id else ""
+    cursor_style = 'cursor: pointer;' if element_id else ""
+    
     st.markdown(f"""
-    <div class="metric-card">
+    <div class="metric-card" {id_attr} style="{cursor_style}">
         <div class="metric-icon" style="background-color: {icon_bg}; color: {icon_col};">
             {icon}
         </div>
@@ -1555,25 +1605,14 @@ def delete_lead(lead_id):
 
 import urllib.parse
 
-# ================== STATUS THEME CONFIGURATION ==================
-# COLORS UPDATED TO MATCH USER REFERENCE IMAGE (VIBRANT)
-STATUS_PALETTE = {
-    "Interested":          {"bg": "#DFF5E1", "txt": "#1B5E20"}, # Light Green
-    "Not picking":         {"bg": "#F0F0F0", "txt": "#616161"}, # Light Grey
-    "Asked to call later": {"bg": "#FFF8E1", "txt": "#8D6E00"}, # Light Yellow
-    "Meeting set":         {"bg": "#E3F2FD", "txt": "#0D47A1"}, # Light Blue
-    "Meeting Done":        {"bg": "#E0F2F1", "txt": "#004D40"}, # Teal
-    "Proposal sent":       {"bg": "#F3E5F5", "txt": "#4A148C"}, # Lavender
-    "Follow-up scheduled": {"bg": "#FFE0B2", "txt": "#E65100"}, # Soft Orange
-    "Not interested":      {"bg": "#FDECEA", "txt": "#B71C1C"}, # Light Red
-    "Closed - Won":        {"bg": "#C8E6C9", "txt": "#1B5E20"}, # Strong Green
-    "Closed - Lost":       {"bg": "#ECEFF1", "txt": "#37474F"}, # Soft Dark Grey
-    "Generated":           {"bg": "#F5F5F5", "txt": "#616161"}, # Neutral
-}
+def clear_all_filters_cb():
+    """Reset all CRM Grid filters and clear query parameters."""
+    for key in ["global_search_input", "f_status_multi", "f_prio_multi"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.query_params.clear()
 
-# Add normalized keys to palette (En-dash variants)
-STATUS_PALETTE["Closed – Won"] = STATUS_PALETTE["Closed - Won"]
-STATUS_PALETTE["Closed – Lost"] = STATUS_PALETTE["Closed - Lost"]
+# ================== STATUS THEME HELPERS ==================
 
 def get_status_colors(theme):
     """
@@ -1736,6 +1775,7 @@ page = st.sidebar.radio(
     label_visibility="collapsed"
 )
 
+<<<<<<< HEAD
 st.markdown(f"""
 <style>
 /* 7. Email Verifier */
@@ -1752,6 +1792,22 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label:nth-child(7)::befo
 </style>
 """, unsafe_allow_html=True)
 
+=======
+# --- NAVIGATION RESET LOGIC ---
+# Detect if user switched pages manually via sidebar
+if "last_page" not in st.session_state:
+    st.session_state["last_page"] = page
+
+if page != st.session_state["last_page"]:
+    # If page changed and it wasn't from a dashboard filter click, reset filters
+    if not st.session_state.get("just_filtered", False):
+        clear_all_filters_cb()
+    st.session_state["last_page"] = page
+
+# Reset the flag so it doesn't affect future runs
+st.session_state["just_filtered"] = False
+
+>>>>>>> 8d238bb57112f1a0d535b630dfebec335c88af10
 
 
 
@@ -1840,7 +1896,7 @@ try:
             ].sort_values("meetingDate")
             
             if future_meetings.empty:
-                st.sidebar.caption("No upcoming meetings.")
+                st.sidebar.markdown('<div class="no-meetings-text">No upcoming meetings.</div>', unsafe_allow_html=True)
             else:
                 meetings_html = '<div style="max-height: 350px; overflow-y: auto; padding-right: 4px;">'
                 
@@ -1930,7 +1986,28 @@ if "Dashboard" in page:
             scraped_today_count = df_exec[df_exec["date"] >= last_24h]["leadsGenerated"].fillna(0).astype(int).sum()
 
     c1, c2, c3 = st.columns(3)
-    with c1: metric_card("Fresh Scraped (Today)", int(scraped_today_count), icon="✨", color="blue")
+    with c1: 
+        metric_card("Fresh Scraped (Today)", int(scraped_today_count), icon="✨", color="blue", element_id="fresh-scraped-card")
+        components.html("""
+        <script>
+            // Wait for element to exist
+            const checkExist = setInterval(function() {
+               const card = window.parent.document.getElementById('fresh-scraped-card');
+               if (card) {
+                  clearInterval(checkExist);
+                  card.onclick = function() {
+                      const labels = window.parent.document.querySelectorAll('section[data-testid="stSidebar"] label');
+                      for (const label of labels) {
+                          if (label.innerText.includes('Scraped Leads')) {
+                              label.click();
+                              break;
+                          }
+                      }
+                  };
+               }
+            }, 100);
+        </script>
+        """, height=0)
     with c2: metric_card("Imported to CRM (Today)", recent_crm_count, icon="📥", color="purple")
     
     # --- SECTION 2: CRM PIPELINE ---
@@ -1956,10 +2033,119 @@ if "Dashboard" in page:
             closed_won = len(df_crm[df_crm['status'].astype(str).str.contains("Won", case=False, na=False)])
     
     c_a, c_b, c_c, c_d = st.columns(4)
-    with c_a: metric_card("In Pipeline", crm_total, icon="📊", color="blue")
-    with c_b: metric_card("Hot Opportunities", hot_leads, icon="🔥", color="rose")
-    with c_c: metric_card("Meetings Set", meetings, icon="📅", color="amber")
-    with c_d: metric_card("Closed Won", closed_won, icon="🏆", color="green")
+    with c_a: 
+        metric_card("In Pipeline", crm_total, icon="📊", color="blue", element_id="in-pipeline-card")
+        components.html("""
+        <script>
+            // Wait for element to exist
+            const checkExist = setInterval(function() {
+               const card = window.parent.document.getElementById('in-pipeline-card');
+               if (card) {
+                  clearInterval(checkExist);
+                  card.onclick = function() {
+                      // 1. Clear Priority Filter (Navigate to All)
+                      const url = new URL(window.parent.location);
+                      url.searchParams.delete('prio');
+                      url.searchParams.delete('status');
+                      window.parent.history.pushState({}, '', url);
+
+                      // 2. Navigate
+                      const labels = window.parent.document.querySelectorAll('section[data-testid="stSidebar"] label');
+                      for (const label of labels) {
+                          if (label.innerText.includes('CRM Grid')) {
+                              label.click();
+                              break;
+                          }
+                      }
+                  };
+               }
+            }, 100);
+        </script>
+        """, height=0)
+    with c_b: 
+        metric_card("Hot Opportunities", hot_leads, icon="🔥", color="rose", element_id="hot-ops-card")
+        components.html("""
+        <script>
+            const checkExist = setInterval(function() {
+               const card = window.parent.document.getElementById('hot-ops-card');
+               if (card) {
+                  clearInterval(checkExist);
+                  card.onclick = function() {
+                      // 1. Set Priority Filter
+                      const url = new URL(window.parent.location);
+                      url.searchParams.set('prio', 'HOT');
+                      url.searchParams.delete('status');
+                      window.parent.history.pushState({}, '', url);
+
+                      // 2. Navigate
+                      const labels = window.parent.document.querySelectorAll('section[data-testid="stSidebar"] label');
+                      for (const label of labels) {
+                          if (label.innerText.includes('CRM Grid')) {
+                              label.click();
+                              break;
+                          }
+                      }
+                  };
+               }
+            }, 100);
+        </script>
+        """, height=0)
+    with c_c: 
+        metric_card("Meetings Set", meetings, icon="📅", color="amber", element_id="meetings-card")
+        components.html("""
+        <script>
+            const checkExist = setInterval(function() {
+               const card = window.parent.document.getElementById('meetings-card');
+               if (card) {
+                  clearInterval(checkExist);
+                  card.onclick = function() {
+                      // 1. Set Status Filter (Meeting)
+                      const url = new URL(window.parent.location);
+                      url.searchParams.set('status', 'Meeting');
+                      url.searchParams.delete('prio');
+                      window.parent.history.pushState({}, '', url);
+
+                      // 2. Navigate
+                      const labels = window.parent.document.querySelectorAll('section[data-testid="stSidebar"] label');
+                      for (const label of labels) {
+                          if (label.innerText.includes('CRM Grid')) {
+                              label.click();
+                              break;
+                          }
+                      }
+                  };
+               }
+            }, 100);
+        </script>
+        """, height=0)
+    with c_d: 
+        metric_card("Closed Won", closed_won, icon="🏆", color="green", element_id="closed-won-card")
+        components.html("""
+        <script>
+            const checkExist = setInterval(function() {
+               const card = window.parent.document.getElementById('closed-won-card');
+               if (card) {
+                  clearInterval(checkExist);
+                  card.onclick = function() {
+                      // 1. Set Status Filter (Won)
+                      const url = new URL(window.parent.location);
+                      url.searchParams.set('status', 'Won');
+                      url.searchParams.delete('prio');
+                      window.parent.history.pushState({}, '', url);
+
+                      // 2. Navigate
+                      const labels = window.parent.document.querySelectorAll('section[data-testid="stSidebar"] label');
+                      for (const label of labels) {
+                          if (label.innerText.includes('CRM Grid')) {
+                              label.click();
+                              break;
+                          }
+                      }
+                  };
+               }
+            }, 100);
+        </script>
+        """, height=0)
 
     # st.markdown("---")
     # if breakdown:
@@ -2092,12 +2278,18 @@ if "CRM Grid" in page:
     ]
     
     # Columns for DISPLAY
-    display_cols = [
+    all_display_cols = [
         "contactName", "businessName", "phone", "email", "address", "map_url",
         "meetingDate", "calendar_url",
         "lastFollowUpDate", "nextFollowUpDate", "status", "callNotes", 
         "priority", "calledBy", "meetingBy", "closedBy"
     ]
+    
+    # Initialize session state for visibility if needed
+    if "visible_columns" not in st.session_state:
+        st.session_state.visible_columns = all_display_cols
+        
+    display_cols = st.session_state.visible_columns
     
     # Use empty DF if no leads, but KEEP columns structure
     if df.empty:
@@ -2185,7 +2377,11 @@ if "CRM Grid" in page:
         c1, c2, c3 = st.columns([3, 1.5, 1.5])
         
         with c1:
+<<<<<<< HEAD
             search_q = st.text_input("🔍 Search Database", placeholder="Name, Company, Phone...", label_visibility="collapsed", key="global_search_input")
+=======
+            search_q = st_keyup("🔍 Search Database", placeholder="Name, Company, Phone...", label_visibility="collapsed", key="global_search_input")
+>>>>>>> 8d238bb57112f1a0d535b630dfebec335c88af10
             
         with c2:
             status_keys = list(STATUS_PALETTE.keys())
@@ -2198,6 +2394,7 @@ if "CRM Grid" in page:
         st.write("") # Spacer
         
         # Bottom Row: Pro Actions & View Controls
+<<<<<<< HEAD
         # Left: Import/Export | Right: View Modes
         ac_left, ac_mid, ac_right = st.columns([2, 2, 2])
         
@@ -2319,11 +2516,126 @@ if "CRM Grid" in page:
                      clear_all_filters_cb()
                      st.rerun()
 
+=======
+        # Left: Zoom | Right: Actions (Import, Export, Edit, Cols, Wrap, Reset)
+        # Give more space to Rights side for all the buttons
+        # Bottom Row: Pro Actions & View Controls (Unified Single Row)
+        # Order: [Zoom-] [Zoom%] [Zoom+] [Gap] [Import] [Export] [Edit] [Cols] [Wrap] [Reset]
+        c1, c2, c3, c_gap, c4, c5, c6, c7, c8, c9 = st.columns([0.6, 0.8, 0.6, 0.4, 1.2, 1.2, 1.2, 0.8, 0.5, 0.5])
+        
+        # 1. Zoom Controls
+        with c1:
+            if st.button("➖", use_container_width=True, help="Zoom Out", key="z_out_btn"):
+                st.session_state.zoom_level = max(50, st.session_state.zoom_level - 10)
+                st.rerun()
+        with c2:
+            st.markdown(f"<div style='text-align:center; padding-top:10px; font-weight:bold; color:#64748b;'>{st.session_state.zoom_level}%</div>", unsafe_allow_html=True)
+        with c3:
+            if st.button("➕", use_container_width=True, help="Zoom In", key="z_in_btn"):
+                st.session_state.zoom_level = min(200, st.session_state.zoom_level + 10)
+                st.rerun()
+                
+        # 2. Action Buttons
+        with c4:
+             # Import Popover
+             with st.popover("📂 Import", use_container_width=True):
+                st.markdown("### Import Leads")
+                uploaded_file = st.file_uploader("Upload CSV/Excel", type=['csv', 'xlsx'], key="crm_importer")
+                if uploaded_file:
+                    try:
+                        if uploaded_file.name.endswith('.csv'):
+                            import_df = pd.read_csv(uploaded_file)
+                        else:
+                            import_df = pd.read_excel(uploaded_file)
+                        
+                        st.caption(f"Preview: {len(import_df)} rows ready")
+                        
+                        if st.button("🚀 Run Import", key="btn_run_import"):
+                            count = 0
+                            progress_bar = st.progress(0, text="Importing...")
+                            
+                            for idx, row in import_df.iterrows():
+                                # Normalize Keys
+                                biz = row.get("Company Name") or row.get("Business Name") or row.get("Company")
+                                name = row.get("Name") or row.get("Contact Name") or row.get("Person")
+                                
+                                if pd.isna(biz) or str(biz).strip() == "":
+                                    if pd.isna(name): continue
+                                    biz = name
+                                    
+                                payload = {
+                                    "businessName": str(biz),
+                                    "contactName": str(name) if not pd.isna(name) else "",
+                                    "phone": str(row.get("Phone") or row.get("Phone Number") or ""),
+                                    "email": str(row.get("Email") or ""),
+                                    "address": str(row.get("Address") or ""),
+                                    "status": "Generated",
+                                    "priority": "COLD"
+                                }
+                                if create_lead(payload):
+                                    count += 1
+                                progress_bar.progress(min((idx + 1) / len(import_df), 1.0))
+                                    
+                            st.success(f"Imported {count} leads!")
+                            time.sleep(1)
+                            st.rerun()
+                    except Exception as e:
+                        st.error(f"Error: {e}")
+
+        with c5:
+             # Export Logic Wrapper
+            if not df.empty:
+                excel_data = to_excel(df)
+                st.download_button("📥 Export", data=excel_data, file_name="crm_export.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True)
+            else:
+                st.button("📥 Export", disabled=True, use_container_width=True)
+        
+        with c6:
+            # Mode Toggle
+            if mode == "👁️ Read Only":
+                if st.button("✏️ Edit", use_container_width=True, help="Switch to Edit Mode"):
+                     st.session_state.mode_state = "✏️ Edit"
+                     st.rerun()
+            else:
+                if st.button("👁️ Read", use_container_width=True, help="Switch to Read Only"):
+                     st.session_state.mode_state = "👁️ Read Only"
+                     st.rerun()
+        
+        with c7:
+            with st.popover("👁️", use_container_width=True, help="Show/Hide Columns"):
+                selected_cols = st.multiselect(
+                    "Visible Columns", 
+                    options=all_display_cols,
+                    default=st.session_state.visible_columns,
+                    key="col_vis_selector"
+                )
+                if selected_cols != st.session_state.visible_columns:
+                    st.session_state.visible_columns = selected_cols
+                    st.rerun()
+        
+        with c8:
+            is_wrapped = st.session_state.get("wrap_text", False)
+            icon_w = "📏" if is_wrapped else "↩️"
+            if st.button(f"{icon_w}", use_container_width=True, help="Toggle Text Wrap"):
+                st.session_state.wrap_text = not is_wrapped
+                st.rerun()
+        
+        with c9:
+             if st.button("🔄", use_container_width=True, help="Clear Filters"):
+                 clear_all_filters_cb()
+                 st.rerun()
+
+>>>>>>> 8d238bb57112f1a0d535b630dfebec335c88af10
     # 2. FILTER LOGIC APPLICATION (Behind the scenes)
     if not df.empty:
         if search_q:
-            mask = df.astype(str).apply(lambda x: x.str.contains(search_q, case=False, na=False)).any(axis=1)
-            df = df[mask]
+            search_lower = search_q.lower().strip()
+            # ONLY show records where Name or Company STARTS WITH the search term
+            starts_with_mask = (
+                df['businessName'].astype(str).str.lower().str.startswith(search_lower) |
+                df['contactName'].astype(str).str.lower().str.startswith(search_lower)
+            )
+            df = df[starts_with_mask]
         if f_status:
             df = df[df['status'].isin(f_status)]
         if f_prio:
@@ -2436,6 +2748,13 @@ if "CRM Grid" in page:
         /* Force Width Compensation to prevent right-side gap */
         /* If zoom is 0.8 (80%), width needs to be 125% to fill the 100% container visual width */
         width: {100 * (100 / st.session_state.zoom_level)}% !important;
+    }}
+
+    /* FORCE INNER CHILDREN TO FILL WIDTH */
+    div[data-testid="stDataEditor"] > div,
+    div[data-testid="stDataFrame"] > div {{
+        width: 100% !important;
+        max-width: none !important;
     }}
 
     /* FORCE INNER CHILDREN TO FILL WIDTH */
@@ -2659,10 +2978,11 @@ if "CRM Grid" in page:
 
     # Prepare Display DF
     display_df = df[display_cols].copy()
-    display_df['status'] = display_df['status'].astype(str)
-    
-    # Rename 'status' to 'Status' for styling consistency
-    display_df.rename(columns={"status": "Status"}, inplace=True)
+    # Safely handle 'status' column if present
+    if "status" in display_df.columns:
+        display_df['status'] = display_df['status'].astype(str)
+        # Rename 'status' to 'Status' for styling consistency
+        display_df.rename(columns={"status": "Status"}, inplace=True)
 
     # --- GLOBAL HEIGHT CALCULATION ---
     total_content_height = (len(df) + 1) * 35 + 10
@@ -2727,10 +3047,10 @@ if "CRM Grid" in page:
         non_styled_cols = [c for c in display_df_html.columns if c not in ['Status', 'Priority']]
 
         styled_html = display_df_html.style\
-            .map(get_status_style, subset=['Status'])\
-            .map(get_priority_style, subset=['Priority'])\
-            .map(get_user_style, subset=['Called By', 'Meeting By', 'Closed By'])\
-            .map(highlight_today, subset=['Next Follow-up'])\
+            .map(get_status_style, subset=display_df_html.columns.intersection(['Status']))\
+            .map(get_priority_style, subset=display_df_html.columns.intersection(['Priority']))\
+            .map(get_user_style, subset=display_df_html.columns.intersection(['Called By', 'Meeting By', 'Closed By']))\
+            .map(highlight_today, subset=display_df_html.columns.intersection(['Next Follow-up']))\
             .set_properties(**base_props, subset=non_styled_cols)\
             .apply(highlight_closed_rows, axis=1)\
             .hide(axis="index")\
@@ -2834,14 +3154,13 @@ if "CRM Grid" in page:
                      st.toast(f"💾 Auto-saved {count} changes!", icon="✅")
 
              edited_df = st.data_editor(
-                df[cols],
+                df[display_cols],
                 column_config=grid_config,
                 hide_index=False, # Show row numbers explicitly
                 use_container_width=True,
                 num_rows="dynamic",
                 key="crm_grid",
                 height=int(final_height),
-                column_order=display_cols,
                 on_change=auto_save_crm_grid,
                 kwargs={"snapshot_df": df}
             )
@@ -2849,11 +3168,11 @@ if "CRM Grid" in page:
         else:
             # Standard Read Only
             styled_df = display_df.style\
-                .map(get_status_style, subset=['Status'])\
-                .map(get_priority_style, subset=['priority'])\
-                .map(get_user_style, subset=['calledBy', 'meetingBy', 'closedBy'])\
+                .map(get_status_style, subset=display_df.columns.intersection(['Status']))\
+                .map(get_priority_style, subset=display_df.columns.intersection(['priority']))\
+                .map(get_user_style, subset=display_df.columns.intersection(['calledBy', 'meetingBy', 'closedBy']))\
                 .set_properties(**base_props, subset=[c for c in display_df.columns if c not in ['Status', 'priority']])\
-                .map(highlight_today, subset=['nextFollowUpDate'])\
+                .map(highlight_today, subset=display_df.columns.intersection(['nextFollowUpDate']))\
                 .apply(highlight_closed_rows, axis=1)\
                 .format({"lastFollowUpDate": "{:%d/%m/%Y}", "nextFollowUpDate": "{:%d/%m/%Y}"}, na_rep="")
                 
@@ -4362,13 +4681,35 @@ div[data-testid="stVerticalBlock"]:has(div#{key}) {{
     # --- LEFT COLUMN ---
     with main_col1:
         # A. Lead Header Card
+        # Prepare Contact Name Display
+        c_name = str(lead.get('contactName', '')).strip()
+        if c_name.lower() in ['none', 'nan', 'null', '']:
+            c_name_display = "<span style='font-style: italic; opacity: 0.6;'>No Contact Person</span>"
+        else:
+            c_name_display = f"👤 {c_name}"
+
+        # A. Lead Header Card (Improved)
         st.markdown(f"""
         <div class="{card_class}">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div style="font-size: 2.5rem;">🏢</div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="
+                    font-size: 2rem; 
+                    background: {'rgba(255,255,255,0.1)' if (current_theme == 'dark' and not is_google_mode) else '#f1f5f9'}; 
+                    width: 64px; 
+                    height: 64px; 
+                    border-radius: 16px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center;
+                    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+                ">🏢</div>
                 <div>
-                    <h2 style="margin: 0; font-size: 1.6rem; font-weight: 700; color: {text_main};">{lead.get('businessName', 'Unknown')}</h2>
-                    <div style="color: {text_sub}; margin-top: 4px;">{lead.get('contactName', 'None')}</div>
+                    <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: {text_main}; letter-spacing: -0.02em;">
+                        {lead.get('businessName', 'Unknown Business')}
+                    </h2>
+                    <div style="color: {text_sub}; margin-top: 6px; font-weight: 500; font-size: 0.95rem;">
+                        {c_name_display}
+                    </div>
                 </div>
             </div>
         </div>

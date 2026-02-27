@@ -166,44 +166,64 @@ def render_email_verifier():
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     """, unsafe_allow_html=True)
     
-    # Stunning Premium Header
+    # Stunning Animated Premium Header
     st.markdown("""
-    <div style="
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-        padding: 2rem 2.5rem;
-        border-radius: 20px;
+    <style>
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    @keyframes floatIcon {
+        0% { transform: translateY(0px); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+        50% { transform: translateY(-8px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.4)); }
+        100% { transform: translateY(0px); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+    }
+    .animated-header {
+        background: linear-gradient(-45deg, #6366f1, #8b5cf6, #d946ef, #3b82f6, #ec4899);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        padding: 2.5rem 3rem;
+        border-radius: 24px;
         margin-bottom: 2rem;
         box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
         position: relative;
         overflow: hidden;
-    ">
-        <div style="position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
-        <div style="display: flex; align-items: center; gap: 1.5rem; position: relative; z-index: 1;">
-            <div style="
-                background: rgba(255, 255, 255, 0.2);
-                backdrop-filter: blur(10px);
-                padding: 1rem;
-                border-radius: 16px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            ">
-                <span style="font-size: 2.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">✉️</span>
+    }
+    .animated-icon {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        padding: 1.25rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255,255,255,0.2);
+        animation: floatIcon 4s ease-in-out infinite;
+    }
+    </style>
+    
+    <div class="animated-header">
+        <div style="position: absolute; top: -50%; right: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%); border-radius: 50%; filter: blur(20px);"></div>
+        <div style="display: flex; align-items: center; gap: 2rem; position: relative; z-index: 1;">
+            <div class="animated-icon">
+                <span style="font-size: 3rem;">✉️</span>
             </div>
             <div>
                 <h1 style="
                     margin: 0; 
                     color: white; 
-                    font-size: 2rem; 
+                    font-size: 2.5rem; 
                     font-weight: 800;
                     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                    letter-spacing: -0.5px;
-                    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    letter-spacing: -1px;
+                    text-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">Email Verifier Pro</h1>
                 <p style="
-                    margin: 0.5rem 0 0 0; 
+                    margin: 0.75rem 0 0 0; 
                     color: rgba(255,255,255,0.95); 
-                    font-size: 1rem;
+                    font-size: 1.1rem;
                     font-family: 'Inter', sans-serif;
                     font-weight: 500;
+                    letter-spacing: 0.5px;
                 ">
                     🚀 Validate emails in real-time • Boost deliverability • Reduce bounce rates
                 </p>
@@ -215,234 +235,161 @@ def render_email_verifier():
     # Premium CSS with Beautiful Typography
     st.markdown("""
     <style>
-    /* Import Inter Font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-    
-    /* Global Font */
-    * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-    }
-    
-    /* Premium Metric Cards with Glassmorphism */
-    .metric-box {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-        backdrop-filter: blur(10px);
-        border: 1.5px solid rgba(255, 255, 255, 0.18);
-        padding: 1.5rem 1rem;
-        border-radius: 16px;
-        text-align: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        position: relative;
-        overflow: hidden;
-    }
-    .metric-box::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    .metric-box:hover {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
-        border-color: rgba(139, 92, 246, 0.4);
-        transform: translateY(-4px);
-        box-shadow: 0 12px 48px rgba(139, 92, 246, 0.2);
-    }
-    .metric-box:hover::before {
-        opacity: 1;
-    }
-    .metric-label { 
-        font-size: 0.7rem; 
-        opacity: 0.8; 
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-        color: #a78bfa;
-    }
-    .metric-value { 
-        font-size: 1.75rem; 
-        font-weight: 800;
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1.2;
-    }
-    
-    /* Stunning Button Design */
-    div.stButton > button {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%) !important;
-        color: white !important;
-        border: none !important;
-        padding: 0.85rem 2rem !important;
-        border-radius: 14px !important;
-        font-weight: 700 !important;
-        font-size: 0.95rem !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4) !important;
-        text-transform: uppercase !important;
-        letter-spacing: 1px !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
-    div.stButton > button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.5s ease;
-    }
-    div.stButton > button:hover::before {
-        left: 100%;
-    }
-    div.stButton > button:hover {
-        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 50%, #ec4899 100%) !important;
-        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6) !important;
-        transform: translateY(-2px) !important;
-    }
-    div.stButton > button:active {
-        transform: translateY(0px) !important;
-    }
-    
-    /* Beautiful Input Fields */
-    div[data-baseweb="input"] > div {
-        border-radius: 14px !important;
-        border: 2px solid rgba(139, 92, 246, 0.3) !important;
-        transition: all 0.3s ease !important;
-        background: rgba(255, 255, 255, 0.05) !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 1rem !important;
-    }
-    div[data-baseweb="input"] > div:focus-within {
-        border-color: #8b5cf6 !important;
-        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15) !important;
-        background: rgba(255, 255, 255, 0.08) !important;
-    }
-    
-    /* Premium Status Card */
-    .status-card {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-        backdrop-filter: blur(20px);
-        border-radius: 20px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        border: 1.5px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-        position: relative;
-        overflow: hidden;
-    }
-    .status-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 200px;
-        height: 200px;
-        background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
-        border-radius: 50%;
-    }
-    
-    /* Monospace Font for MX Records */
-    .mx-record {
-        font-family: 'JetBrains Mono', 'Monaco', 'Menlo', monospace !important;
-        font-size: 0.85rem;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
-        padding: 12px 16px;
-        border-radius: 10px;
-        display: block;
-        margin-top: 8px;
-        word-break: break-all;
-        border: 1px solid rgba(139, 92, 246, 0.3);
-        font-weight: 500;
-        color: #c4b5fd;
-        transition: all 0.2s ease;
-    }
-    .mx-record:hover {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
-        border-color: rgba(139, 92, 246, 0.5);
+    /* Websites Showcase Style Theme for Email Verifier */
+
+    @font-face {
+        font-family: 'Inter';
+        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     }
 
-    /* Modern Tab Design */
+    /* --- HERO HEADER --- */
+    .hero-container {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: #000;
+    }
+
+    .hero-icon {
+        background: rgba(0, 0, 0, 0.05);
+        color: #000;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: inset 0 2px 10px rgba(255,255,255,1);
+    }
+
+    /* --- CARDS & CONTAINERS --- */
+    .verifier-card {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        margin-bottom: 24px;
+        color: #000;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    /* Hover Effect for Cards */
+    .verifier-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 255, 255, 1) !important;
+    }
+
+    /* --- RESULTS CARD COLORING --- */
+    .result-valid { border: 2px solid rgba(52, 168, 83, 0.3) !important; }
+    .result-risky { border: 2px solid rgba(251, 188, 5, 0.3) !important; }
+    .result-invalid { border: 2px solid rgba(234, 67, 53, 0.3) !important; }
+
+    /* --- METRIC BOXES --- */
+    .metric-grid-box {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #666;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .metric-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000;
+    }
+    .metric-sub {
+        font-size: 12px;
+        color: #888;
+        margin-top: 6px;
+    }
+
+    /* --- TABS --- */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-        padding: 8px;
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 12px;
+        background-color: rgba(0,0,0,0.03);
+        padding: 6px;
+        border-radius: 30px;
+        border-bottom: none;
+        margin-bottom: 30px;
+        display: inline-flex;
     }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 12px;
         padding: 12px 24px;
         font-weight: 600;
-        font-family: 'Inter', sans-serif;
-        transition: all 0.3s ease;
-    }
-    .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(139, 92, 246, 0.1);
-    }
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
-    }
-
-    /* Vibrant Progress Bar */
-    .stProgress > div > div > div > div {
-        background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%) !important;
-        border-radius: 10px;
-    }
-    .stProgress > div > div {
-        background: rgba(139, 92, 246, 0.2) !important;
-        border-radius: 10px;
-    }
-    
-    /* Beautiful Expander */
-    .streamlit-expanderHeader {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
-        border-radius: 12px;
-        font-weight: 600;
-        font-family: 'Inter', sans-serif;
-        border: 1px solid rgba(139, 92, 246, 0.2);
+        color: #666;
+        border: none;
+        border-radius: 24px;
+        background: transparent;
         transition: all 0.2s ease;
     }
-    .streamlit-expanderHeader:hover {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
-        border-color: rgba(139, 92, 246, 0.4);
+    .stTabs [aria-selected="true"] {
+        color: #000 !important;
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: none !important;
     }
     
-    /* Typography Improvements */
-    h1, h2, h3, h4, h5, h6 {
+    /* Hide Streamlit tab selection border */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+        background-color: transparent !important;
+    }
+    
+    /* --- INPUTS AND BUTTONS --- */
+    input[type="text"] {
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.1) !important;
+        background: rgba(255,255,255,0.8) !important;
+        padding: 14px 20px !important;
         font-family: 'Inter', sans-serif !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.5px !important;
     }
     
-    p, span, div {
+    button {
+        border-radius: 20px !important;
         font-family: 'Inter', sans-serif !important;
+        font-weight: bold !important;
     }
     
-    /* Mobile Responsive */
-    @media only screen and (max-width: 768px) {
-        div.stButton > button {
-            width: 100% !important;
-            margin-top: 12px !important;
-        }
-        .status-header {
-            flex-direction: column !important;
-            text-align: center !important;
-        }
-        .metric-box {
-            margin-bottom: 1rem;
-        }
+    /* --- DATAFRAME / TABLE --- */
+    div[data-testid="stDataFrame"] {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        background: rgba(255,255,255,0.6);
+        overflow: hidden;
     }
+    
+    /* Hiding Streamlit Branding where possible */
+    footer {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
@@ -452,29 +399,84 @@ def render_email_verifier():
 
     # --- TAB 1: SINGLE VERIFY ---
     with tab1:
-        # Section Header
+        # Added Premium CSS specifically for the Email Input and Button
         st.markdown("""
-        <div style="margin-bottom: 2rem;">
+        <style>
+            /* Premium Input Field */
+            div[data-testid="stTextInput"] input {
+                font-size: 1.05rem !important;
+                padding: 1.5rem !important;
+                border-radius: 16px !important;
+                border: 2px solid #e2e8f0 !important;
+                background: #ffffff !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.02) !important;
+                transition: all 0.3s ease !important;
+            }
+            div[data-testid="stTextInput"] input:focus {
+                border-color: #8b5cf6 !important;
+                box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15) !important;
+                outline: none !important;
+            }
+            
+            /* Premium Verify Button */
+            div[data-testid="stButton"] button[kind="primary"] {
+                border-radius: 16px !important;
+                padding: 1rem !important;
+                font-size: 1.1rem !important;
+                font-weight: 700 !important;
+                letter-spacing: 0.5px !important;
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+                color: #ffffff !important;
+                border: none !important;
+                box-shadow: 0 8px 20px rgba(139, 92, 246, 0.25) !important;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                height: 100% !important;
+                min-height: 54px !important;
+            }
+            div[data-testid="stButton"] button[kind="primary"]:hover {
+                transform: translateY(-2px) !important;
+                box-shadow: 0 12px 25px rgba(139, 92, 246, 0.35) !important;
+            }
+            div[data-testid="stButton"] button[kind="primary"]:active {
+                transform: translateY(0px) !important;
+            }
+            
+            /* Align button properly with input */
+            div[data-testid="stVerticalBlock"] > div[style*="flex-direction: row;"] > div:last-child {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="margin-bottom: 2.5rem; background: #ffffff; padding: 2.5rem 2rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.04); text-align: center;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: rgba(139, 92, 246, 0.1); border-radius: 50%; margin-bottom: 1rem;">
+                <span style="font-size: 2rem;">⚡</span>
+            </div>
             <h2 style="
                 font-family: 'Inter', sans-serif;
                 font-weight: 800;
-                font-size: 1.75rem;
+                font-size: 2.2rem;
                 background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.75rem;
                 letter-spacing: -0.5px;
-            ">✨ Check a Single Email</h2>
+            ">Check a Single Email</h2>
             <p style="
                 font-family: 'Inter', sans-serif;
-                color: rgba(255, 255, 255, 0.7);
-                font-size: 1rem;
-                margin: 0;
-            ">Enter an email address below to perform a comprehensive verification check</p>
+                color: #64748b;
+                font-size: 1.1rem;
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.5;
+            ">Enter an email address to run a real-time, comprehensive verification check. We'll identify syntax errors, domain validity, and MX records presence.</p>
         </div>
         """, unsafe_allow_html=True)
         
-        # Input Section
+        # Input Section with Container for precise alignment
         col1, col2 = st.columns([3, 1], gap="medium")
         with col1:
             email_input = st.text_input(
@@ -484,6 +486,7 @@ def render_email_verifier():
                 key="email_input_field"
             )
         with col2:
+            st.markdown("<div style='height: 2px'></div>", unsafe_allow_html=True)
             verify_btn = st.button("🚀 VERIFY", use_container_width=True, type="primary", key="verify_btn")
 
         # Client-side validation feedback
@@ -579,11 +582,162 @@ def render_email_verifier():
                             </div>
                             
                             <style>
-                            @keyframes pulse {
-                                0%, 100% { opacity: 1; }
-                                50% { opacity: 0.5; }
-                            }
-                            </style>
+    /* Websites Showcase Style Theme for Email Verifier */
+
+    @font-face {
+        font-family: 'Inter';
+        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    }
+
+    /* --- HERO HEADER --- */
+    .hero-container {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: #000;
+    }
+
+    .hero-icon {
+        background: rgba(0, 0, 0, 0.05);
+        color: #000;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: inset 0 2px 10px rgba(255,255,255,1);
+    }
+
+    /* --- CARDS & CONTAINERS --- */
+    .verifier-card {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        margin-bottom: 24px;
+        color: #000;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    /* Hover Effect for Cards */
+    .verifier-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 255, 255, 1) !important;
+    }
+
+    /* --- RESULTS CARD COLORING --- */
+    .result-valid { border: 2px solid rgba(52, 168, 83, 0.3) !important; }
+    .result-risky { border: 2px solid rgba(251, 188, 5, 0.3) !important; }
+    .result-invalid { border: 2px solid rgba(234, 67, 53, 0.3) !important; }
+
+    /* --- METRIC BOXES --- */
+    .metric-grid-box {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #666;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .metric-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000;
+    }
+    .metric-sub {
+        font-size: 12px;
+        color: #888;
+        margin-top: 6px;
+    }
+
+    /* --- TABS --- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+        background-color: rgba(0,0,0,0.03);
+        padding: 6px;
+        border-radius: 30px;
+        border-bottom: none;
+        margin-bottom: 30px;
+        display: inline-flex;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 12px 24px;
+        font-weight: 600;
+        color: #666;
+        border: none;
+        border-radius: 24px;
+        background: transparent;
+        transition: all 0.2s ease;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #000 !important;
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: none !important;
+    }
+    
+    /* Hide Streamlit tab selection border */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+        background-color: transparent !important;
+    }
+    
+    /* --- INPUTS AND BUTTONS --- */
+    input[type="text"] {
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.1) !important;
+        background: rgba(255,255,255,0.8) !important;
+        padding: 14px 20px !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    button {
+        border-radius: 20px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: bold !important;
+    }
+    
+    /* --- DATAFRAME / TABLE --- */
+    div[data-testid="stDataFrame"] {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        background: rgba(255,255,255,0.6);
+        overflow: hidden;
+    }
+    
+    /* Hiding Streamlit Branding where possible */
+    footer {visibility: hidden;}
+    </style>
                             """, unsafe_allow_html=True)
                             
                             results = verify_emails(email_input, source="Single")
@@ -692,11 +846,162 @@ def render_email_verifier():
                 </div>
                 
                 <style>
-                @keyframes pulse {{
-                    0%, 100% {{ transform: scale(1); }}
-                    50% {{ transform: scale(1.05); }}
-                }}
-                </style>
+    /* Websites Showcase Style Theme for Email Verifier */
+
+    @font-face {
+        font-family: 'Inter';
+        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    }
+
+    /* --- HERO HEADER --- */
+    .hero-container {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: #000;
+    }
+
+    .hero-icon {
+        background: rgba(0, 0, 0, 0.05);
+        color: #000;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: inset 0 2px 10px rgba(255,255,255,1);
+    }
+
+    /* --- CARDS & CONTAINERS --- */
+    .verifier-card {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        margin-bottom: 24px;
+        color: #000;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    /* Hover Effect for Cards */
+    .verifier-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 255, 255, 1) !important;
+    }
+
+    /* --- RESULTS CARD COLORING --- */
+    .result-valid { border: 2px solid rgba(52, 168, 83, 0.3) !important; }
+    .result-risky { border: 2px solid rgba(251, 188, 5, 0.3) !important; }
+    .result-invalid { border: 2px solid rgba(234, 67, 53, 0.3) !important; }
+
+    /* --- METRIC BOXES --- */
+    .metric-grid-box {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #666;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .metric-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000;
+    }
+    .metric-sub {
+        font-size: 12px;
+        color: #888;
+        margin-top: 6px;
+    }
+
+    /* --- TABS --- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+        background-color: rgba(0,0,0,0.03);
+        padding: 6px;
+        border-radius: 30px;
+        border-bottom: none;
+        margin-bottom: 30px;
+        display: inline-flex;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 12px 24px;
+        font-weight: 600;
+        color: #666;
+        border: none;
+        border-radius: 24px;
+        background: transparent;
+        transition: all 0.2s ease;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #000 !important;
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: none !important;
+    }
+    
+    /* Hide Streamlit tab selection border */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+        background-color: transparent !important;
+    }
+    
+    /* --- INPUTS AND BUTTONS --- */
+    input[type="text"] {
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.1) !important;
+        background: rgba(255,255,255,0.8) !important;
+        padding: 14px 20px !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    button {
+        border-radius: 20px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: bold !important;
+    }
+    
+    /* --- DATAFRAME / TABLE --- */
+    div[data-testid="stDataFrame"] {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        background: rgba(255,255,255,0.6);
+        overflow: hidden;
+    }
+    
+    /* Hiding Streamlit Branding where possible */
+    footer {visibility: hidden;}
+    </style>
                 """, unsafe_allow_html=True)
 
                 # Metrics Header
