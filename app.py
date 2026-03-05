@@ -14,6 +14,16 @@ import streamlit.components.v1 as components
 from components.sidebar import render_sidebar_toggle
 from st_keyup import st_keyup
 
+# Detect Environment
+IS_LIVE_ENV = platform.system() == "Linux"
+
+# MUST BE THE FIRST STREAMLIT COMMAND
+st.set_page_config(
+    page_title="n8n CRM & Sales Engine",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 # --- PLAYWRIGHT SETUP FOR CLOUD ---
 # Ensure browsers are installed (essential for Streamlit Cloud)
 if not os.path.exists(".browser_installed"):
@@ -45,8 +55,9 @@ def start_backend_server():
         if not os.path.exists("node_modules"):
             print("📦 Installing Node modules...")
             try:
-                subprocess.run(["npm", "install"], check=True)
-                print("✅ Node dependencies installed.")
+                if not IS_LIVE_ENV:
+                    subprocess.run(["npm", "install"], check=True)
+                    print("✅ Node dependencies installed.")
             except Exception as e:
                 print(f"❌ npm install failed: {e}")
 
@@ -62,14 +73,15 @@ def start_backend_server():
         # 3. Start Server
         try:
             # Run node server.js in background
-            subprocess.Popen(
-                ["node", "server.js"], 
-                cwd=os.getcwd(),
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
-            )
-            time.sleep(5)  # Give it 5 seconds to boot
-            print("✅ Backend launch command sent.")
+            if not IS_LIVE_ENV:
+                subprocess.Popen(
+                    ["node", "server.js"], 
+                    cwd=os.getcwd(),
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                time.sleep(5)  # Give it 5 seconds to boot
+                print("✅ Backend launch command sent.")
         except Exception as e:
             print(f"❌ Failed to start backend: {e}")
     else:
@@ -84,15 +96,6 @@ EXECUTIONS_API = f"{BACKEND_BASE}/executions"
 LEADS_API = f"{BACKEND_BASE}/leads"
 STATS_API = f"{BACKEND_BASE}/stats"
 LEAD_GEN_API = f"{BACKEND_BASE}/lead-gen"
-
-# Detect Environment
-IS_LIVE_ENV = platform.system() == "Linux"
-
-st.set_page_config(
-    page_title="n8n CRM & Sales Engine",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Render the collapsible sidebar toggle (Must be called early)
 render_sidebar_toggle()
