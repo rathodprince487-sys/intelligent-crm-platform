@@ -12,3 +12,5 @@ libxrandr2
 libgbm1
 libxml2-dev
 libxslt1-dev
+nodejs
+npm

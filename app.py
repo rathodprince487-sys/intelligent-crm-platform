@@ -26,7 +26,7 @@ st.set_page_config(
 
 # --- PLAYWRIGHT SETUP FOR CLOUD ---
 # Ensure browsers are installed (essential for Streamlit Cloud)
-if not os.path.exists(".browser_installed") and not IS_LIVE_ENV:
+if not os.path.exists(".browser_installed"):
     try:
         print("🔧 Installing Playwright Browsers (First Run)...")
         subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=False)
@@ -43,10 +43,6 @@ def start_backend_server():
     Checks if the backend is running on port 3000.
     If not, starts 'node server.js' as a background process.
     """
-    if IS_LIVE_ENV:
-        print("☁️ Live Environment Detected: Skipping local backend auto-start.")
-        return
-
     def is_port_in_use(port):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
