@@ -43,9 +43,16 @@ def start_backend_server():
     Checks if the backend is running on port 3000.
     If not, starts 'node server.js' as a background process.
     """
+    if IS_LIVE_ENV:
+        print("☁️ Live Environment Detected: Skipping local backend auto-start.")
+        return
+
     def is_port_in_use(port):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            return s.connect_ex(('localhost', port)) == 0
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                return s.connect_ex(('127.0.0.1', port)) == 0
+        except Exception:
+            return False
 
     if not is_port_in_use(3000):
         # Start server
@@ -55,9 +62,8 @@ def start_backend_server():
         if not os.path.exists("node_modules"):
             print("📦 Installing Node modules...")
             try:
-                if not IS_LIVE_ENV:
-                    subprocess.run(["npm", "install"], check=True)
-                    print("✅ Node dependencies installed.")
+                subprocess.run(["npm", "install"], check=True)
+                print("✅ Node dependencies installed.")
             except Exception as e:
                 print(f"❌ npm install failed: {e}")
 
@@ -65,24 +71,22 @@ def start_backend_server():
         # We check a flag or just run it (it's fast if already installed)
         print("🎭 Ensuring Playwright browsers...")
         try:
-             if not IS_LIVE_ENV:
-                 subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=False)
-                 print("✅ Playwright chromium installed.")
+             subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=False)
+             print("✅ Playwright chromium installed.")
         except Exception as e:
              print(f"⚠️ Playwright install warning: {e}")
 
         # 3. Start Server
         try:
             # Run node server.js in background
-            if not IS_LIVE_ENV:
-                subprocess.Popen(
-                    ["node", "server.js"], 
-                    cwd=os.getcwd(),
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL
-                )
-                time.sleep(5)  # Give it 5 seconds to boot
-                print("✅ Backend launch command sent.")
+            subprocess.Popen(
+                ["node", "server.js"], 
+                cwd=os.getcwd(),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            time.sleep(5)  # Give it 5 seconds to boot
+            print("✅ Backend launch command sent.")
         except Exception as e:
             print(f"❌ Failed to start backend: {e}")
     else:
