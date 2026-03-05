@@ -34,7 +34,6 @@ const Lead = sequelize.define('Lead', {
     meetingBy: DataTypes.STRING,
     closedBy: DataTypes.STRING,
     lastFollowUpDate: DataTypes.DATEONLY, // Date only for easier grid view
-    lastFollowUpDate: DataTypes.DATEONLY, // Date only for easier grid view
     nextFollowUpDate: DataTypes.DATEONLY,
     meetingDate: DataTypes.DATEONLY,
 
