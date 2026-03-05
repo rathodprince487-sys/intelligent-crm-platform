@@ -26,10 +26,10 @@ st.set_page_config(
 
 # --- PLAYWRIGHT SETUP FOR CLOUD ---
 # Ensure browsers are installed (essential for Streamlit Cloud)
-if not os.path.exists(".browser_installed"):
+if not os.path.exists(".browser_installed") and not IS_LIVE_ENV:
     try:
         print("🔧 Installing Playwright Browsers (First Run)...")
-        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=False)
         with open(".browser_installed", "w") as f: 
             f.write("done")
         print("✅ Playwright Browsers Installed.")
@@ -65,8 +65,9 @@ def start_backend_server():
         # We check a flag or just run it (it's fast if already installed)
         print("🎭 Ensuring Playwright browsers...")
         try:
-             subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
-             print("✅ Playwright chromium installed.")
+             if not IS_LIVE_ENV:
+                 subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=False)
+                 print("✅ Playwright chromium installed.")
         except Exception as e:
              print(f"⚠️ Playwright install warning: {e}")
 
