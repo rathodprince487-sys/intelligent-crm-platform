@@ -166,44 +166,64 @@ def render_email_verifier():
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     """, unsafe_allow_html=True)
     
-    # Stunning Premium Header
+    # Stunning Animated Premium Header
     st.markdown("""
-    <div style="
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-        padding: 2rem 2.5rem;
-        border-radius: 20px;
+    <style>
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    @keyframes floatIcon {
+        0% { transform: translateY(0px); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+        50% { transform: translateY(-8px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.4)); }
+        100% { transform: translateY(0px); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+    }
+    .animated-header {
+        background: linear-gradient(-45deg, #6366f1, #8b5cf6, #d946ef, #3b82f6, #ec4899);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        padding: 2.5rem 3rem;
+        border-radius: 24px;
         margin-bottom: 2rem;
         box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
         position: relative;
         overflow: hidden;
-    ">
-        <div style="position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
-        <div style="display: flex; align-items: center; gap: 1.5rem; position: relative; z-index: 1;">
-            <div style="
-                background: rgba(255, 255, 255, 0.2);
-                backdrop-filter: blur(10px);
-                padding: 1rem;
-                border-radius: 16px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            ">
-                <span style="font-size: 2.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">✉️</span>
+    }
+    .animated-icon {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        padding: 1.25rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255,255,255,0.2);
+        animation: floatIcon 4s ease-in-out infinite;
+    }
+    </style>
+    
+    <div class="animated-header">
+        <div style="position: absolute; top: -50%; right: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%); border-radius: 50%; filter: blur(20px);"></div>
+        <div style="display: flex; align-items: center; gap: 2rem; position: relative; z-index: 1;">
+            <div class="animated-icon">
+                <span style="font-size: 3rem;">✉️</span>
             </div>
             <div>
                 <h1 style="
                     margin: 0; 
                     color: white; 
-                    font-size: 2rem; 
+                    font-size: 2.5rem; 
                     font-weight: 800;
                     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                    letter-spacing: -0.5px;
-                    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    letter-spacing: -1px;
+                    text-shadow: 0 4px 15px rgba(0,0,0,0.2);
                 ">Email Verifier Pro</h1>
                 <p style="
-                    margin: 0.5rem 0 0 0; 
+                    margin: 0.75rem 0 0 0; 
                     color: rgba(255,255,255,0.95); 
-                    font-size: 1rem;
+                    font-size: 1.1rem;
                     font-family: 'Inter', sans-serif;
                     font-weight: 500;
+                    letter-spacing: 0.5px;
                 ">
                     🚀 Validate emails in real-time • Boost deliverability • Reduce bounce rates
                 </p>
@@ -379,29 +399,84 @@ def render_email_verifier():
 
     # --- TAB 1: SINGLE VERIFY ---
     with tab1:
-        # Section Header
+        # Added Premium CSS specifically for the Email Input and Button
         st.markdown("""
-        <div style="margin-bottom: 2rem;">
+        <style>
+            /* Premium Input Field */
+            div[data-testid="stTextInput"] input {
+                font-size: 1.05rem !important;
+                padding: 1.5rem !important;
+                border-radius: 16px !important;
+                border: 2px solid #e2e8f0 !important;
+                background: #ffffff !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.02) !important;
+                transition: all 0.3s ease !important;
+            }
+            div[data-testid="stTextInput"] input:focus {
+                border-color: #8b5cf6 !important;
+                box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15) !important;
+                outline: none !important;
+            }
+            
+            /* Premium Verify Button */
+            div[data-testid="stButton"] button[kind="primary"] {
+                border-radius: 16px !important;
+                padding: 1rem !important;
+                font-size: 1.1rem !important;
+                font-weight: 700 !important;
+                letter-spacing: 0.5px !important;
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+                color: #ffffff !important;
+                border: none !important;
+                box-shadow: 0 8px 20px rgba(139, 92, 246, 0.25) !important;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                height: 100% !important;
+                min-height: 54px !important;
+            }
+            div[data-testid="stButton"] button[kind="primary"]:hover {
+                transform: translateY(-2px) !important;
+                box-shadow: 0 12px 25px rgba(139, 92, 246, 0.35) !important;
+            }
+            div[data-testid="stButton"] button[kind="primary"]:active {
+                transform: translateY(0px) !important;
+            }
+            
+            /* Align button properly with input */
+            div[data-testid="stVerticalBlock"] > div[style*="flex-direction: row;"] > div:last-child {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="margin-bottom: 2.5rem; background: #ffffff; padding: 2.5rem 2rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.04); text-align: center;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: rgba(139, 92, 246, 0.1); border-radius: 50%; margin-bottom: 1rem;">
+                <span style="font-size: 2rem;">⚡</span>
+            </div>
             <h2 style="
                 font-family: 'Inter', sans-serif;
                 font-weight: 800;
-                font-size: 1.75rem;
+                font-size: 2.2rem;
                 background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.75rem;
                 letter-spacing: -0.5px;
-            ">✨ Check a Single Email</h2>
+            ">Check a Single Email</h2>
             <p style="
                 font-family: 'Inter', sans-serif;
-                color: rgba(255, 255, 255, 0.7);
-                font-size: 1rem;
-                margin: 0;
-            ">Enter an email address below to perform a comprehensive verification check</p>
+                color: #64748b;
+                font-size: 1.1rem;
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.5;
+            ">Enter an email address to run a real-time, comprehensive verification check. We'll identify syntax errors, domain validity, and MX records presence.</p>
         </div>
         """, unsafe_allow_html=True)
         
-        # Input Section
+        # Input Section with Container for precise alignment
         col1, col2 = st.columns([3, 1], gap="medium")
         with col1:
             email_input = st.text_input(
@@ -411,6 +486,7 @@ def render_email_verifier():
                 key="email_input_field"
             )
         with col2:
+            st.markdown("<div style='height: 2px'></div>", unsafe_allow_html=True)
             verify_btn = st.button("🚀 VERIFY", use_container_width=True, type="primary", key="verify_btn")
 
         # Client-side validation feedback

@@ -1,0 +1,35 @@
+[
+    {
+        "username": "admin",
+        "name": "Shubham Parmar",
+        "role": "CEO",
+        "password_hash": "bde2f39c868647dd11c12def27d604feea753b3c48c20d1a14aad8b3439335b0",
+        "salt": "a72ab67fce39f18fb45ff7ad74e262ba",
+        "status": "Active",
+        "email": "admin@n8nOutline.com",
+        "visible_password": "admin123",
+        "avatar_file": "assets/avatars/admin_avatar.png"
+    },
+    {
+        "username": "vyonishmomaya@1",
+        "name": "Vyonish Momaya",
+        "role": "HR",
+        "password_hash": "bf165a9866ae6271122f9d175ff75dff1929fedc9982dc3563d71ff175d10680",
+        "salt": "6d477c9e422fe6ab242a2ded8798a5aa",
+        "status": "Active",
+        "email": "vyonishmomaya@1@n8nOutline.com",
+        "visible_password": "admin123",
+        "avatar_file": "assets/avatars/vyonishmomaya@1_avatar.png"
+    },
+    {
+        "username": "Satyajeet61",
+        "name": "Satyajeetsinh rathod",
+        "role": "Intern",
+        "password_hash": "cbbc9249ef07e48485a1ce3b558f5207b095ed03196c2064d6b9c2ca06d2b507",
+        "salt": "df2f48017866049f04d889cc3d33b9c3",
+        "status": "Active",
+        "email": "satyajeetrathod5@gmail.com",
+        "visible_password": "admin123",
+        "avatar_file": "default_avatar.png"
+    }
+]

@@ -20,17 +20,12 @@ section[data-testid="stSidebar"] {
     background-color: var(--bg-color) !important;
     border-right: 1px solid var(--border-color) !important;
     transition: width 0.25s ease, min-width 0.25s ease, max-width 0.25s ease !important;
+    width: var(--sidebar-width-expanded) !important;
+    min-width: var(--sidebar-width-expanded) !important;
     overflow-x: hidden !important;
     padding-top: 0 !important;
-}
-
-@media (min-width: 769px) {
-    section[data-testid="stSidebar"] {
-        width: var(--sidebar-width-expanded) !important;
-        min-width: var(--sidebar-width-expanded) !important;
-        transform: none !important;
-        margin-left: 0 !important;
-    }
+    transform: none !important;
+    margin-left: 0 !important;
 }
 section[data-testid="stSidebar"] > div {
     padding-top: 1rem !important;
@@ -220,8 +215,8 @@ body.sidebar-mj-collapsed section[data-testid="stSidebar"] span:not([data-testid
 body.sidebar-mj-collapsed section[data-testid="stSidebar"] hr {
     margin: 8px 0 !important;
 }
-/* Hide all known Streamlit sidebar toggle buttons */
-@media (min-width: 769px) {
+    /* Hide all known Streamlit sidebar toggle buttons */
+    /* Aggressively hide all known Streamlit sidebar toggle buttons */
     [data-testid="stSidebarCollapseButton"],
     [data-testid="stExpandSidebarButton"],
     button[kind="headerNoPadding"] {
@@ -236,62 +231,47 @@ body.sidebar-mj-collapsed section[data-testid="stSidebar"] hr {
         left: -9999px !important;
         z-index: -1 !important;
     }
-}
-#sidebar-custom-toggle {
-    position: fixed;
-    top: 20px;
-    left: 180px; 
-    z-index: 999999;
-    background: white;
-    border: 1px solid #EAEAEA;
-    border-radius: 6px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #555;
-    font-size: 16px;
-    transition: all 0.25s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-#sidebar-custom-toggle:hover {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-    background: #f8f9fa;
-}
-body.sidebar-mj-collapsed #sidebar-custom-toggle {
-    left: 16px;
-}
-body.sidebar-mj-collapsed section[data-testid="stSidebar"] img:not(.sidebar-user-avatar),
-body.sidebar-mj-collapsed section[data-testid="stSidebar"] [data-testid="stLogo"] {
-    display: none !important;
-}
-body.sidebar-mj-collapsed .sidebar-user-avatar {
-    display: none !important;
-}
-@media (max-width: 768px) {
-    #sidebar-custom-toggle { display: none !important; }
-    .block-container {
-        max-width: 100vw !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+    
+    #sidebar-custom-toggle {
+        position: fixed;
+        top: 20px;
+        left: 180px; 
+        z-index: 999999;
+        background: white;
+        border: 1px solid #EAEAEA;
+        border-radius: 6px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #555;
+        font-size: 16px;
+        transition: all 0.25s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    button[data-testid="stSidebarCollapseButton"], button[data-testid="stExpandSidebarButton"] { 
-        display: inline-flex !important; 
-        visibility: visible !important;
-        opacity: 1 !important;
-        width: auto !important;
-        height: auto !important;
-        position: relative !important;
-        pointer-events: auto !important;
-        top: 0 !important;
-        left: 0 !important;
-        z-index: 100 !important;
-    } 
-}
-</style>
+    #sidebar-custom-toggle:hover {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+        background: #f8f9fa;
+    }
+    body.sidebar-mj-collapsed #sidebar-custom-toggle {
+        left: 16px;
+    }
+    body.sidebar-mj-collapsed section[data-testid="stSidebar"] img:not(.sidebar-user-avatar),
+    body.sidebar-mj-collapsed section[data-testid="stSidebar"] [data-testid="stLogo"] {
+        display: none !important;
+    }
+    body.sidebar-mj-collapsed .sidebar-user-avatar {
+        display: none !important;
+    }
+    @media (max-width: 768px) {
+        #sidebar-custom-toggle { display: none !important; }
+        section[data-testid="stSidebar"] { width: 100% !important; min-width: 100% !important; }
+        button[data-testid="stSidebarCollapseButton"], button[data-testid="stExpandSidebarButton"] { display: block !important; } 
+    }
+    </style>
 """
     st.markdown(sidebar_css, unsafe_allow_html=True)
 

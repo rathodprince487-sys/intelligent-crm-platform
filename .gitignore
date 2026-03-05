@@ -74,3 +74,5 @@ convert_to_word.sh
 create_weekly_report.py
 fix_logo.py
 generate_pdf.py
+
+.venv/
