@@ -215,234 +215,161 @@ def render_email_verifier():
     # Premium CSS with Beautiful Typography
     st.markdown("""
     <style>
-    /* Import Inter Font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-    
-    /* Global Font */
-    * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-    }
-    
-    /* Premium Metric Cards with Glassmorphism */
-    .metric-box {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-        backdrop-filter: blur(10px);
-        border: 1.5px solid rgba(255, 255, 255, 0.18);
-        padding: 1.5rem 1rem;
-        border-radius: 16px;
-        text-align: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        position: relative;
-        overflow: hidden;
-    }
-    .metric-box::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    .metric-box:hover {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
-        border-color: rgba(139, 92, 246, 0.4);
-        transform: translateY(-4px);
-        box-shadow: 0 12px 48px rgba(139, 92, 246, 0.2);
-    }
-    .metric-box:hover::before {
-        opacity: 1;
-    }
-    .metric-label { 
-        font-size: 0.7rem; 
-        opacity: 0.8; 
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-        color: #a78bfa;
-    }
-    .metric-value { 
-        font-size: 1.75rem; 
-        font-weight: 800;
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1.2;
-    }
-    
-    /* Stunning Button Design */
-    div.stButton > button {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%) !important;
-        color: white !important;
-        border: none !important;
-        padding: 0.85rem 2rem !important;
-        border-radius: 14px !important;
-        font-weight: 700 !important;
-        font-size: 0.95rem !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4) !important;
-        text-transform: uppercase !important;
-        letter-spacing: 1px !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
-    div.stButton > button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.5s ease;
-    }
-    div.stButton > button:hover::before {
-        left: 100%;
-    }
-    div.stButton > button:hover {
-        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 50%, #ec4899 100%) !important;
-        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6) !important;
-        transform: translateY(-2px) !important;
-    }
-    div.stButton > button:active {
-        transform: translateY(0px) !important;
-    }
-    
-    /* Beautiful Input Fields */
-    div[data-baseweb="input"] > div {
-        border-radius: 14px !important;
-        border: 2px solid rgba(139, 92, 246, 0.3) !important;
-        transition: all 0.3s ease !important;
-        background: rgba(255, 255, 255, 0.05) !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 1rem !important;
-    }
-    div[data-baseweb="input"] > div:focus-within {
-        border-color: #8b5cf6 !important;
-        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15) !important;
-        background: rgba(255, 255, 255, 0.08) !important;
-    }
-    
-    /* Premium Status Card */
-    .status-card {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-        backdrop-filter: blur(20px);
-        border-radius: 20px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        border: 1.5px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-        position: relative;
-        overflow: hidden;
-    }
-    .status-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 200px;
-        height: 200px;
-        background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
-        border-radius: 50%;
-    }
-    
-    /* Monospace Font for MX Records */
-    .mx-record {
-        font-family: 'JetBrains Mono', 'Monaco', 'Menlo', monospace !important;
-        font-size: 0.85rem;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
-        padding: 12px 16px;
-        border-radius: 10px;
-        display: block;
-        margin-top: 8px;
-        word-break: break-all;
-        border: 1px solid rgba(139, 92, 246, 0.3);
-        font-weight: 500;
-        color: #c4b5fd;
-        transition: all 0.2s ease;
-    }
-    .mx-record:hover {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
-        border-color: rgba(139, 92, 246, 0.5);
+    /* Websites Showcase Style Theme for Email Verifier */
+
+    @font-face {
+        font-family: 'Inter';
+        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     }
 
-    /* Modern Tab Design */
+    /* --- HERO HEADER --- */
+    .hero-container {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: #000;
+    }
+
+    .hero-icon {
+        background: rgba(0, 0, 0, 0.05);
+        color: #000;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: inset 0 2px 10px rgba(255,255,255,1);
+    }
+
+    /* --- CARDS & CONTAINERS --- */
+    .verifier-card {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        margin-bottom: 24px;
+        color: #000;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    /* Hover Effect for Cards */
+    .verifier-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 255, 255, 1) !important;
+    }
+
+    /* --- RESULTS CARD COLORING --- */
+    .result-valid { border: 2px solid rgba(52, 168, 83, 0.3) !important; }
+    .result-risky { border: 2px solid rgba(251, 188, 5, 0.3) !important; }
+    .result-invalid { border: 2px solid rgba(234, 67, 53, 0.3) !important; }
+
+    /* --- METRIC BOXES --- */
+    .metric-grid-box {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #666;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .metric-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000;
+    }
+    .metric-sub {
+        font-size: 12px;
+        color: #888;
+        margin-top: 6px;
+    }
+
+    /* --- TABS --- */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-        padding: 8px;
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 12px;
+        background-color: rgba(0,0,0,0.03);
+        padding: 6px;
+        border-radius: 30px;
+        border-bottom: none;
+        margin-bottom: 30px;
+        display: inline-flex;
     }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 12px;
         padding: 12px 24px;
         font-weight: 600;
-        font-family: 'Inter', sans-serif;
-        transition: all 0.3s ease;
-    }
-    .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(139, 92, 246, 0.1);
-    }
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
-    }
-
-    /* Vibrant Progress Bar */
-    .stProgress > div > div > div > div {
-        background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%) !important;
-        border-radius: 10px;
-    }
-    .stProgress > div > div {
-        background: rgba(139, 92, 246, 0.2) !important;
-        border-radius: 10px;
-    }
-    
-    /* Beautiful Expander */
-    .streamlit-expanderHeader {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
-        border-radius: 12px;
-        font-weight: 600;
-        font-family: 'Inter', sans-serif;
-        border: 1px solid rgba(139, 92, 246, 0.2);
+        color: #666;
+        border: none;
+        border-radius: 24px;
+        background: transparent;
         transition: all 0.2s ease;
     }
-    .streamlit-expanderHeader:hover {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
-        border-color: rgba(139, 92, 246, 0.4);
+    .stTabs [aria-selected="true"] {
+        color: #000 !important;
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: none !important;
     }
     
-    /* Typography Improvements */
-    h1, h2, h3, h4, h5, h6 {
+    /* Hide Streamlit tab selection border */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+        background-color: transparent !important;
+    }
+    
+    /* --- INPUTS AND BUTTONS --- */
+    input[type="text"] {
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.1) !important;
+        background: rgba(255,255,255,0.8) !important;
+        padding: 14px 20px !important;
         font-family: 'Inter', sans-serif !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.5px !important;
     }
     
-    p, span, div {
+    button {
+        border-radius: 20px !important;
         font-family: 'Inter', sans-serif !important;
+        font-weight: bold !important;
     }
     
-    /* Mobile Responsive */
-    @media only screen and (max-width: 768px) {
-        div.stButton > button {
-            width: 100% !important;
-            margin-top: 12px !important;
-        }
-        .status-header {
-            flex-direction: column !important;
-            text-align: center !important;
-        }
-        .metric-box {
-            margin-bottom: 1rem;
-        }
+    /* --- DATAFRAME / TABLE --- */
+    div[data-testid="stDataFrame"] {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        background: rgba(255,255,255,0.6);
+        overflow: hidden;
     }
+    
+    /* Hiding Streamlit Branding where possible */
+    footer {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
@@ -579,11 +506,162 @@ def render_email_verifier():
                             </div>
                             
                             <style>
-                            @keyframes pulse {
-                                0%, 100% { opacity: 1; }
-                                50% { opacity: 0.5; }
-                            }
-                            </style>
+    /* Websites Showcase Style Theme for Email Verifier */
+
+    @font-face {
+        font-family: 'Inter';
+        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    }
+
+    /* --- HERO HEADER --- */
+    .hero-container {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: #000;
+    }
+
+    .hero-icon {
+        background: rgba(0, 0, 0, 0.05);
+        color: #000;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: inset 0 2px 10px rgba(255,255,255,1);
+    }
+
+    /* --- CARDS & CONTAINERS --- */
+    .verifier-card {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        margin-bottom: 24px;
+        color: #000;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    /* Hover Effect for Cards */
+    .verifier-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 255, 255, 1) !important;
+    }
+
+    /* --- RESULTS CARD COLORING --- */
+    .result-valid { border: 2px solid rgba(52, 168, 83, 0.3) !important; }
+    .result-risky { border: 2px solid rgba(251, 188, 5, 0.3) !important; }
+    .result-invalid { border: 2px solid rgba(234, 67, 53, 0.3) !important; }
+
+    /* --- METRIC BOXES --- */
+    .metric-grid-box {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #666;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .metric-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000;
+    }
+    .metric-sub {
+        font-size: 12px;
+        color: #888;
+        margin-top: 6px;
+    }
+
+    /* --- TABS --- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+        background-color: rgba(0,0,0,0.03);
+        padding: 6px;
+        border-radius: 30px;
+        border-bottom: none;
+        margin-bottom: 30px;
+        display: inline-flex;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 12px 24px;
+        font-weight: 600;
+        color: #666;
+        border: none;
+        border-radius: 24px;
+        background: transparent;
+        transition: all 0.2s ease;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #000 !important;
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: none !important;
+    }
+    
+    /* Hide Streamlit tab selection border */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+        background-color: transparent !important;
+    }
+    
+    /* --- INPUTS AND BUTTONS --- */
+    input[type="text"] {
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.1) !important;
+        background: rgba(255,255,255,0.8) !important;
+        padding: 14px 20px !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    button {
+        border-radius: 20px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: bold !important;
+    }
+    
+    /* --- DATAFRAME / TABLE --- */
+    div[data-testid="stDataFrame"] {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        background: rgba(255,255,255,0.6);
+        overflow: hidden;
+    }
+    
+    /* Hiding Streamlit Branding where possible */
+    footer {visibility: hidden;}
+    </style>
                             """, unsafe_allow_html=True)
                             
                             results = verify_emails(email_input, source="Single")
@@ -692,11 +770,162 @@ def render_email_verifier():
                 </div>
                 
                 <style>
-                @keyframes pulse {{
-                    0%, 100% {{ transform: scale(1); }}
-                    50% {{ transform: scale(1.05); }}
-                }}
-                </style>
+    /* Websites Showcase Style Theme for Email Verifier */
+
+    @font-face {
+        font-family: 'Inter';
+        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    }
+
+    /* --- HERO HEADER --- */
+    .hero-container {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: #000;
+    }
+
+    .hero-icon {
+        background: rgba(0, 0, 0, 0.05);
+        color: #000;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: inset 0 2px 10px rgba(255,255,255,1);
+    }
+
+    /* --- CARDS & CONTAINERS --- */
+    .verifier-card {
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        margin-bottom: 24px;
+        color: #000;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    /* Hover Effect for Cards */
+    .verifier-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 255, 255, 1) !important;
+    }
+
+    /* --- RESULTS CARD COLORING --- */
+    .result-valid { border: 2px solid rgba(52, 168, 83, 0.3) !important; }
+    .result-risky { border: 2px solid rgba(251, 188, 5, 0.3) !important; }
+    .result-invalid { border: 2px solid rgba(234, 67, 53, 0.3) !important; }
+
+    /* --- METRIC BOXES --- */
+    .metric-grid-box {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #666;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .metric-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000;
+    }
+    .metric-sub {
+        font-size: 12px;
+        color: #888;
+        margin-top: 6px;
+    }
+
+    /* --- TABS --- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+        background-color: rgba(0,0,0,0.03);
+        padding: 6px;
+        border-radius: 30px;
+        border-bottom: none;
+        margin-bottom: 30px;
+        display: inline-flex;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 12px 24px;
+        font-weight: 600;
+        color: #666;
+        border: none;
+        border-radius: 24px;
+        background: transparent;
+        transition: all 0.2s ease;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #000 !important;
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: none !important;
+    }
+    
+    /* Hide Streamlit tab selection border */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+        background-color: transparent !important;
+    }
+    
+    /* --- INPUTS AND BUTTONS --- */
+    input[type="text"] {
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.1) !important;
+        background: rgba(255,255,255,0.8) !important;
+        padding: 14px 20px !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    button {
+        border-radius: 20px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: bold !important;
+    }
+    
+    /* --- DATAFRAME / TABLE --- */
+    div[data-testid="stDataFrame"] {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        background: rgba(255,255,255,0.6);
+        overflow: hidden;
+    }
+    
+    /* Hiding Streamlit Branding where possible */
+    footer {visibility: hidden;}
+    </style>
                 """, unsafe_allow_html=True)
 
                 # Metrics Header
