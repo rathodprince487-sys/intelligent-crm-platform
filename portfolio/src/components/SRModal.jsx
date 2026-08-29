@@ -88,13 +88,6 @@ export const SRModal = ({ isOpen, onClose }) => {
 
         {/* Top Header & Avatar */}
         <div className="flex flex-col items-center text-center mt-2 mb-6">
-          {/* Logo Badge */}
-          <div
-            className="size-12 rounded-2xl flex items-center justify-center font-anton text-xl mb-3 shadow-lg"
-            style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--accent)' }}
-          >
-            SR.
-          </div>
 
           <h3 className="text-xs font-semibold tracking-wider uppercase mb-1" style={{ color: 'var(--text-muted)' }}>
             Hey, I'm Satyajitsinh 👋

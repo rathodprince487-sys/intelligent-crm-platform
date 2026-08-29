@@ -46,10 +46,13 @@ export const Navbar = ({ theme, toggleTheme, onOpenSRModal }) => {
             title="Click to open Satyajitsinh AI Overview & Q&A"
           >
             <div
-              className="size-10 rounded-full flex items-center justify-center font-anton text-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-active:scale-95 shadow-md"
-              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--accent)' }}
+              className="size-10 rounded-full p-0.5 bg-gradient-to-tr from-[var(--accent)] to-emerald-400 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-active:scale-95 flex items-center justify-center shrink-0"
             >
-              SR.
+              <img
+                src="/images/avatar.png"
+                alt="Satyajitsinh Avatar"
+                className="size-full rounded-full object-cover bg-white"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-syne font-bold tracking-wider text-sm transition-colors group-hover:text-[var(--accent)]" style={{ color: 'var(--text-primary)' }}>SATYAJITSINH</span>
