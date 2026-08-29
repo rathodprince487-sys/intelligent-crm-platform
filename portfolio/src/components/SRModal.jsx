@@ -90,19 +90,30 @@ export const SRModal = ({ isOpen, onClose }) => {
         <div className="flex flex-col items-center text-center mt-2 mb-6">
           {/* Logo Badge */}
           <div
-            className="size-14 rounded-2xl flex items-center justify-center font-anton text-2xl mb-4 shadow-lg"
+            className="size-12 rounded-2xl flex items-center justify-center font-anton text-xl mb-3 shadow-lg"
             style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--accent)' }}
           >
             SR.
           </div>
 
-          <h3 className="text-sm font-semibold tracking-wider uppercase mb-1" style={{ color: 'var(--text-muted)' }}>
+          <h3 className="text-xs font-semibold tracking-wider uppercase mb-1" style={{ color: 'var(--text-muted)' }}>
             Hey, I'm Satyajitsinh 👋
           </h3>
-          <h2 className="font-anton text-3xl sm:text-5xl uppercase leading-tight" style={{ color: 'var(--text-primary)' }}>
+          <h2 className="font-anton text-3xl sm:text-5xl uppercase leading-tight mb-4" style={{ color: 'var(--text-primary)' }}>
             Project Coordinator <br />
             <span style={{ color: 'var(--accent)' }}>& CS Engineer</span>
           </h2>
+
+          {/* 3D Memoji Avatar (Animated & Floating) */}
+          <div className="relative size-28 sm:size-32 rounded-full p-1 bg-gradient-to-tr from-[var(--accent)] to-emerald-400 shadow-xl transition-transform hover:scale-105 duration-300 animate-float">
+            <div className="size-full rounded-full overflow-hidden bg-white flex items-center justify-center">
+              <img
+                src="/images/avatar.png"
+                alt="Satyajitsinh 3D Memoji Avatar"
+                className="size-full object-cover"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Content Tabs / Q&A Area */}
