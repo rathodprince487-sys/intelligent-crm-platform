@@ -73,7 +73,7 @@ export const portfolioData = {
       id: "velvetnova",
       title: "Velvetnova.in — E-Commerce Growth Strategy",
       category: "E-Commerce / UX",
-      image: "/images/project_analytics_platform_1787991984689.png",
+      image: "/images/velvetnova.png",
       description: "Designed promotional combo offer strategies and enhanced styling suggestions for Velvetnova clothing brand, yielding higher customer engagement and increased sales.",
       tags: ["Shopify", "UI/UX Design", "Inventory Planning", "Digital Marketing", "E-Commerce"],
       metrics: "Higher Sales & Engagement",
