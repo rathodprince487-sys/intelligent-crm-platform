@@ -40,15 +40,23 @@ export const Navbar = ({ theme, toggleTheme }) => {
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           {/* Logo */}
-          <a href="#banner" className="flex items-center gap-3 group">
+          <a
+            href="#banner"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex items-center gap-3 group cursor-pointer"
+            title="Back to Top"
+          >
             <div
-              className="size-10 rounded-full flex items-center justify-center font-anton text-lg transition-colors"
-              style={{ background: 'var(--bg-chip)', border: '1px solid var(--border)', color: 'var(--accent)' }}
+              className="size-10 rounded-full flex items-center justify-center font-anton text-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-active:scale-95"
+              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--accent)' }}
             >
               SR.
             </div>
             <div className="flex flex-col">
-              <span className="font-syne font-bold tracking-wider text-sm" style={{ color: 'var(--text-primary)' }}>SATYAJITSINH</span>
+              <span className="font-syne font-bold tracking-wider text-sm transition-colors group-hover:text-[var(--accent)]" style={{ color: 'var(--text-primary)' }}>SATYAJITSINH</span>
               <span className="text-[10px] tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>Project Coordinator</span>
             </div>
           </a>
