@@ -84,7 +84,7 @@ export const portfolioData = {
       id: "verymiss",
       title: "Verymiss.in — Inventory Order Automation",
       category: "Automation",
-      image: "/images/project_workflow_automation_1787991967998.png",
+      image: "/images/verymiss.png",
       description: "Engineered an automated order processing flow for Verymiss cosmetics brand that automatically appends matching product shades to orders, saving hours for the fulfillment team.",
       tags: ["Workflow Automation", "JavaScript", "Shopify API", "Inventory Logic"],
       metrics: "Saved 20+ Hours/Week",
