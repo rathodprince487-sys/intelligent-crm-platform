@@ -3,7 +3,7 @@ import { portfolioData } from '../data/portfolioData';
 import { Sun, Moon, Menu, X, ArrowUpRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, GujaratMapIcon } from './Icons';
 
-export const Navbar = ({ theme, toggleTheme }) => {
+export const Navbar = ({ theme, toggleTheme, onOpenSRModal }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
@@ -39,18 +39,14 @@ export const Navbar = ({ theme, toggleTheme }) => {
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'py-3 navbar-scrolled' : 'py-6'}`}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          {/* Logo */}
-          <a
-            href="#banner"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="flex items-center gap-3 group cursor-pointer"
-            title="Back to Top"
+          {/* Logo - Clicks to open SR AI Overview Modal */}
+          <button
+            onClick={onOpenSRModal}
+            className="flex items-center gap-3 group cursor-pointer text-left focus:outline-none"
+            title="Click to open Satyajitsinh AI Overview & Q&A"
           >
             <div
-              className="size-10 rounded-full flex items-center justify-center font-anton text-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-active:scale-95"
+              className="size-10 rounded-full flex items-center justify-center font-anton text-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-active:scale-95 shadow-md"
               style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--accent)' }}
             >
               SR.
@@ -59,7 +55,7 @@ export const Navbar = ({ theme, toggleTheme }) => {
               <span className="font-syne font-bold tracking-wider text-sm transition-colors group-hover:text-[var(--accent)]" style={{ color: 'var(--text-primary)' }}>SATYAJITSINH</span>
               <span className="text-[10px] tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>Project Coordinator</span>
             </div>
-          </a>
+          </button>
 
           {/* Right Controls */}
           <div className="flex items-center gap-4">

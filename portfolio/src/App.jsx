@@ -8,9 +8,11 @@ import { Projects } from './components/Projects';
 import { Education } from './components/Education';
 import { Contact } from './components/Contact';
 import { FluidCanvas } from './components/FluidCanvas';
+import { SRModal } from './components/SRModal';
 
 export function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
+  const [isSRModalOpen, setIsSRModalOpen] = useState(false);
 
   useEffect(() => {
     // Apply the correct class to <html> so CSS :root.light variables kick in
@@ -32,7 +34,7 @@ export function App() {
   return (
     <div className="min-h-screen transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>
       <FluidCanvas />
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <Navbar theme={theme} toggleTheme={toggleTheme} onOpenSRModal={() => setIsSRModalOpen(true)} />
       <main style={{ position: 'relative', zIndex: 1 }}>
         <Hero />
         <About />
@@ -42,6 +44,9 @@ export function App() {
         <Education />
         <Contact />
       </main>
+
+      {/* Interactive SR Overview Modal */}
+      <SRModal isOpen={isSRModalOpen} onClose={() => setIsSRModalOpen(false)} />
     </div>
   );
 }
