@@ -54,10 +54,9 @@ export const Navbar = ({ theme, toggleTheme, onOpenSRModal }) => {
                 className="size-full rounded-full object-cover bg-white"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-syne font-bold tracking-wider text-sm transition-colors group-hover:text-[var(--accent)]" style={{ color: 'var(--text-primary)' }}>SATYAJITSINH</span>
-              <span className="text-[10px] tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>Project Coordinator</span>
-            </div>
+            <span className="font-syne font-bold tracking-wider text-sm sm:text-base transition-colors group-hover:text-[var(--accent)]" style={{ color: 'var(--text-primary)' }}>
+              SATYAJITSINH RATHOD
+            </span>
           </button>
 
           {/* Right Controls */}
